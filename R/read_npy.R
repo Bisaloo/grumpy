@@ -1,11 +1,11 @@
 #' Read a .npy file
 #'
 #' @param path Path to the .npy file
-#' 
+#'
 #' @return An array containing the data from the .npy file
-#' 
+#'
 #' @export
-#' 
+#'
 #' @examples
 #' read_npy(
 #'   system.file("extdata", "test.npy", package = "grumpy")
@@ -17,11 +17,11 @@ read_npy <- function(path) {
   }
   con <- file(path, "rb")
   on.exit(close(con))
-  
+
   # Read the header
   magic_string <- readBin(con, "raw", n = 6)
   if (!identical(magic_string, charToRaw("\x93NUMPY"))) {
-    stop("Not a valid .npy file: ", path) 
+    stop("Not a valid .npy file: ", path)
   }
 
   version <- readBin(con, "integer", n = 2, size = 1, endian = "little")
@@ -37,7 +37,14 @@ read_npy <- function(path) {
   header <- rawToChar(readBin(con, "raw", n = header_len))
 
   # FIXME: are we sure descr is always using the short formatting for dtypes? (e.g. 'i4' instead of 'int32')
-  descr <- regmatches(header, regexec("['\"]descr['\"]\\s*:\\s*['\"]([<|>]?)([?bBiufcmMOSaUV])(\\d+)['\"]", header, perl = TRUE))[[1]]
+  descr <- regmatches(
+    header,
+    regexec(
+      "['\"]descr['\"]\\s*:\\s*['\"]([<|>]?)([?bBiufcmMOSaUV])(\\d+)['\"]",
+      header,
+      perl = TRUE
+    )
+  )[[1]]
   endianness <- if (descr[2] %in% c("", "|")) {
     .Platform$endian
   } else {
@@ -58,8 +65,14 @@ read_npy <- function(path) {
   )
   size <- as.integer(descr[4])
 
-  fortran_order <- as.logical(regmatches(header, regexec("['\"]fortran_order['\"]\\s*:\\s*(True|False)", header))[[1]][2])
-  shape <- regmatches(header, regexec("['\"]shape['\"]\\s*:\\s*\\(([^\\)]*)\\)", header))[[1]][2]
+  fortran_order <- as.logical(regmatches(
+    header,
+    regexec("['\"]fortran_order['\"]\\s*:\\s*(True|False)", header)
+  )[[1]][2])
+  shape <- regmatches(
+    header,
+    regexec("['\"]shape['\"]\\s*:\\s*\\(([^\\)]*)\\)", header)
+  )[[1]][2]
   shape <- as.integer(strsplit(shape, ",\\s*")[[1]])
 
   if (!fortran_order) {
@@ -68,7 +81,13 @@ read_npy <- function(path) {
 
   # Read the data
   num_elements <- prod(shape)
-  data <- readBin(con, what = type, n = num_elements, size = size, endian = endianness)
+  data <- readBin(
+    con,
+    what = type,
+    n = num_elements,
+    size = size,
+    endian = endianness
+  )
 
   dim(data) <- shape
 
