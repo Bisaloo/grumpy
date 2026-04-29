@@ -34,8 +34,23 @@ read_npy <- function(path) {
     stop("Unsupported .npy version: ", version[1])
   }
 
-  header <- rawToChar(readBin(con, "raw", n = header_len))
+  header <- parse_npy_header(readBin(con, "raw", n = header_len))
 
+  # Read the data
+  data <- parse_npy_data(
+    con,
+    shape = header$shape,
+    datatype = header$r_type,
+    signed = header$signed,
+    typesize = header$size,
+    endian = header$endianness
+  )
+
+  return(data)
+}
+
+parse_npy_header <- function(bytes) {
+  header <- rawToChar(bytes)
   # FIXME: are we sure descr is always using the short formatting for dtypes? (e.g. 'i4' instead of 'int32')
   descr <- regmatches(
     header,
@@ -62,8 +77,8 @@ read_npy <- function(path) {
     "i" = "integer",
     "u" = "integer",
     "b" = "logical",
-    "S" = "integer",
-    "U" = "integer",
+    "S" = "string",
+    "U" = "unicode",
     stop("Unsupported data type in .npy file: ", descr[1])
   )
   signed <- python_type != "u"
@@ -93,20 +108,33 @@ read_npy <- function(path) {
   )[[1]][2]
   shape <- as.integer(strsplit(shape, ",\\s*")[[1]])
 
-  # Read the data
+  return(list(
+    endianness = endianness,
+    python_type = python_type,
+    r_type = r_type,
+    signed = signed,
+    size = size,
+    fortran_order = fortran_order,
+    shape = shape
+  ))
+}
+
+parse_npy_datatype <- function(descr) {}
+
+parse_npy_data <- function(bytes, shape, datatype, signed, typesize, endian) {
   num_elements <- prod(shape)
 
-  if (python_type %in% "U") {
+  if (datatype == "unicode") {
     ints <- readBin(
-      con,
+      bytes,
       what = "integer",
       size = 4,
-      n = num_elements * size / 4,
-      endian = endianness
+      n = num_elements * typesize / 4,
+      endian = endian
     )
     tmp <- split(
       ints,
-      f = ceiling(seq_along(ints) / (size / 4))
+      f = ceiling(seq_along(ints) / (typesize / 4))
     )
     data <- vapply(
       tmp,
@@ -114,17 +142,17 @@ read_npy <- function(path) {
       FUN.VALUE = character(1),
       USE.NAMES = FALSE
     )
-  } else if (python_type == "S") {
+  } else if (datatype == "string") {
     ints <- readBin(
-      con,
+      bytes,
       what = "integer",
       size = 1,
-      n = num_elements * size,
-      endian = endianness
+      n = num_elements * typesize,
+      endian = endian
     )
     tmp <- split(
       ints,
-      f = ceiling(seq_along(ints) / size)
+      f = ceiling(seq_along(ints) / typesize)
     )
     data <- vapply(
       tmp,
@@ -134,12 +162,12 @@ read_npy <- function(path) {
     )
   } else {
     data <- readBin(
-      con,
-      what = r_type,
+      bytes,
+      what = datatype,
       n = num_elements,
-      size = size,
+      size = typesize,
       signed = signed,
-      endian = endianness
+      endian = endian
     )
   }
 
