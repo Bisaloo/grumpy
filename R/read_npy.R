@@ -148,7 +148,7 @@ parse_npy_data <- function(bytes, shape, datatype, signed, typesize, endian) {
       what = "integer",
       size = 4,
       n = num_elements * typesize / 4,
-      endian = endian
+      endian = "little"
     )
     tmp <- split(
       ints,
@@ -166,7 +166,7 @@ parse_npy_data <- function(bytes, shape, datatype, signed, typesize, endian) {
       what = "integer",
       size = 1,
       n = num_elements * typesize,
-      endian = endian
+      endian = "little"
     )
     tmp <- split(
       ints,
