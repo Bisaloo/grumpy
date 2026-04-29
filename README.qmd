@@ -21,14 +21,20 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of grumpy is to ...
+The grumpy R package provides a way to read NumPy's `.npy` files into R. It supports a wide range of data types and array shapes.
 
 ## Installation
 
 You can install the development version of grumpy like so:
 
 ``` r
-# FILL THIS IN! HOW CAN PEOPLE INSTALL YOUR DEV PACKAGE?
+# install.packages("pak")
+pak::pak("Bisaloo/grumpy")
 ```
 
 ## Example
+
+```{r}
+library(grumpy)
+read_npy(system.file("extdata", "test_2d.npy", package = "grumpy"))
+```
