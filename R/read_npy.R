@@ -34,7 +34,7 @@ read_npy <- function(path) {
     stop("Unsupported .npy version: ", version[1])
   }
 
-  header <- parse_npy_header(readBin(con, "raw", n = header_len))
+  header <- parse_npy_descr(readBin(con, "raw", n = header_len))
 
   if (header$python_type %in% c("uint32", "uint64")) {
     stop("Unsigned integers larger than 16 bits are not supported.")
@@ -56,7 +56,7 @@ read_npy <- function(path) {
   return(data)
 }
 
-parse_npy_header <- function(bytes) {
+parse_npy_descr <- function(bytes) {
   header <- rawToChar(bytes)
   # FIXME: are we sure descr is always using the short formatting for dtypes? (e.g. 'i4' instead of 'int32')
   descr <- regmatches(
@@ -67,6 +67,36 @@ parse_npy_header <- function(bytes) {
       perl = TRUE
     )
   )[[1]]
+  parsed_descr <- parse_npy_datatype(descr)
+
+  # TODO: If I understand correctly, fortranarray in python are still displayed
+  # the same way as regular arrays, but with a different order in memory.
+  # It is not related to the way the data is stored in the file, nor the way
+  # it appears to the user.
+  # We just ignore it, at least for now.
+  fortran_order <- as.logical(regmatches(
+    header,
+    regexec("['\"]fortran_order['\"]\\s*:\\s*(True|False)", header)
+  )[[1]][2])
+  shape <- regmatches(
+    header,
+    regexec("['\"]shape['\"]\\s*:\\s*\\(([^\\)]*)\\)", header)
+  )[[1]][2]
+
+  shape <- as.integer(strsplit(shape, ",\\s*")[[1]])
+
+  return(list(
+    endianness = parsed_descr$endianness,
+    python_type = parsed_descr$python_type,
+    r_type = parsed_descr$r_type,
+    signed = parsed_descr$signed,
+    size = parsed_descr$size,
+    fortran_order = fortran_order,
+    shape = shape
+  ))
+}
+
+parse_npy_datatype <- function(descr) {
   endianness <- if (descr[2] %in% c("", "|")) {
     .Platform$endian
   } else {
@@ -100,33 +130,14 @@ parse_npy_header <- function(bytes) {
     "U" = as.integer(descr[4]) * 4L
   )
 
-  # TODO: If I understand correctly, fortranarray in python are still displayed
-  # the same way as regular arrays, but with a different order in memory.
-  # It is not related to the way the data is stored in the file, nor the way
-  # it appears to the user.
-  # We just ignore it, at least for now.
-  fortran_order <- as.logical(regmatches(
-    header,
-    regexec("['\"]fortran_order['\"]\\s*:\\s*(True|False)", header)
-  )[[1]][2])
-  shape <- regmatches(
-    header,
-    regexec("['\"]shape['\"]\\s*:\\s*\\(([^\\)]*)\\)", header)
-  )[[1]][2]
-  shape <- as.integer(strsplit(shape, ",\\s*")[[1]])
-
   return(list(
     endianness = endianness,
     python_type = python_type,
     r_type = r_type,
     signed = signed,
-    size = size,
-    fortran_order = fortran_order,
-    shape = shape
+    size = size
   ))
 }
-
-parse_npy_datatype <- function(descr) {}
 
 parse_npy_data <- function(bytes, shape, datatype, signed, typesize, endian) {
   num_elements <- prod(shape)
