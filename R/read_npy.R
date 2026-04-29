@@ -55,17 +55,28 @@ read_npy <- function(path) {
       stop("Invalid endianness in .npy file: ", descr[1])
     )
   }
-  type <- switch(
-    descr[3],
+  python_type <- descr[3]
+  r_type <- switch(
+    python_type,
     "f" = "numeric",
     "i" = "integer",
     "u" = "integer",
     "b" = "logical",
+    "S" = "integer",
+    "U" = "integer",
     stop("Unsupported data type in .npy file: ", descr[1])
   )
-  signed <- descr[3] != "u"
+  signed <- python_type != "u"
 
-  size <- as.integer(descr[4])
+  size <- switch(
+    python_type,
+    "f" = as.integer(descr[4]),
+    "i" = as.integer(descr[4]),
+    "u" = as.integer(descr[4]),
+    "b" = 1L,
+    "S" = as.integer(descr[4]),
+    "U" = as.integer(descr[4]) * 4L
+  )
 
   # TODO: If I understand correctly, fortranarray in python are still displayed
   # the same way as regular arrays, but with a different order in memory.
@@ -84,14 +95,53 @@ read_npy <- function(path) {
 
   # Read the data
   num_elements <- prod(shape)
-  data <- readBin(
-    con,
-    what = type,
-    n = num_elements,
-    size = size,
-    signed = signed,
-    endian = endianness
-  )
+
+  if (python_type %in% "U") {
+    ints <- readBin(
+      con,
+      what = "integer",
+      size = 4,
+      n = num_elements * size / 4,
+      endian = endianness
+    )
+    tmp <- split(
+      ints,
+      f = ceiling(seq_along(ints) / (size / 4))
+    )
+    data <- vapply(
+      tmp,
+      intToUtf8,
+      FUN.VALUE = character(1),
+      USE.NAMES = FALSE
+    )
+  } else if (python_type == "S") {
+    ints <- readBin(
+      con,
+      what = "integer",
+      size = 1,
+      n = num_elements * size,
+      endian = endianness
+    )
+    tmp <- split(
+      ints,
+      f = ceiling(seq_along(ints) / size)
+    )
+    data <- vapply(
+      tmp,
+      function(x) rawToChar(as.raw(x)),
+      FUN.VALUE = character(1),
+      USE.NAMES = FALSE
+    )
+  } else {
+    data <- readBin(
+      con,
+      what = r_type,
+      n = num_elements,
+      size = size,
+      signed = signed,
+      endian = endianness
+    )
+  }
 
   dim(data) <- shape
 

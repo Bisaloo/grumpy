@@ -34,3 +34,7 @@ np.save("inst/extdata/test_scalar.npy", np.array([42.0], dtype="float32"))
 
 # Empty array
 np.save("inst/extdata/test_empty.npy", np.array([], dtype="float32"))
+
+# String types (unicode and byte strings)
+np.save("inst/extdata/test_str_unicode.npy", np.array(["foo", "bar", "baz"], dtype="U3"))
+np.save("inst/extdata/test_str_bytes.npy", np.array([b"foo", b"bar", b"baz"], dtype="S3"))

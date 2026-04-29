@@ -72,6 +72,18 @@ test_that("fortran order arrays work", {
     expect_identical(matrix(0:5, nrow = 2L, ncol = 3L, byrow = TRUE))
 })
 
+test_that("string dtypes raise an informative error", {
+  system.file("extdata", "test_str_unicode.npy", package = "grumpy") |>
+    read_npy() |>
+    expect_no_condition() |>
+    expect_identical(array(c("foo", "bar", "baz"), dim = 3L))
+
+  system.file("extdata", "test_str_bytes.npy", package = "grumpy") |>
+    read_npy() |>
+    expect_no_condition() |>
+    expect_identical(array(c("foo", "bar", "baz"), dim = 3L))
+})
+
 test_that("scalar or empty arrays work", {
   system.file("extdata", "test_scalar.npy", package = "grumpy") |>
     read_npy() |>
