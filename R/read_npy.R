@@ -36,6 +36,7 @@ read_npy <- function(path) {
 
   header <- rawToChar(readBin(con, "raw", n = header_len))
 
+  # FIXME: are we sure descr is always using the short formatting for dtypes? (e.g. 'i4' instead of 'int32')
   descr <- regmatches(header, regexec("['\"]descr['\"]\\s*:\\s*['\"]([<|>]?)([?bBiufcmMOSaUV])(\\d+)['\"]", header, perl = TRUE))[[1]]
   endianness <- if (descr[2] %in% c("", "|")) {
     .Platform$endian
