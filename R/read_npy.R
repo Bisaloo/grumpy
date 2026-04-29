@@ -65,6 +65,11 @@ read_npy <- function(path) {
   )
   size <- as.integer(descr[4])
 
+  # TODO: If I understand correctly, fortranarray in python are still displayed
+  # the same way as regular arrays, but with a different order in memory.
+  # It is not related to the way the data is stored in the file, nor the way
+  # it appears to the user.
+  # We just ignore it, at least for now.
   fortran_order <- as.logical(regmatches(
     header,
     regexec("['\"]fortran_order['\"]\\s*:\\s*(True|False)", header)
@@ -74,10 +79,6 @@ read_npy <- function(path) {
     regexec("['\"]shape['\"]\\s*:\\s*\\(([^\\)]*)\\)", header)
   )[[1]][2]
   shape <- as.integer(strsplit(shape, ",\\s*")[[1]])
-
-  if (!fortran_order) {
-    shape <- rev(shape)
-  }
 
   # Read the data
   num_elements <- prod(shape)
@@ -90,10 +91,6 @@ read_npy <- function(path) {
   )
 
   dim(data) <- shape
-
-  if (!fortran_order) {
-    data <- aperm(data, rev(seq_along(shape)))
-  }
 
   return(data)
 }
