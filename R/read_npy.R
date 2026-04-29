@@ -63,6 +63,8 @@ read_npy <- function(path) {
     "b" = "logical",
     stop("Unsupported data type in .npy file: ", descr[1])
   )
+  signed <- descr[3] != "u"
+
   size <- as.integer(descr[4])
 
   # TODO: If I understand correctly, fortranarray in python are still displayed
@@ -87,6 +89,7 @@ read_npy <- function(path) {
     what = type,
     n = num_elements,
     size = size,
+    signed = signed,
     endian = endianness
   )
 
