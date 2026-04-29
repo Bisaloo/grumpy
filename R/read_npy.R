@@ -36,6 +36,13 @@ read_npy <- function(path) {
 
   header <- parse_npy_header(readBin(con, "raw", n = header_len))
 
+  if (header$python_type %in% c("uint32", "uint64")) {
+    stop("Unsigned integers larger than 16 bits are not supported.")
+  }
+  if (header$python_type == "int64") {
+    warning("64-bit integers may overflow when converted to R integers.")
+  }
+
   # Read the data
   data <- parse_npy_data(
     con,
