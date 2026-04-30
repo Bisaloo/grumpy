@@ -8,6 +8,7 @@ It supports a wide range of data types and array shapes.
 You can install the development version of grumpy like so:
 
 ``` r
+
 # install.packages("pak")
 pak::pak("Bisaloo/grumpy")
 ```
@@ -15,6 +16,7 @@ pak::pak("Bisaloo/grumpy")
 ## Example
 
 ``` r
+
 library(grumpy)
 read_npy(system.file("extdata", "test_2d.npy", package = "grumpy"))
 #>      [,1] [,2] [,3]
