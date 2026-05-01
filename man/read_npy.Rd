@@ -4,10 +4,10 @@
 \alias{read_npy}
 \title{Read a .npy file}
 \usage{
-read_npy(path)
+read_npy(file)
 }
 \arguments{
-\item{path}{Path to the .npy file}
+\item{file}{Path to the .npy file}
 }
 \value{
 An array containing the data from the .npy file
