@@ -1,6 +1,6 @@
 #' Read a .npy file
 #'
-#' @param path Path to the .npy file
+#' @param file Path to the .npy file
 #'
 #' @return An array containing the data from the .npy file
 #'
@@ -11,17 +11,23 @@
 #'   system.file("extdata", "test.npy", package = "grumpy")
 #' )
 
-read_npy <- function(path) {
-  if (!file.exists(path)) {
-    stop("File does not exist: ", path)
+read_npy <- function(file) {
+  if (is.character(file)) {
+    if (!file.exists(file)) {
+      stop("File does not exist: ", file)
+    }
+    con <- file(file, "rb")
+    on.exit(close(con))
+  } else if (inherits(file, "connection")) {
+    con <- file
+  } else {
+    stop("Invalid input: file must be a character string or a connection.")
   }
-  con <- file(path, "rb")
-  on.exit(close(con))
 
   # Read the header
   magic_string <- readBin(con, "raw", n = 6)
   if (!identical(magic_string, charToRaw("\x93NUMPY"))) {
-    stop("Not a valid .npy file: ", path)
+    stop("Not a valid .npy file: ", file)
   }
 
   version <- readBin(con, "integer", n = 2, size = 1, endian = "little")
