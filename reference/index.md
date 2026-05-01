@@ -4,3 +4,5 @@
 
 - [`read_npy()`](https://hugogruson.fr/grumpy/reference/read_npy.md) :
   Read a .npy file
+- [`read_npz()`](https://hugogruson.fr/grumpy/reference/read_npz.md) :
+  Read a .npz file
