@@ -38,3 +38,10 @@ np.save("inst/extdata/test_empty.npy", np.array([], dtype="float32"))
 # String types (unicode and byte strings)
 np.save("inst/extdata/test_str_unicode.npy", np.array(["foo", "bar", "baz"], dtype="U3"))
 np.save("inst/extdata/test_str_bytes.npy", np.array([b"foo", b"bar", b"baz"], dtype="S3"))
+
+# NPZ archive (multiple arrays)
+np.savez(
+    "inst/extdata/test.npz",
+    x=np.array([1, 2, 3], dtype="int32"),
+    y=np.array([4.0, 5.0, 6.0], dtype="float64"),
+)
