@@ -21,7 +21,7 @@ read_npy <- function(file) {
   } else if (inherits(file, "connection")) {
     con <- file
   } else {
-    stop("Invalid input: file must be a character string or a connection.")
+    stop("Invalid bytes: file must be a character string or a connection.")
   }
 
   # Read the header
@@ -54,7 +54,7 @@ read_npy <- function(file) {
   data <- parse_npy_data(
     con,
     shape = header$shape,
-    datatype = header$r_type,
+    datatype = header$base_type,
     signed = header$signed,
     typesize = header$size,
     endian = header$endianness
@@ -96,6 +96,7 @@ parse_npy_descr <- function(bytes) {
     endianness = parsed_descr$endianness,
     python_type = parsed_descr$python_type,
     r_type = parsed_descr$r_type,
+    base_type = parsed_descr$base_type,
     signed = parsed_descr$signed,
     size = parsed_descr$size,
     fortran_order = fortran_order,
@@ -126,6 +127,15 @@ parse_npy_datatype <- function(descr) {
     stop("Unsupported data type in .npy file: ", descr[1])
   )
   signed <- python_type != "u"
+  base_type <- switch(
+    python_type,
+    "f" = "float",
+    "i" = "int",
+    "u" = "uint",
+    "b" = "bool",
+    "S" = "string",
+    "U" = "unicode"
+  )
 
   size <- switch(
     python_type,
@@ -141,6 +151,7 @@ parse_npy_datatype <- function(descr) {
     endianness = endianness,
     python_type = python_type,
     r_type = r_type,
+    base_type = base_type,
     signed = signed,
     size = size
   ))
@@ -186,13 +197,19 @@ parse_npy_data <- function(bytes, shape, datatype, signed, typesize, endian) {
       USE.NAMES = FALSE
     )
   } else {
-    data <- readBin(
+    # FIXME: optimize this
+    bytes <- readBin(bytes, "raw", n = num_elements * typesize)
+    if (!is.na(endian) && endian != .Platform$endian) {
+      ind <- rep_len(rev(seq_len(typesize)), length(bytes)) +
+        (seq_along(bytes) - 1L) %/% typesize * typesize
+      bytes <- bytes[ind]
+    }
+
+    data <- .Call(
+      paste0("type_convert_", datatype),
       bytes,
-      what = datatype,
-      n = num_elements,
-      size = typesize,
-      signed = signed,
-      endian = endian
+      typesize,
+      PACKAGE = "grumpy"
     )
   }
 
