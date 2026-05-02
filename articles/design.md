@@ -12,12 +12,14 @@ etc.).
 
 ### Why not use `reticulate`?
 
-### Why is this package slow?
-
-This package is optimized for performance as much as base R allows. We
-could get better performance by using a lower-level language under the
-hood, but this package only exist as a crutch if you have received a
-`.npy` or `.npz` file and want to read it in R.
-
-For better performance when exchanging data across languages, one should
-prefer high-performance interoperable format (parquet, zarr, etc.).
+- When reading `.npy` files with
+  [reticulate](https://rstudio.github.io/reticulate/), at some point in
+  time, two (sometimes 3) copies of the data are made in memory: one in
+  Python and one in R. This can be problematic for large files. With
+  [grumpy](https://hugogruson.fr/grumpy/), only one copy of the data is
+  made in memory.
+- Reading data with [reticulate](https://rstudio.github.io/reticulate/)
+  requires a Python installation and additional python packages, which
+  users in restricted environments may not have access to.
+  [grumpy](https://hugogruson.fr/grumpy/) is a pure R package with no
+  external dependencies.

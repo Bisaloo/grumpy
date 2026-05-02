@@ -79,18 +79,17 @@ etc.).</p>
 <div class="section level3">
 <h3 id="why-not-use-reticulate">Why not use <code>reticulate</code>?<a class="anchor" aria-label="anchor" href="#why-not-use-reticulate"></a>
 </h3>
-</div>
-<div class="section level3">
-<h3 id="why-is-this-package-slow">Why is this package slow?<a class="anchor" aria-label="anchor" href="#why-is-this-package-slow"></a>
-</h3>
-<p>This package is optimized for performance as much as base R allows.
-We could get better performance by using a lower-level language under
-the hood, but this package only exist as a crutch if you have received a
-<code>.npy</code> or <code>.npz</code> file and want to read it in
-R.</p>
-<p>For better performance when exchanging data across languages, one
-should prefer high-performance interoperable format (parquet, zarr,
-etc.).</p>
+<ul>
+<li>When reading <code>.npy</code> files with <a href="https://rstudio.github.io/reticulate/" class="external-link">reticulate</a>,
+at some point in time, two (sometimes 3) copies of the data are made in
+memory: one in Python and one in R. This can be problematic for large
+files. With <a href="https://hugogruson.fr/grumpy/">grumpy</a>, only one copy of the data is made in
+memory.</li>
+<li>Reading data with <a href="https://rstudio.github.io/reticulate/" class="external-link">reticulate</a> requires a Python
+installation and additional python packages, which users in restricted
+environments may not have access to. <a href="https://hugogruson.fr/grumpy/">grumpy</a> is a pure R
+package with no external dependencies.</li>
+</ul>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -100,7 +99,7 @@ etc.).</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Hugo Gruson.</p>
+  <p>Developed by Hugo Gruson, Mike Smith.</p>
 </div>
 
 <div class="pkgdown-footer-right">
