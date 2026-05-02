@@ -4,11 +4,13 @@ import numpy as np
 np.save("inst/extdata/test_int32.npy", np.array([1, 2, 3], dtype="int32"))
 np.save("inst/extdata/test_int8.npy", np.array([-128, 0, 127], dtype="int8"))
 np.save("inst/extdata/test_int16.npy", np.array([-32768, 0, 32767], dtype="int16"))
-np.save("inst/extdata/test_int64.npy", np.array([-2**32, 0, 2**32], dtype="int64"))
+np.save("inst/extdata/test_int64.npy", np.array([-2, 73, 38], dtype="int64"))
+np.save("inst/extdata/test_int64_overflowing.npy", np.array([-2**32, 0, 2**32], dtype="int64"))
 
 # Unsigned integer (stored as integer in R)
 np.save("inst/extdata/test_uint8.npy", np.array([0, 128, 255], dtype="uint8"))
 np.save("inst/extdata/test_uint16.npy", np.array([0, 1000, 65535], dtype="uint16"))
+np.save("inst/extdata/test_uint32.npy", np.array([0, 100000, 2**32 - 1], dtype="uint32"))
 
 # Float types
 np.save("inst/extdata/test_float32.npy", np.array([1.5, -2.5, 3.14], dtype="float32"))

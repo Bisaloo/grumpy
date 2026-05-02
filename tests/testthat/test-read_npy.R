@@ -14,11 +14,10 @@ test_that("different types work", {
     expect_no_condition() |>
     expect_identical(array(c(-32768L, 0L, 32767L), dim = 3L))
 
-  # FIXME: support int64
-  # system.file("extdata", "test_int64.npy", package = "grumpy") |>
-  #   read_npy() |>
-  #   expect_no_condition() |>
-  #   expect_identical(array(c(-2^32, 0, 2^32), dim = 3L))
+  system.file("extdata", "test_int64.npy", package = "grumpy") |>
+    read_npy() |>
+    expect_identical(array(c(-2L, 73L, 38L), dim = 3L)) |>
+    expect_warning("overflow")
 
   system.file("extdata", "test_uint8.npy", package = "grumpy") |>
     read_npy() |>
