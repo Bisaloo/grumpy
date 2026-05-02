@@ -11,6 +11,7 @@ np.save("inst/extdata/test_int64_overflowing.npy", np.array([-2**32, 0, 2**32], 
 np.save("inst/extdata/test_uint8.npy", np.array([0, 128, 255], dtype="uint8"))
 np.save("inst/extdata/test_uint16.npy", np.array([0, 1000, 65535], dtype="uint16"))
 np.save("inst/extdata/test_uint32.npy", np.array([0, 100000, 2**32 - 1], dtype="uint32"))
+np.save("inst/extdata/test_uint64.npy", np.array([0, 100000, 2**64 - 1], dtype="uint64"))
 
 # Float types
 np.save("inst/extdata/test_float32.npy", np.array([1.5, -2.5, 3.14], dtype="float32"))
