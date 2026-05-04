@@ -179,11 +179,11 @@ SEXP type_convert_string(SEXP input, SEXP _n_bytes) {
   return(data);
 }
 
-SEXP type_convert_unicode(SEXP input, SEXP _n_bytes) {
+SEXP type_convert_unicode(SEXP input, SEXP _n_bytes, SEXP _endian) {
 
   // n_bytes is the total bytes per string element (num_codepoints * 4).
-  // The raw bytes have already been endian-swapped per codepoint (4 bytes each)
-  // before being passed here, so the encoding is UTF-32LE.
+  // Bytes are passed as-is from the file; we select UTF-32LE or UTF-32BE
+  // based on the file's endianness so no R-side byte-swapping is needed.
   const size_t n_bytes = (size_t)INTEGER(_n_bytes)[0];
   const R_xlen_t length = xlength(input);
   const char *raw_buffer = (const char *)RAW(input);
@@ -192,10 +192,13 @@ SEXP type_convert_unicode(SEXP input, SEXP _n_bytes) {
   R_xlen_t i;
   SEXP data;
 
+  const char *endian = CHAR(STRING_ELT(_endian, 0));
+  const char *utf32_enc = (strcmp(endian, "big") == 0) ? "UTF-32BE" : "UTF-32LE";
+
   // Worst case: 4 UTF-8 bytes per UTF-32 codepoint.
   char *utf8_buf = (char *)R_alloc(n_bytes + 1, 1);
 
-  void *cd = Riconv_open("UTF-8", "UTF-32LE");
+  void *cd = Riconv_open("UTF-8", utf32_enc);
   if (cd == (void *)-1)
     error("Riconv_open failed: cannot convert UTF-32LE to UTF-8");
 

@@ -7,7 +7,7 @@ static const R_CallMethodDef callMethods[] = {
   {"type_convert_float", (DL_FUNC) &type_convert_float, 2},
   {"type_convert_bool", (DL_FUNC) &type_convert_bool, 2},
   {"type_convert_string", (DL_FUNC) &type_convert_string, 2},
-  {"type_convert_unicode", (DL_FUNC) &type_convert_unicode, 2},
+  {"type_convert_unicode", (DL_FUNC) &type_convert_unicode, 3},
   {NULL, NULL, 0}
 };
 

@@ -164,21 +164,29 @@ parse_npy_data <- function(bytes, shape, datatype, signed, typesize, endian) {
   num_elements <- prod(shape)
 
   bytes <- readBin(bytes, "raw", n = num_elements * typesize)
-  # Unicode is UTF-32: each codepoint is 4 bytes, so swap per codepoint.
-  swap_unit <- if (datatype == "unicode") 4L else typesize
   # FIXME: optimize this
-  if (!is.na(endian) && endian != .Platform$endian) {
-    ind <- rep_len(rev(seq_len(swap_unit)), length(bytes)) +
-      (seq_along(bytes) - 1L) %/% swap_unit * swap_unit
+  if (datatype != "unicode" && !is.na(endian) && endian != .Platform$endian) {
+    ind <- rep_len(rev(seq_len(typesize)), length(bytes)) +
+      (seq_along(bytes) - 1L) %/% typesize * typesize
     bytes <- bytes[ind]
   }
 
-  data <- .Call(
-    paste0("type_convert_", datatype),
-    bytes,
-    typesize,
-    PACKAGE = "grumpy"
-  )
+  if (datatype == "unicode") {
+    data <- .Call(
+      "type_convert_unicode",
+      bytes,
+      typesize,
+      endian,
+      PACKAGE = "grumpy"
+    )
+  } else {
+    data <- .Call(
+      paste0("type_convert_", datatype),
+      bytes,
+      typesize,
+      PACKAGE = "grumpy"
+    )
+  }
 
   dim(data) <- shape
 
