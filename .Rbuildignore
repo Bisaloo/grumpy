@@ -7,3 +7,4 @@
 ^[.]?air[.]toml$
 ^\.vscode$
 ^touchstone$
+^\.lintr$
