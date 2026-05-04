@@ -72,56 +72,47 @@ read_npy <- function(file) {
 }
 
 parse_npy_descr <- function(bytes) {
-  header <- rawToChar(bytes)
-  # FIXME: are we sure descr is always using the short formatting for dtypes?
-  # (e.g. 'i4' instead of 'int32')
-  descr <- regmatches(
-    header,
-    regexec(
-      "['\"]descr['\"]\\s*:\\s*['\"]([<|>]?)([?bBiufcmMOSaUV])(\\d+)['\"]",
-      header,
-      perl = TRUE
-    )
-  )[[1L]]
-  parsed_descr <- parse_npy_datatype(descr)
-
   # TODO: If I understand correctly, fortranarray in python are still displayed
   # the same way as regular arrays, but with a different order in memory.
   # It is not related to the way the data is stored in the file, nor the way
   # it appears to the user.
   # We just ignore it, at least for now.
-  fortran_order <- as.logical(regmatches(
-    header,
-    regexec("['\"]fortran_order['\"]\\s*:\\s*(True|False)", header)
-  )[[1L]][2L])
-  shape <- regmatches(
-    header,
-    regexec("['\"]shape['\"]\\s*:\\s*\\(([^\\)]*)\\)", header)
-  )[[1L]][2L]
+  header <- bytes |>
+    rawToChar() |>
+    convert_py_dict_to_json() |>
+    jsonlite::fromJSON()
 
-  shape <- as.integer(strsplit(shape, ",\\s*")[[1L]])
+  parsed_descr <- parse_npy_datatype(header$descr)
 
   return(list(
     endianness = parsed_descr$endianness,
     base_type = parsed_descr$base_type,
     size = parsed_descr$size,
-    fortran_order = fortran_order,
-    shape = shape
+    fortran_order = header$fortran_order,
+    shape = header$shape
   ))
 }
 
 parse_npy_datatype <- function(descr) {
-  endianness <- if (descr[2L] %in% c("", "|")) {
+  descr_components <- regmatches(
+    descr,
+    regexec("^([<>|]?)([a-zA-Z])([0-9]+)$", descr)
+  )[[1L]]
+  endianness <- if (descr_components[2L] %in% c("", "|")) {
     .Platform$endian
   } else {
     switch(
-      descr[2L],
+      descr_components[2L],
       `<` = "little",
       `>` = "big",
-      stop("Invalid endianness in .npy file: ", descr[1L], call. = FALSE)
+      stop(
+        "Invalid endianness in .npy file: ",
+        descr_components[1L],
+        call. = FALSE
+      )
     )
   }
-  python_type <- descr[3L]
+  python_type <- descr_components[3L]
   base_type <- switch(
     python_type,
     f = "float",
@@ -132,19 +123,23 @@ parse_npy_datatype <- function(descr) {
     a = "string",
     S = "string",
     U = "unicode",
-    stop("Unsupported data type in .npy file: ", descr[1L], call. = FALSE)
+    stop(
+      "Unsupported data type in .npy file: ",
+      descr_components[1L],
+      call. = FALSE
+    )
   )
 
   size <- switch(
     python_type,
-    f = as.integer(descr[4L]),
-    i = as.integer(descr[4L]),
-    u = as.integer(descr[4L]),
+    f = as.integer(descr_components[4L]),
+    i = as.integer(descr_components[4L]),
+    u = as.integer(descr_components[4L]),
     `?` = 1L,
     b = 1L,
-    a = as.integer(descr[4L]),
-    S = as.integer(descr[4L]),
-    U = as.integer(descr[4L]) * 4L
+    a = as.integer(descr_components[4L]),
+    S = as.integer(descr_components[4L]),
+    U = as.integer(descr_components[4L]) * 4L
   )
 
   return(list(
@@ -201,4 +196,15 @@ parse_npy_data <- function(bytes, shape, datatype, typesize, endian) {
   dim(res) <- shape
 
   return(res)
+}
+
+convert_py_dict_to_json <- function(dict_str) {
+  dict_str |>
+    gsub("'", '"', x = _, fixed = TRUE) |>
+    gsub("None", "null", x = _, fixed = TRUE) |>
+    gsub("True", "true", x = _, fixed = TRUE) |>
+    gsub("False", "false", x = _, fixed = TRUE) |>
+    gsub("(", "[", x = _, fixed = TRUE) |>
+    gsub(")", "]", x = _, fixed = TRUE) |>
+    gsub(",\\s*(}|\\])", "\\1", x = _) # trailing commas
 }
