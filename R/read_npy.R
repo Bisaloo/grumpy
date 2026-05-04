@@ -119,6 +119,7 @@ parse_npy_datatype <- function(descr) {
     "i" = "integer",
     "u" = "integer",
     "b" = "logical",
+    "a" = "string",
     "S" = "string",
     "U" = "unicode",
     stop("Unsupported data type in .npy file: ", descr[1])
@@ -130,6 +131,7 @@ parse_npy_datatype <- function(descr) {
     "i" = "int",
     "u" = "uint",
     "b" = "bool",
+    "a" = "string",
     "S" = "string",
     "U" = "unicode"
   )
@@ -140,6 +142,7 @@ parse_npy_datatype <- function(descr) {
     "i" = as.integer(descr[4]),
     "u" = as.integer(descr[4]),
     "b" = 1L,
+    "a" = as.integer(descr[4]),
     "S" = as.integer(descr[4]),
     "U" = as.integer(descr[4]) * 4L
   )
