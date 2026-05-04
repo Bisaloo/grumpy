@@ -109,6 +109,30 @@ test_that("different types work", {
     )) |>
     expect_warning("overflow")
 
+  system.file("extdata", "test_float16.npy", package = "grumpy") |>
+    read_npy() |>
+    expect_no_condition() |>
+    expect_equal(
+      array(
+        c(
+          1.5,
+          -2.5,
+          3.14,
+          0.0,
+          -1.0,
+          100.0,
+          -100.0,
+          0.001,
+          1000.0,
+          -1000.0,
+          1.2345,
+          -9.8765
+        ),
+        dim = 12L
+      ),
+      tolerance = 1e-3
+    )
+
   system.file("extdata", "test_float32.npy", package = "grumpy") |>
     read_npy() |>
     expect_no_condition() |>
