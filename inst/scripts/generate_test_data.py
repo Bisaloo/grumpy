@@ -39,7 +39,7 @@ np.save("inst/extdata/test_scalar.npy", np.array([42.0], dtype="float32"))
 np.save("inst/extdata/test_empty.npy", np.array([], dtype="float32"))
 
 # String types (unicode and byte strings)
-np.save("inst/extdata/test_str_unicode.npy", np.array(["foo", "bar", "baz", "qux", "hello", "world", "alpha", "beta", "gamma", "delta", "epsilon", "zeta"], dtype="U7"))
+np.save("inst/extdata/test_str_unicode.npy", np.array(['¡Hola mundo!', 'Hej Världen!', 'Servus Woid!', 'Hei maailma!', 'Xin chào thế giới', 'Njatjeta Botë!', 'Γεια σου κόσμε!', 'こんにちは世界', '世界，你好！', 'Helló, világ!', 'Zdravo svete!', 'เฮลโลเวิลด์'], dtype="U20"))
 np.save("inst/extdata/test_str_bytes.npy", np.array([b"foo", b"bar", b"baz", b"qux", b"hello", b"world", b"alpha", b"beta", b"gamma", b"delta", b"eps", b"zeta"], dtype="S5"))
 
 # NPZ archive (multiple arrays)
