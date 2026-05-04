@@ -175,24 +175,6 @@ parse_npy_data <- function(bytes, shape, datatype, signed, typesize, endian) {
       FUN.VALUE = character(1),
       USE.NAMES = FALSE
     )
-  } else if (datatype == "string") {
-    ints <- readBin(
-      bytes,
-      what = "integer",
-      size = 1,
-      n = num_elements * typesize,
-      endian = "little"
-    )
-    tmp <- split(
-      ints,
-      f = ceiling(seq_along(ints) / typesize)
-    )
-    data <- vapply(
-      tmp,
-      function(x) rawToChar(as.raw(x)),
-      FUN.VALUE = character(1),
-      USE.NAMES = FALSE
-    )
   } else {
     # FIXME: optimize this
     bytes <- readBin(bytes, "raw", n = num_elements * typesize)
