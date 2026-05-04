@@ -52,7 +52,7 @@ read_npy <- function(file) {
   header <- parse_npy_descr(readBin(con, "raw", n = header_len))
 
   # TODO: improve int64 support
-  if (header$python_type %in% c("i", "u") && header$size == 8L) {
+  if (header$base_type %in% c("uint", "int") && header$size == 8L) {
     warning(
       "64-bit integers may overflow when converted to R integers.",
       call. = FALSE
@@ -103,7 +103,6 @@ parse_npy_descr <- function(bytes) {
 
   return(list(
     endianness = parsed_descr$endianness,
-    python_type = parsed_descr$python_type,
     base_type = parsed_descr$base_type,
     size = parsed_descr$size,
     fortran_order = fortran_order,
@@ -150,7 +149,6 @@ parse_npy_datatype <- function(descr) {
 
   return(list(
     endianness = endianness,
-    python_type = python_type,
     base_type = base_type,
     size = size
   ))
