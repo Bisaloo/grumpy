@@ -204,6 +204,26 @@ test_that("big endian files work", {
     expect_identical(array(as.double(1L:12L), dim = 12L))
 })
 
+test_that("structured arrays work", {
+  system.file("extdata", "test_structured.npy", package = "grumpy") |>
+    read_npy() |>
+    expect_no_condition() |>
+    expect_identical(
+      array(
+        list(
+          list(1L, 3.14, "Alice"),
+          list(2L, 2.71, "Bob"),
+          list(3L, 1.62, "Charlie"),
+          list(4L, 0.0, "Dave"),
+          list(5L, -1.0, "Eve"),
+          list(6L, 2.0, "Frank"),
+          list(7L, 33.12, "Grace")
+        ),
+        dim = 7L
+      )
+    )
+})
+
 test_that("higher-dimension arrays work", {
   system.file("extdata", "test_2d.npy", package = "grumpy") |>
     read_npy() |>
