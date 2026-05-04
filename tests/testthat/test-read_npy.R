@@ -153,35 +153,7 @@ test_that("different types work", {
       ),
       dim = 12L
     ))
-})
 
-test_that("big endian files work", {
-  system.file("extdata", "test_bigendian.npy", package = "grumpy") |>
-    read_npy() |>
-    expect_no_condition() |>
-    expect_identical(array(as.double(1:12), dim = 12L))
-})
-
-test_that("higher-dimension arrays work", {
-  system.file("extdata", "test_2d.npy", package = "grumpy") |>
-    read_npy() |>
-    expect_no_condition() |>
-    expect_identical(array(0:11, dim = c(3L, 4L)))
-
-  system.file("extdata", "test_3d.npy", package = "grumpy") |>
-    read_npy() |>
-    expect_no_condition() |>
-    expect_identical(array(0:23, dim = c(2L, 3L, 4L)))
-})
-
-test_that("fortran order arrays work", {
-  system.file("extdata", "test_fortran.npy", package = "grumpy") |>
-    read_npy() |>
-    expect_no_condition() |>
-    expect_identical(matrix(0:11, nrow = 3L, ncol = 4L, byrow = TRUE))
-})
-
-test_that("string dtypes raise an informative error", {
   system.file("extdata", "test_str_unicode.npy", package = "grumpy") |>
     read_npy() |>
     expect_no_condition() |>
@@ -223,6 +195,32 @@ test_that("string dtypes raise an informative error", {
       ),
       dim = 12L
     ))
+})
+
+test_that("big endian files work", {
+  system.file("extdata", "test_bigendian.npy", package = "grumpy") |>
+    read_npy() |>
+    expect_no_condition() |>
+    expect_identical(array(as.double(1:12), dim = 12L))
+})
+
+test_that("higher-dimension arrays work", {
+  system.file("extdata", "test_2d.npy", package = "grumpy") |>
+    read_npy() |>
+    expect_no_condition() |>
+    expect_identical(array(0:11, dim = c(3L, 4L)))
+
+  system.file("extdata", "test_3d.npy", package = "grumpy") |>
+    read_npy() |>
+    expect_no_condition() |>
+    expect_identical(array(0:23, dim = c(2L, 3L, 4L)))
+})
+
+test_that("fortran order arrays work", {
+  system.file("extdata", "test_fortran.npy", package = "grumpy") |>
+    read_npy() |>
+    expect_no_condition() |>
+    expect_identical(matrix(0:11, nrow = 3L, ncol = 4L, byrow = TRUE))
 })
 
 test_that("scalar or empty arrays work", {
