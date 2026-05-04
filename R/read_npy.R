@@ -104,7 +104,6 @@ parse_npy_descr <- function(bytes) {
   return(list(
     endianness = parsed_descr$endianness,
     python_type = parsed_descr$python_type,
-    r_type = parsed_descr$r_type,
     base_type = parsed_descr$base_type,
     size = parsed_descr$size,
     fortran_order = fortran_order,
@@ -124,18 +123,6 @@ parse_npy_datatype <- function(descr) {
     )
   }
   python_type <- descr[3L]
-  r_type <- switch(
-    python_type,
-    f = "numeric",
-    i = "integer",
-    u = "integer",
-    `?` = "logical",
-    b = "logical",
-    a = "string",
-    S = "string",
-    U = "unicode",
-    stop("Unsupported data type in .npy file: ", descr[1L], call. = FALSE)
-  )
   base_type <- switch(
     python_type,
     f = "float",
@@ -145,7 +132,8 @@ parse_npy_datatype <- function(descr) {
     b = "bool",
     a = "string",
     S = "string",
-    U = "unicode"
+    U = "unicode",
+    stop("Unsupported data type in .npy file: ", descr[1L], call. = FALSE)
   )
 
   size <- switch(
@@ -163,7 +151,6 @@ parse_npy_datatype <- function(descr) {
   return(list(
     endianness = endianness,
     python_type = python_type,
-    r_type = r_type,
     base_type = base_type,
     size = size
   ))
