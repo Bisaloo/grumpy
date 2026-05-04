@@ -182,22 +182,41 @@ parse_npy_data <- function(bytes, shape, datatype, signed, typesize, endian) {
     bytes <- bytes[ind]
   }
 
-  if (datatype == "unicode") {
-    res <- .Call(
-      "type_convert_unicode",
+  res <- switch(
+    datatype,
+    float = .Call(
+      C_type_convert_float,
+      bytes,
+      typesize
+    ),
+    int = .Call(
+      C_type_convert_int,
+      bytes,
+      typesize
+    ),
+    uint = .Call(
+      C_type_convert_uint,
+      bytes,
+      typesize
+    ),
+    bool = .Call(
+      C_type_convert_bool,
+      bytes,
+      typesize
+    ),
+    string = .Call(
+      C_type_convert_string,
+      bytes,
+      typesize
+    ),
+    unicode = .Call(
+      C_type_convert_unicode,
       bytes,
       typesize,
-      endian,
-      PACKAGE = "grumpy"
-    )
-  } else {
-    res <- .Call(
-      paste0("type_convert_", datatype),
-      bytes,
-      typesize,
-      PACKAGE = "grumpy"
-    )
-  }
+      endian
+    ),
+    stop("Unsupported data type: ", datatype, call. = FALSE)
+  )
 
   dim(res) <- shape
 
