@@ -10,8 +10,8 @@ np.save("inst/extdata/test_int64_overflowing.npy", np.array([-2**32, -2**31, -2*
 # Unsigned integer (stored as integer in R)
 np.save("inst/extdata/test_uint8.npy", np.array([0, 10, 20, 50, 100, 128, 150, 175, 200, 210, 240, 255], dtype="uint8"))
 np.save("inst/extdata/test_uint16.npy", np.array([0, 100, 1000, 5000, 10000, 20000, 32767, 40000, 50000, 55000, 60000, 65535], dtype="uint16"))
-np.save("inst/extdata/test_uint32.npy", np.array([0, 1, 10, 100, 1000, 10000, 100000, 1000000, 2**16, 2**24, 2**31, 2**32 - 1], dtype="uint32"))
-np.save("inst/extdata/test_uint64.npy", np.array([0, 1, 10, 100, 1000, 10000, 100000, 2**16, 2**32, 2**48, 2**63, 2**64 - 1], dtype="uint64"))
+np.save("inst/extdata/test_uint32_overflowing.npy", np.array([0, 1, 10, 100, 1000, 10000, 100000, 1000000, 2**16, 2**24, 2**31, 2**32 - 1], dtype="uint32"))
+np.save("inst/extdata/test_uint64_overflowing.npy", np.array([0, 1, 10, 100, 1000, 10000, 100000, 2**16, 2**32, 2**48, 2**63, 2**64 - 1], dtype="uint64"))
 
 # Float types
 np.save("inst/extdata/test_float32.npy", np.array([1.5, -2.5, 3.14, 0.0, -1.0, 100.0, -100.0, 0.001, 1e6, -1e6, 1.23456, -9.87654], dtype="float32"))
