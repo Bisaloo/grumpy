@@ -8,4 +8,4 @@ SEXP type_convert_uint(SEXP input, SEXP _n_bytes);
 SEXP type_convert_float(SEXP input, SEXP _n_bytes);
 SEXP type_convert_bool(SEXP input, SEXP _n_bytes);
 SEXP type_convert_string(SEXP input, SEXP _n_bytes);
-SEXP type_convert_unicode(SEXP input, SEXP _n_bytes);
+SEXP type_convert_unicode(SEXP input, SEXP _n_bytes, SEXP _endian);
