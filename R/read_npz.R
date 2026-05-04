@@ -4,6 +4,8 @@
 #'
 #' @return A list of arrays containing the data from the .npz file
 #'
+#' @importFrom utils unzip
+#'
 #' @export
 #'
 #' @examples

@@ -2,4 +2,5 @@
 
 export(read_npy)
 export(read_npz)
+importFrom(utils,unzip)
 useDynLib(grumpy)
