@@ -64,7 +64,6 @@ read_npy <- function(file) {
     con,
     shape = header$shape,
     datatype = header$base_type,
-    signed = header$signed,
     typesize = header$size,
     endian = header$endianness
   )
@@ -105,7 +104,6 @@ parse_npy_descr <- function(bytes) {
     python_type = parsed_descr$python_type,
     r_type = parsed_descr$r_type,
     base_type = parsed_descr$base_type,
-    signed = parsed_descr$signed,
     size = parsed_descr$size,
     fortran_order = fortran_order,
     shape = shape
@@ -136,7 +134,6 @@ parse_npy_datatype <- function(descr) {
     U = "unicode",
     stop("Unsupported data type in .npy file: ", descr[1L], call. = FALSE)
   )
-  signed <- python_type != "u"
   base_type <- switch(
     python_type,
     f = "float",
@@ -166,12 +163,11 @@ parse_npy_datatype <- function(descr) {
     python_type = python_type,
     r_type = r_type,
     base_type = base_type,
-    signed = signed,
     size = size
   ))
 }
 
-parse_npy_data <- function(bytes, shape, datatype, signed, typesize, endian) {
+parse_npy_data <- function(bytes, shape, datatype, typesize, endian) {
   num_elements <- prod(shape)
 
   bytes <- readBin(bytes, "raw", n = num_elements * typesize)
