@@ -1,4 +1,5 @@
 #include "type_conversion.h"
+#include <R_ext/Riconv.h>
 
 SEXP type_convert_int(SEXP input, SEXP _n_bytes) {
 
@@ -174,6 +175,60 @@ SEXP type_convert_string(SEXP input, SEXP _n_bytes) {
       SET_STRING_ELT(data, i, mkCharCE(field, CE_BYTES));
   }
 
+  UNPROTECT(1);
+  return(data);
+}
+
+SEXP type_convert_unicode(SEXP input, SEXP _n_bytes) {
+
+  // n_bytes is the total bytes per string element (num_codepoints * 4).
+  // The raw bytes have already been endian-swapped per codepoint (4 bytes each)
+  // before being passed here, so the encoding is UTF-32LE.
+  const size_t n_bytes = (size_t)INTEGER(_n_bytes)[0];
+  const R_xlen_t length = xlength(input);
+  const char *raw_buffer = (const char *)RAW(input);
+
+  const R_xlen_t data_length = length / n_bytes;
+  R_xlen_t i;
+  SEXP data;
+
+  // Worst case: 4 UTF-8 bytes per UTF-32 codepoint.
+  char *utf8_buf = (char *)R_alloc(n_bytes + 1, 1);
+
+  void *cd = Riconv_open("UTF-8", "UTF-32LE");
+  if (cd == (void *)-1)
+    error("Riconv_open failed: cannot convert UTF-32LE to UTF-8");
+
+  data = PROTECT(allocVector(STRSXP, data_length));
+
+  for (i = 0; i < data_length; i++) {
+    const char *inbuf = raw_buffer + i * n_bytes;
+
+    // Find the actual length: stop at the first null codepoint (4 zero bytes),
+    // or at n_bytes if there is no null terminator.
+    // This allows us to handle both fixed-length and null-terminated strings.
+    size_t field_bytes = 0;
+    while (field_bytes + 4 <= n_bytes) {
+      uint32_t cp;
+      memcpy(&cp, inbuf + field_bytes, 4);
+      if (cp == 0) break;
+      field_bytes += 4;
+    }
+
+    size_t inbytesleft = field_bytes;
+    size_t outbytesleft = n_bytes; // safe upper bound
+    char *outbuf = utf8_buf;
+
+    Riconv(cd, &inbuf, &inbytesleft, &outbuf, &outbytesleft);
+    *outbuf = '\0';
+
+    SET_STRING_ELT(data, i, mkCharCE(utf8_buf, CE_UTF8));
+
+    // Reset the converter state for the next element.
+    Riconv(cd, NULL, NULL, NULL, NULL);
+  }
+
+  Riconv_close(cd);
   UNPROTECT(1);
   return(data);
 }
