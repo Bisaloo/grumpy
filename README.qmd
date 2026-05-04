@@ -19,6 +19,8 @@ knitr::opts_chunk$set(
 # grumpy
 
 <!-- badges: start -->
+[![R-CMD-check](https://github.com/Bisaloo/grumpy/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Bisaloo/grumpy/actions/workflows/R-CMD-check.yaml)
+[![Codecov test coverage](https://codecov.io/gh/Bisaloo/grumpy/graph/badge.svg)](https://app.codecov.io/gh/Bisaloo/grumpy)
 <!-- badges: end -->
 
 The grumpy R package provides a way to read NumPy's `.npy` files into R. It supports a wide range of data types and array shapes.
