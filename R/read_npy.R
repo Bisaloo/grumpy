@@ -42,11 +42,8 @@ read_npy <- function(file) {
 
   header <- parse_npy_descr(readBin(con, "raw", n = header_len))
 
-  if (header$python_type == "u" && header$size > 2) {
-    stop("Unsigned integers larger than 16 bits are not supported.")
-  }
   # TODO: improve int64 support
-  if (header$python_type == "i" && header$size == 8) {
+  if (header$python_type %in% c("i", "u") && header$size == 8) {
     warning("64-bit integers may overflow when converted to R integers.")
   }
 
