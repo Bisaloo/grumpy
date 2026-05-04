@@ -1,0 +1,15 @@
+linters: all_linters(
+    packages = "lintr",
+    return_linter = NULL,
+    todo_comment_linter = NULL,
+    undesirable_function_linter(
+      modify_defaults(
+        default_undesirable_functions,
+        citEntry = "use the more modern bibentry() function",
+        mapply = NULL,
+        library = NULL # too many false positive in too many files
+      ),
+      symbol_is_undesirable = FALSE
+    )
+  ) # see vignette("lintr")
+encoding: "UTF-8"
