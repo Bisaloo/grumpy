@@ -52,7 +52,7 @@ read_npy <- function(file) {
   header <- parse_npy_descr(readBin(con, "raw", n = header_len))
 
   # TODO: improve int64 support
-  if (header$base_type %in% c("uint", "int") && header$size == 8L) {
+  if (any(header$base_type %in% c("uint", "int") & header$size == 8L)) {
     warning(
       "64-bit integers may overflow when converted to R integers.",
       call. = FALSE
@@ -61,7 +61,7 @@ read_npy <- function(file) {
 
   # Read the data
   num_elements <- prod(header$shape)
-  bytes <- readBin(con, "raw", n = num_elements * header$size)
+  bytes <- readBin(con, "raw", n = sum(num_elements * header$size))
   parse_npy_data(
     bytes,
     shape = header$shape,
@@ -80,7 +80,7 @@ parse_npy_descr <- function(bytes) {
   header <- bytes |>
     rawToChar() |>
     convert_py_dict_to_json() |>
-    jsonlite::fromJSON()
+    jsonlite::fromJSON(simplifyMatrix = FALSE)
 
   parsed_descr <- parse_npy_datatype(header$descr)
 
@@ -94,6 +94,20 @@ parse_npy_descr <- function(bytes) {
 }
 
 parse_npy_datatype <- function(descr) {
+  if (is.list(descr)) {
+    # structured data type
+    types <- lapply(descr, function(field) {
+      parse_npy_datatype(field[[2]])
+    })
+    return(
+      list(
+        types,
+        size = vapply(types, function(x) x$size, integer(1L)),
+        base_type = vapply(types, function(x) x$base_type, character(1L)),
+        endianness = vapply(types, function(x) x$endianness, character(1L))
+      )
+    )
+  }
   descr_components <- regmatches(
     descr,
     regexec("^([<>|]?)([a-zA-Z])([0-9]+)$", descr)
@@ -150,48 +164,76 @@ parse_npy_datatype <- function(descr) {
 }
 
 parse_npy_data <- function(bytes, shape, datatype, typesize, endian) {
-  # FIXME: optimize this
-  if (datatype != "unicode" && !is.na(endian) && endian != .Platform$endian) {
-    ind <- rep_len(rev(seq_len(typesize)), length(bytes)) +
-      (seq_along(bytes) - 1L) %/% typesize * typesize
-    bytes <- bytes[ind]
-  }
+  if (length(datatype) > 1L) {
+    # structured datatype
+    field <- rep_len(
+      rep(
+        seq_along(typesize),
+        typesize
+      ),
+      length.out = length(bytes)
+    )
 
-  res <- switch(
-    datatype,
-    float = .Call(
-      C_type_convert_float,
-      bytes,
-      typesize
-    ),
-    int = .Call(
-      C_type_convert_int,
-      bytes,
-      typesize
-    ),
-    uint = .Call(
-      C_type_convert_uint,
-      bytes,
-      typesize
-    ),
-    bool = .Call(
-      C_type_convert_bool,
-      bytes,
-      typesize
-    ),
-    string = .Call(
-      C_type_convert_string,
-      bytes,
-      typesize
-    ),
-    unicode = .Call(
-      C_type_convert_unicode,
-      bytes,
-      typesize,
-      endian
-    ),
-    stop("Unsupported data type: ", datatype, call. = FALSE)
-  )
+    res <- vector("list", prod(shape))
+    for (i in seq_along(datatype)) {
+      raw_field <- bytes[field == i]
+      field_converted <- parse_npy_data(
+        raw_field,
+        shape = NULL,
+        datatype = datatype[[i]],
+        typesize = typesize[[i]],
+        endian = endian[[i]]
+      )
+      res <- mapply(
+        function(x, y) c(x, list(y)),
+        res,
+        field_converted,
+        SIMPLIFY = FALSE
+      )
+    }
+  } else {
+    # FIXME: optimize this
+    if (datatype != "unicode" && !is.na(endian) && endian != .Platform$endian) {
+      ind <- rep_len(rev(seq_len(typesize)), length(bytes)) +
+        (seq_along(bytes) - 1L) %/% typesize * typesize
+      bytes <- bytes[ind]
+    }
+    res <- switch(
+      datatype,
+      float = .Call(
+        C_type_convert_float,
+        bytes,
+        typesize
+      ),
+      int = .Call(
+        C_type_convert_int,
+        bytes,
+        typesize
+      ),
+      uint = .Call(
+        C_type_convert_uint,
+        bytes,
+        typesize
+      ),
+      bool = .Call(
+        C_type_convert_bool,
+        bytes,
+        typesize
+      ),
+      string = .Call(
+        C_type_convert_string,
+        bytes,
+        typesize
+      ),
+      unicode = .Call(
+        C_type_convert_unicode,
+        bytes,
+        typesize,
+        endian
+      ),
+      stop("Unsupported data type: ", datatype, call. = FALSE)
+    )
+  }
 
   dim(res) <- shape
 
