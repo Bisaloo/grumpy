@@ -187,18 +187,18 @@ test_that("string dtypes raise an informative error", {
     expect_no_condition() |>
     expect_identical(array(
       c(
-        "foo",
-        "bar",
-        "baz",
-        "qux",
-        "hello",
-        "world",
-        "alpha",
-        "beta",
-        "gamma",
-        "delta",
-        "epsilon",
-        "zeta"
+        '¡Hola mundo!',
+        'Hej Världen!',
+        'Servus Woid!',
+        'Hei maailma!',
+        'Xin chào thế giới',
+        'Njatjeta Botë!',
+        'Γεια σου κόσμε!',
+        'こんにちは世界',
+        '世界，你好！',
+        'Helló, világ!',
+        'Zdravo svete!',
+        'เฮลโลเวิลด์'
       ),
       dim = 12L
     ))
