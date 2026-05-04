@@ -102,8 +102,8 @@ test_that("different types work", {
           100.0,
           -100.0,
           0.001,
-          1e6,
-          -1e6,
+          1000000.0,
+          -1000000.0,
           1.23456,
           -9.87654
         ),
@@ -125,8 +125,8 @@ test_that("different types work", {
         100.0,
         -100.0,
         0.001,
-        1e6,
-        -1e6,
+        1000000.0,
+        -1000000.0,
         1.23456789,
         -9.87654321
       ),
@@ -159,18 +159,18 @@ test_that("different types work", {
     expect_no_condition() |>
     expect_identical(array(
       c(
-        '¡Hola mundo!',
-        'Hej Världen!',
-        'Servus Woid!',
-        'Hei maailma!',
-        'Xin chào thế giới',
-        'Njatjeta Botë!',
-        'Γεια σου κόσμε!',
-        'こんにちは世界',
-        '世界，你好！',
-        'Helló, világ!',
-        'Zdravo svete!',
-        'เฮลโลเวิลด์'
+        "¡Hola mundo!",
+        "Hej Världen!",
+        "Servus Woid!",
+        "Hei maailma!",
+        "Xin chào thế giới",
+        "Njatjeta Botë!",
+        "Γεια σου κόσμε!",
+        "こんにちは世界",
+        "世界，你好！",
+        "Helló, világ!",
+        "Zdravo svete!",
+        "เฮลโลเวิลด์"
       ),
       dim = 12L
     ))
@@ -201,36 +201,36 @@ test_that("big endian files work", {
   system.file("extdata", "test_bigendian.npy", package = "grumpy") |>
     read_npy() |>
     expect_no_condition() |>
-    expect_identical(array(as.double(1:12), dim = 12L))
+    expect_identical(array(as.double(1L:12L), dim = 12L))
 })
 
 test_that("higher-dimension arrays work", {
   system.file("extdata", "test_2d.npy", package = "grumpy") |>
     read_npy() |>
     expect_no_condition() |>
-    expect_identical(array(0:11, dim = c(3L, 4L)))
+    expect_identical(array(0L:11L, dim = c(3L, 4L)))
 
   system.file("extdata", "test_3d.npy", package = "grumpy") |>
     read_npy() |>
     expect_no_condition() |>
-    expect_identical(array(0:23, dim = c(2L, 3L, 4L)))
+    expect_identical(array(0L:23L, dim = c(2L, 3L, 4L)))
 })
 
 test_that("fortran order arrays work", {
   system.file("extdata", "test_fortran.npy", package = "grumpy") |>
     read_npy() |>
     expect_no_condition() |>
-    expect_identical(matrix(0:11, nrow = 3L, ncol = 4L, byrow = TRUE))
+    expect_identical(matrix(0L:11L, nrow = 3L, ncol = 4L, byrow = TRUE))
 })
 
 test_that("scalar or empty arrays work", {
   system.file("extdata", "test_scalar.npy", package = "grumpy") |>
     read_npy() |>
     expect_no_condition() |>
-    expect_identical(array(42))
+    expect_identical(array(42.0))
 
   system.file("extdata", "test_empty.npy", package = "grumpy") |>
     read_npy() |>
     expect_no_condition() |>
-    expect_length(0)
+    expect_length(0L)
 })

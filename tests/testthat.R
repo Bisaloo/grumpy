@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/articles/special-files.html
 
 library(testthat)
-library(grumpy)
+library(grumpy) # nolint: unused_import_linter.
 
 test_check("grumpy")
