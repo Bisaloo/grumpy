@@ -1,4 +1,4 @@
-#' @useDynLib grumpy
+#' @useDynLib grumpy, .registration = TRUE, .fixes = "C_"
 #' @keywords internal
 "_PACKAGE"
 

@@ -3,4 +3,4 @@
 export(read_npy)
 export(read_npz)
 importFrom(utils,unzip)
-useDynLib(grumpy)
+useDynLib(grumpy, .registration = TRUE, .fixes = "C_")
