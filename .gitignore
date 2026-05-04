@@ -3,3 +3,7 @@ inst/doc
 /.quarto/
 **/*.quarto_ipynb
 docs
+
+*.o
+*.so
+*.dll
