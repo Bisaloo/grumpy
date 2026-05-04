@@ -14,41 +14,53 @@
 read_npy <- function(file) {
   if (is.character(file)) {
     if (!file.exists(file)) {
-      stop("File does not exist: ", file)
+      stop("File does not exist: ", file, call. = FALSE)
     }
     con <- file(file, "rb")
     on.exit(close(con))
   } else if (inherits(file, "connection")) {
     con <- file
   } else {
-    stop("Invalid bytes: file must be a character string or a connection.")
+    stop(
+      "Invalid bytes: file must be a character string or a connection.",
+      call. = FALSE
+    )
   }
 
   # Read the header
-  magic_string <- readBin(con, "raw", n = 6)
+  magic_string <- readBin(con, "raw", n = 6L)
   if (!identical(magic_string, charToRaw("\x93NUMPY"))) {
-    stop("Not a valid .npy file: ", file)
+    stop("Not a valid .npy file: ", file, call. = FALSE)
   }
 
-  version <- readBin(con, "integer", n = 2, size = 1, endian = "little")
+  format_version <- readBin(
+    con,
+    "integer",
+    n = 2L,
+    size = 1L,
+    endian = "little"
+  )
 
-  header_len <- if (version[1] == 1) {
-    readBin(con, "integer", n = 1, size = 2, endian = "little")
-  } else if (version[1] %in% c(2, 3)) {
-    readBin(con, "integer", n = 1, size = 4, endian = "little")
+  header_len <- if (format_version[1L] == 1L) {
+    readBin(con, "integer", n = 1L, size = 2L, endian = "little")
+  } else if (format_version[1L] %in% c(2L, 3L)) {
+    readBin(con, "integer", n = 1L, size = 4L, endian = "little")
   } else {
-    stop("Unsupported .npy version: ", version[1])
+    stop("Unsupported .npy version: ", format_version[1L], call. = FALSE)
   }
 
   header <- parse_npy_descr(readBin(con, "raw", n = header_len))
 
   # TODO: improve int64 support
-  if (header$python_type %in% c("i", "u") && header$size == 8) {
-    warning("64-bit integers may overflow when converted to R integers.")
+  if (header$python_type %in% c("i", "u") && header$size == 8L) {
+    warning(
+      "64-bit integers may overflow when converted to R integers.",
+      call. = FALSE
+    )
   }
 
   # Read the data
-  data <- parse_npy_data(
+  parse_npy_data(
     con,
     shape = header$shape,
     datatype = header$base_type,
@@ -56,13 +68,12 @@ read_npy <- function(file) {
     typesize = header$size,
     endian = header$endianness
   )
-
-  return(data)
 }
 
 parse_npy_descr <- function(bytes) {
   header <- rawToChar(bytes)
-  # FIXME: are we sure descr is always using the short formatting for dtypes? (e.g. 'i4' instead of 'int32')
+  # FIXME: are we sure descr is always using the short formatting for dtypes?
+  # (e.g. 'i4' instead of 'int32')
   descr <- regmatches(
     header,
     regexec(
@@ -70,7 +81,7 @@ parse_npy_descr <- function(bytes) {
       header,
       perl = TRUE
     )
-  )[[1]]
+  )[[1L]]
   parsed_descr <- parse_npy_datatype(descr)
 
   # TODO: If I understand correctly, fortranarray in python are still displayed
@@ -81,13 +92,13 @@ parse_npy_descr <- function(bytes) {
   fortran_order <- as.logical(regmatches(
     header,
     regexec("['\"]fortran_order['\"]\\s*:\\s*(True|False)", header)
-  )[[1]][2])
+  )[[1L]][2L])
   shape <- regmatches(
     header,
     regexec("['\"]shape['\"]\\s*:\\s*\\(([^\\)]*)\\)", header)
-  )[[1]][2]
+  )[[1L]][2L]
 
-  shape <- as.integer(strsplit(shape, ",\\s*")[[1]])
+  shape <- as.integer(strsplit(shape, ",\\s*")[[1L]])
 
   return(list(
     endianness = parsed_descr$endianness,
@@ -102,52 +113,52 @@ parse_npy_descr <- function(bytes) {
 }
 
 parse_npy_datatype <- function(descr) {
-  endianness <- if (descr[2] %in% c("", "|")) {
+  endianness <- if (descr[2L] %in% c("", "|")) {
     .Platform$endian
   } else {
     switch(
-      descr[2],
-      "<" = "little",
-      ">" = "big",
-      stop("Invalid endianness in .npy file: ", descr[1])
+      descr[2L],
+      `<` = "little",
+      `>` = "big",
+      stop("Invalid endianness in .npy file: ", descr[1L], call. = FALSE)
     )
   }
-  python_type <- descr[3]
+  python_type <- descr[3L]
   r_type <- switch(
     python_type,
-    "f" = "numeric",
-    "i" = "integer",
-    "u" = "integer",
-    "?" = "logical",
-    "b" = "logical",
-    "a" = "string",
-    "S" = "string",
-    "U" = "unicode",
-    stop("Unsupported data type in .npy file: ", descr[1])
+    f = "numeric",
+    i = "integer",
+    u = "integer",
+    `?` = "logical",
+    b = "logical",
+    a = "string",
+    S = "string",
+    U = "unicode",
+    stop("Unsupported data type in .npy file: ", descr[1L], call. = FALSE)
   )
   signed <- python_type != "u"
   base_type <- switch(
     python_type,
-    "f" = "float",
-    "i" = "int",
-    "u" = "uint",
-    "?" = "bool",
-    "b" = "bool",
-    "a" = "string",
-    "S" = "string",
-    "U" = "unicode"
+    f = "float",
+    i = "int",
+    u = "uint",
+    `?` = "bool",
+    b = "bool",
+    a = "string",
+    S = "string",
+    U = "unicode"
   )
 
   size <- switch(
     python_type,
-    "f" = as.integer(descr[4]),
-    "i" = as.integer(descr[4]),
-    "u" = as.integer(descr[4]),
-    "?" = 1L,
-    "b" = 1L,
-    "a" = as.integer(descr[4]),
-    "S" = as.integer(descr[4]),
-    "U" = as.integer(descr[4]) * 4L
+    f = as.integer(descr[4L]),
+    i = as.integer(descr[4L]),
+    u = as.integer(descr[4L]),
+    `?` = 1L,
+    b = 1L,
+    a = as.integer(descr[4L]),
+    S = as.integer(descr[4L]),
+    U = as.integer(descr[4L]) * 4L
   )
 
   return(list(
@@ -172,7 +183,7 @@ parse_npy_data <- function(bytes, shape, datatype, signed, typesize, endian) {
   }
 
   if (datatype == "unicode") {
-    data <- .Call(
+    res <- .Call(
       "type_convert_unicode",
       bytes,
       typesize,
@@ -180,7 +191,7 @@ parse_npy_data <- function(bytes, shape, datatype, signed, typesize, endian) {
       PACKAGE = "grumpy"
     )
   } else {
-    data <- .Call(
+    res <- .Call(
       paste0("type_convert_", datatype),
       bytes,
       typesize,
@@ -188,7 +199,7 @@ parse_npy_data <- function(bytes, shape, datatype, signed, typesize, endian) {
     )
   }
 
-  dim(data) <- shape
+  dim(res) <- shape
 
-  return(data)
+  return(res)
 }

@@ -4,9 +4,9 @@ test_that("read_npz() works", {
     expect_no_condition()
 
   expect_type(res, "list")
-  expect_equal(length(res), 2)
+  expect_length(res, 2L)
 
   # Mixed types are preserved
-  expect_identical(res[[1]], array(c(1L, 2L, 3L), dim = 3L))
-  expect_identical(res[[2]], array(c(4.0, 5.0, 6.0), dim = 3L))
+  expect_identical(res[[1L]], array(c(1L, 2L, 3L), dim = 3L))
+  expect_identical(res[[2L]], array(c(4.0, 5.0, 6.0), dim = 3L))
 })
