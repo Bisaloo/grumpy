@@ -60,8 +60,10 @@ read_npy <- function(file) {
   }
 
   # Read the data
+  num_elements <- prod(header$shape)
+  bytes <- readBin(con, "raw", n = num_elements * header$size)
   parse_npy_data(
-    con,
+    bytes,
     shape = header$shape,
     datatype = header$base_type,
     typesize = header$size,
@@ -168,9 +170,6 @@ parse_npy_datatype <- function(descr) {
 }
 
 parse_npy_data <- function(bytes, shape, datatype, typesize, endian) {
-  num_elements <- prod(shape)
-
-  bytes <- readBin(bytes, "raw", n = num_elements * typesize)
   # FIXME: optimize this
   if (datatype != "unicode" && !is.na(endian) && endian != .Platform$endian) {
     ind <- rep_len(rev(seq_len(typesize)), length(bytes)) +
