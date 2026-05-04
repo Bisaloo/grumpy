@@ -67,7 +67,7 @@ test_that("different types work", {
       dim = 12L
     ))
 
-  system.file("extdata", "test_uint32.npy", package = "grumpy") |>
+  system.file("extdata", "test_uint32_overflowing.npy", package = "grumpy") |>
     read_npy() |>
     expect_identical(array(
       c(
