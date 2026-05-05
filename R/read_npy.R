@@ -120,7 +120,7 @@ parse_npy_datatype <- function(descr) {
       `<` = "little",
       `>` = "big",
       stop(
-        "Invalid endianness in .npy file: ",
+        "Invalid endianness: ",
         descr_components[1L],
         call. = FALSE
       )
@@ -143,7 +143,7 @@ parse_npy_datatype <- function(descr) {
     V = "other",
     O = "py_object",
     stop(
-      "Unsupported data type in .npy file: ",
+      "Unsupported data type: ",
       descr_components[1L],
       call. = FALSE
     )
