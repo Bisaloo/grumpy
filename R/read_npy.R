@@ -93,6 +93,7 @@ parse_npy_descr <- function(bytes) {
   ))
 }
 
+#' @export
 parse_npy_datatype <- function(descr) {
   if (is.list(descr)) {
     # structured data type
