@@ -198,10 +198,8 @@ parse_npy_data <- function(bytes, shape, datatype, typesize, endian) {
       )
     }
   } else {
-    endian <- if (is.na(endian)) {
-      .Platform$endian
-    } else {
-      endian
+    if (is.na(endian)) {
+      endian <- .Platform$endian
     }
     # FIXME: optimize this
     if (datatype != "unicode" && endian != .Platform$endian) {
