@@ -137,6 +137,11 @@ parse_npy_datatype <- function(descr) {
     a = "string",
     S = "string",
     U = "unicode",
+    c = "complex",
+    m = "timedelta",
+    M = "datetime",
+    V = "other",
+    O = "py_object",
     stop(
       "Unsupported data type in .npy file: ",
       descr_components[1L],
