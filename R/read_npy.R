@@ -157,6 +157,7 @@ parse_npy_datatype <- function(descr) {
   ))
 }
 
+#' @export
 convert_bytes_to_array <- function(bytes, what, shape, size, endian) {
   if (length(what) > 1L) {
     # structured datatype
