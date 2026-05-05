@@ -52,7 +52,7 @@ read_npy <- function(file) {
   header <- parse_npy_descr(readBin(con, "raw", n = header_len))
 
   # TODO: improve int64 support
-  if (any(header$base_type %in% c("uint", "int") & header$size == 8L)) {
+  if (any(header$base_type %in% c("uint", "int") & header$nbytes == 8L)) {
     warning(
       "64-bit integers may overflow when converted to R integers.",
       call. = FALSE
@@ -61,13 +61,13 @@ read_npy <- function(file) {
 
   # Read the data
   num_elements <- prod(header$shape)
-  bytes <- readBin(con, "raw", n = sum(num_elements * header$size))
+  bytes <- readBin(con, "raw", n = sum(num_elements * header$nbytes))
   convert_bytes_to_array(
     bytes,
     what = header$base_type,
     shape = header$shape,
-    size = header$size,
-    endian = header$endianness
+    size = header$nbytes,
+    endian = header$endian
   )
 }
 
@@ -85,9 +85,9 @@ parse_npy_descr <- function(bytes) {
   parsed_descr <- parse_npy_datatype(header$descr)
 
   return(list(
-    endianness = parsed_descr$endianness,
+    endian = parsed_descr$endian,
     base_type = parsed_descr$base_type,
-    size = parsed_descr$size,
+    nbytes = parsed_descr$nbytes,
     fortran_order = header$fortran_order,
     shape = header$shape
   ))
@@ -103,9 +103,9 @@ parse_npy_datatype <- function(descr) {
     return(
       list(
         types,
-        size = vapply(types, function(x) x$size, integer(1L)),
+        nbytes = vapply(types, function(x) x$nbytes, integer(1L)),
         base_type = vapply(types, function(x) x$base_type, character(1L)),
-        endianness = vapply(types, function(x) x$endianness, character(1L))
+        endian = vapply(types, function(x) x$endian, character(1L))
       )
     )
   }
@@ -113,7 +113,7 @@ parse_npy_datatype <- function(descr) {
     descr,
     regexec("^([<>|]?)([a-zA-Z])([0-9]*)$", descr)
   )[[1L]]
-  endianness <- if (descr_components[2L] %in% c("", "|")) {
+  endian <- if (descr_components[2L] %in% c("", "|")) {
     NA_character_
   } else {
     switch(
@@ -152,9 +152,9 @@ parse_npy_datatype <- function(descr) {
   }
 
   return(list(
-    endianness = endianness,
+    endian = endian,
     base_type = entry$base_type,
-    size = entry$size
+    nbytes = entry$size
   ))
 }
 
