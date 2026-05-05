@@ -62,11 +62,11 @@ read_npy <- function(file) {
   # Read the data
   num_elements <- prod(header$shape)
   bytes <- readBin(con, "raw", n = sum(num_elements * header$size))
-  parse_npy_data(
+  convert_bytes_to_array(
     bytes,
+    what = header$base_type,
     shape = header$shape,
-    datatype = header$base_type,
-    typesize = header$size,
+    size = header$size,
     endian = header$endianness
   )
 }
@@ -157,29 +157,29 @@ parse_npy_datatype <- function(descr) {
   ))
 }
 
-parse_npy_data <- function(bytes, shape, datatype, typesize, endian) {
-  if (length(datatype) > 1L) {
+convert_bytes_to_array <- function(bytes, what, shape, size, endian) {
+  if (length(what) > 1L) {
     # structured datatype
-    record_size <- sum(typesize)
+    record_size <- sum(size)
     n_records <- prod(shape)
 
     # Byte offset of each field within one record
-    field_start <- c(0L, cumsum(typesize)[-length(typesize)])
+    field_start <- c(0L, cumsum(size)[-length(size)])
 
     # Convert each field via strided index extraction
-    res_fields <- vector("list", length(datatype))
-    for (i in seq_along(datatype)) {
+    res_fields <- vector("list", length(what))
+    for (i in seq_along(what)) {
       starts <- seq(
         field_start[[i]] + 1L,
         by = record_size,
         length.out = n_records
       )
-      idx <- rep(starts, each = typesize[[i]]) + seq_len(typesize[[i]]) - 1
-      res_fields[[i]] <- parse_npy_data(
+      idx <- rep(starts, each = size[[i]]) + seq_len(size[[i]]) - 1
+      res_fields[[i]] <- convert_bytes_to_array(
         bytes[idx],
+        what = what[[i]],
         shape = NULL,
-        datatype = datatype[[i]],
-        typesize = typesize[[i]],
+        size = size[[i]],
         endian = endian[[i]]
       )
     }
@@ -194,51 +194,51 @@ parse_npy_data <- function(bytes, shape, datatype, typesize, endian) {
       endian <- .Platform$endian
     }
     # FIXME: optimize this
-    if (datatype != "unicode" && endian != .Platform$endian) {
-      ind <- rep_len(rev(seq_len(typesize)), length(bytes)) +
-        (seq_along(bytes) - 1L) %/% typesize * typesize
+    if (what != "unicode" && endian != .Platform$endian) {
+      ind <- rep_len(rev(seq_len(size)), length(bytes)) +
+        (seq_along(bytes) - 1L) %/% size * size
       bytes <- bytes[ind]
     }
     res <- switch(
-      datatype,
+      what,
       float = .Call(
         C_type_convert_float,
         bytes,
-        typesize,
+        size,
         PACKAGE = "grumpy"
       ),
       int = .Call(
         C_type_convert_int,
         bytes,
-        typesize,
+        size,
         PACKAGE = "grumpy"
       ),
       uint = .Call(
         C_type_convert_uint,
         bytes,
-        typesize,
+        size,
         PACKAGE = "grumpy"
       ),
       bool = .Call(
         C_type_convert_bool,
         bytes,
-        typesize,
+        size,
         PACKAGE = "grumpy"
       ),
       string = .Call(
         C_type_convert_string,
         bytes,
-        typesize,
+        size,
         PACKAGE = "grumpy"
       ),
       unicode = .Call(
         C_type_convert_unicode,
         bytes,
-        typesize,
+        size,
         endian,
         PACKAGE = "grumpy"
       ),
-      stop("Unsupported data type: ", datatype, call. = FALSE)
+      stop("Unsupported data type: ", what, call. = FALSE)
     )
   }
 
