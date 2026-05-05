@@ -110,7 +110,7 @@ parse_npy_datatype <- function(descr) {
   }
   descr_components <- regmatches(
     descr,
-    regexec("^([<>|]?)([a-zA-Z])([0-9]+)$", descr)
+    regexec("^([<>|]?)([a-zA-Z])([0-9]*)$", descr)
   )[[1L]]
   endianness <- if (descr_components[2L] %in% c("", "|")) {
     .Platform$endian
@@ -158,7 +158,8 @@ parse_npy_datatype <- function(descr) {
     b = 1L,
     a = as.integer(descr_components[4L]),
     S = as.integer(descr_components[4L]),
-    U = as.integer(descr_components[4L]) * 4L
+    U = as.integer(descr_components[4L]) * 4L,
+    O = NA_real_
   )
 
   return(list(
