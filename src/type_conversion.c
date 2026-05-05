@@ -206,6 +206,16 @@ SEXP type_convert_unicode(SEXP input, SEXP _n_bytes, SEXP _endian) {
 
   for (i = 0; i < data_length; i++) {
     const char *inbuf = raw_buffer + i * n_bytes;
+    // Check for R's NA_integer_ sentinel.
+    if (n_bytes >= 4) {
+      int sentinel;
+      memcpy(&sentinel, inbuf, 4);
+      if (sentinel == NA_INTEGER) {
+        SET_STRING_ELT(data, i, NA_STRING);
+        Riconv(cd, NULL, NULL, NULL, NULL);
+        continue;
+      }
+    }
 
     // Find the actual length: stop at the first null codepoint (4 zero bytes),
     // or at n_bytes if there is no null terminator.
