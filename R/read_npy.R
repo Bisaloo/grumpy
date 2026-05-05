@@ -113,7 +113,7 @@ parse_npy_datatype <- function(descr) {
     regexec("^([<>|]?)([a-zA-Z])([0-9]*)$", descr)
   )[[1L]]
   endianness <- if (descr_components[2L] %in% c("", "|")) {
-    .Platform$endian
+    NA_character_
   } else {
     switch(
       descr_components[2L],
@@ -198,8 +198,13 @@ parse_npy_data <- function(bytes, shape, datatype, typesize, endian) {
       )
     }
   } else {
+    endian <- if (is.na(endian)) {
+      .Platform$endian
+    } else {
+      endian
+    }
     # FIXME: optimize this
-    if (datatype != "unicode" && !is.na(endian) && endian != .Platform$endian) {
+    if (datatype != "unicode" && endian != .Platform$endian) {
       ind <- rep_len(rev(seq_len(typesize)), length(bytes)) +
         (seq_along(bytes) - 1L) %/% typesize * typesize
       bytes <- bytes[ind]
