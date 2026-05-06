@@ -160,30 +160,34 @@ parse_npy_datatype <- function(descr) {
 parse_npy_data <- function(bytes, shape, datatype, typesize, endian) {
   if (length(datatype) > 1L) {
     # structured datatype
-    field <- rep_len(
-      rep(
-        seq_along(typesize),
-        typesize
-      ),
-      length.out = length(bytes)
-    )
+    record_size <- sum(typesize)
+    n_records <- prod(shape)
 
-    res <- vector("list", prod(shape))
+    # Byte offset of each field within one record
+    field_start <- c(0L, cumsum(typesize)[-length(typesize)])
+
+    # Convert each field via strided index extraction
+    res_fields <- vector("list", length(datatype))
     for (i in seq_along(datatype)) {
-      raw_field <- bytes[field == i]
-      field_converted <- parse_npy_data(
-        raw_field,
+      starts <- seq(
+        field_start[[i]] + 1L,
+        by = record_size,
+        length.out = n_records
+      )
+      idx <- rep(starts, each = typesize[[i]]) + seq_len(typesize[[i]]) - 1
+      res_fields[[i]] <- parse_npy_data(
+        bytes[idx],
         shape = NULL,
         datatype = datatype[[i]],
         typesize = typesize[[i]],
         endian = endian[[i]]
       )
-      res <- mapply(
-        function(x, y) c(x, list(y)),
-        res,
-        field_converted,
-        SIMPLIFY = FALSE
-      )
+    }
+
+    # Final list-transpose
+    res <- vector("list", n_records)
+    for (j in seq_len(n_records)) {
+      res[[j]] <- lapply(res_fields, `[[`, j)
     }
   } else {
     if (is.na(endian)) {
