@@ -1,0 +1,91 @@
+# Parse a NumPy Array-protocol type strings
+
+Parse a NumPy Array-protocol type strings
+
+## Usage
+
+``` r
+parse_npy_datatype(descr)
+```
+
+## Arguments
+
+- descr:
+
+  A NumPy dtype description string, or a list of such strings fo
+  structured dtypes
+
+## Value
+
+A list containing the parsed data type information, including the base
+type, the number of bytes, and the endianness
+
+## Examples
+
+``` r
+parse_npy_datatype(">i8")
+#> $endian
+#> [1] "big"
+#> 
+#> $base_type
+#> [1] "int"
+#> 
+#> $nbytes
+#> [1] 8
+#> 
+parse_npy_datatype("|b1")
+#> $endian
+#> [1] NA
+#> 
+#> $base_type
+#> [1] "bool"
+#> 
+#> $nbytes
+#> [1] 1
+#> 
+parse_npy_datatype(list(c("r", "<i8"), c("g", "<i8"), c("b", "<i8")))
+#> [[1]]
+#> [[1]][[1]]
+#> [[1]][[1]]$endian
+#> [1] "little"
+#> 
+#> [[1]][[1]]$base_type
+#> [1] "int"
+#> 
+#> [[1]][[1]]$nbytes
+#> [1] 8
+#> 
+#> 
+#> [[1]][[2]]
+#> [[1]][[2]]$endian
+#> [1] "little"
+#> 
+#> [[1]][[2]]$base_type
+#> [1] "int"
+#> 
+#> [[1]][[2]]$nbytes
+#> [1] 8
+#> 
+#> 
+#> [[1]][[3]]
+#> [[1]][[3]]$endian
+#> [1] "little"
+#> 
+#> [[1]][[3]]$base_type
+#> [1] "int"
+#> 
+#> [[1]][[3]]$nbytes
+#> [1] 8
+#> 
+#> 
+#> 
+#> $nbytes
+#> [1] 8 8 8
+#> 
+#> $base_type
+#> [1] "int" "int" "int"
+#> 
+#> $endian
+#> [1] "little" "little" "little"
+#> 
+```

@@ -6,8 +6,10 @@
 <url><loc>https://hugogruson.fr/grumpy/articles/index.html</loc></url>
 <url><loc>https://hugogruson.fr/grumpy/authors.html</loc></url>
 <url><loc>https://hugogruson.fr/grumpy/index.html</loc></url>
+<url><loc>https://hugogruson.fr/grumpy/reference/convert_bytes_to_array.html</loc></url>
 <url><loc>https://hugogruson.fr/grumpy/reference/grumpy-package.html</loc></url>
 <url><loc>https://hugogruson.fr/grumpy/reference/index.html</loc></url>
+<url><loc>https://hugogruson.fr/grumpy/reference/parse_npy_datatype.html</loc></url>
 <url><loc>https://hugogruson.fr/grumpy/reference/read_npy.html</loc></url>
 <url><loc>https://hugogruson.fr/grumpy/reference/read_npz.html</loc></url>
 </urlset>
