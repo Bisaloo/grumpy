@@ -208,7 +208,6 @@ SEXP type_convert_unicode(SEXP input, SEXP _n_bytes, SEXP _endian) {
       memcpy(&sentinel, inbuf, 4);
       if (sentinel == NA_INTEGER) {
         SET_STRING_ELT(data, i, NA_STRING);
-        Riconv(cd, NULL, NULL, NULL, NULL);
         continue;
       }
     }
@@ -232,9 +231,6 @@ SEXP type_convert_unicode(SEXP input, SEXP _n_bytes, SEXP _endian) {
     *outbuf = '\0';
 
     SET_STRING_ELT(data, i, mkCharCE(utf8_buf, CE_UTF8));
-
-    // Reset the converter state for the next element.
-    Riconv(cd, NULL, NULL, NULL, NULL);
   }
 
   Riconv_close(cd);
