@@ -8,10 +8,9 @@ Authors@R: c(
            comment = c("Original author of portions of the C code migrated from the Rarr package")),
         person("German Network for Bioinformatics Infrastructure - de.NBI", role = "fnd")
     )
-Description: This package provides a dependency-free way to read 'NumPy' '.npy' and '.npz'
-    files in R. It support all data types supported by 'NumPy', with all sizes (converted
-    internally to R native size), both C and Fortran order, and any shape, up to an arbitrary
-    number of dimensions.
+Description: Lightweight way to read 'NumPy' '.npy' and '.npz' files in R. All data types supported 
+    by 'NumPy', with all sizes (converted internally to R native size), both C and Fortran order, 
+    and any shape, up to an arbitrary number of dimensions, are supported.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
