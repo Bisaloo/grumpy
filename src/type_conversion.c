@@ -23,8 +23,7 @@ SEXP type_convert_int(SEXP input, SEXP _n_bytes) {
   } else if(n_bytes == 2) {
     const int16_t *mock_buffer = (const int16_t *)raw_buffer;
     for (i = 0; i < data_length; i++) {
-      p_data[i] = mock_buffer[0];
-      mock_buffer++;
+      p_data[i] = mock_buffer[i];
     }
   } else if(n_bytes == 4) {
     memcpy(p_data, raw_buffer, length);
@@ -62,8 +61,7 @@ SEXP type_convert_uint(SEXP input, SEXP _n_bytes) {
   } else if(n_bytes == 2) {
     const uint16_t *mock_buffer = (const uint16_t *)raw_buffer;
     for (i = 0; i < data_length; i++) {
-      p_data[i] = mock_buffer[0];
-      mock_buffer++;
+      p_data[i] = mock_buffer[i];
     }
   } else if(n_bytes == 4) {
     uint32_to_int32(raw_buffer, data_length, p_data);
@@ -97,16 +95,14 @@ SEXP type_convert_float(SEXP input, SEXP _n_bytes){
 
     const uint16_t *mock_buffer = (const uint16_t *)raw_buffer;
     for (i = 0; i < data_length; i++) {
-      p_data[i] = (double)float16_to_float64(mock_buffer[0]);
-      mock_buffer++;
+      p_data[i] = (double)float16_to_float64(mock_buffer[i]);
     }
 
   } else if(n_bytes == 4) {
 
     const float *mock_buffer = (const float *)raw_buffer;
     for (i = 0; i < data_length; i++) {
-      p_data[i] = (double)mock_buffer[0];
-      mock_buffer++;
+      p_data[i] = (double)mock_buffer[i];
     }
 
   } else if (n_bytes == 8) {
