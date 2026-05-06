@@ -127,45 +127,33 @@ parse_npy_datatype <- function(descr) {
     )
   }
   python_type <- descr_components[3L]
-  base_type <- switch(
-    python_type,
-    f = "float",
-    i = "int",
-    u = "uint",
-    `?` = "bool",
-    b = "bool",
-    a = "string",
-    S = "string",
-    U = "unicode",
-    c = "complex",
-    m = "timedelta",
-    M = "datetime",
-    V = "other",
-    O = "py_object",
-    stop(
-      "Unsupported data type: ",
-      descr_components[1L],
-      call. = FALSE
-    )
+  n <- as.integer(descr_components[4L])
+
+  type_map <- list(
+    f = list(base_type = "float", size = n),
+    i = list(base_type = "int", size = n),
+    u = list(base_type = "uint", size = n),
+    `?` = list(base_type = "bool", size = 1L),
+    b = list(base_type = "bool", size = 1L),
+    a = list(base_type = "string", size = n),
+    S = list(base_type = "string", size = n),
+    U = list(base_type = "unicode", size = n * 4L),
+    c = list(base_type = "complex", size = n),
+    m = list(base_type = "timedelta", size = n),
+    M = list(base_type = "datetime", size = n),
+    V = list(base_type = "other", size = n),
+    O = list(base_type = "py_object", size = NA_integer_)
   )
 
-  size <- switch(
-    python_type,
-    f = as.integer(descr_components[4L]),
-    i = as.integer(descr_components[4L]),
-    u = as.integer(descr_components[4L]),
-    `?` = 1L,
-    b = 1L,
-    a = as.integer(descr_components[4L]),
-    S = as.integer(descr_components[4L]),
-    U = as.integer(descr_components[4L]) * 4L,
-    O = NA_real_
-  )
+  entry <- type_map[[python_type]]
+  if (is.null(entry)) {
+    stop("Unsupported data type: ", descr_components[1L], call. = FALSE)
+  }
 
   return(list(
     endianness = endianness,
-    base_type = base_type,
-    size = size
+    base_type = entry$base_type,
+    size = entry$size
   ))
 }
 
