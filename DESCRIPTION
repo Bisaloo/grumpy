@@ -2,10 +2,11 @@ Package: grumpy
 Title: Read 'NumPy' '.npy' and '.npz' Files in R
 Version: 0.0.1
 Authors@R: c(
-    person("Hugo", "Gruson", , "hugo.gruson+R@normalesup.org", role = c("aut", "cre"),
+    person("Hugo", "Gruson", , "hugo.gruson+R@normalesup.org", role = c("aut", "cre", "cph"),
            comment = c(ORCID = "0000-0002-4094-1476")),
-    person("Mike", "Smith", role = "aut",
-           comment = c("Original author of portions of the C code migrated from the Rarr package"))
+    person("Mike", "Smith", role = c("aut", "cph"),
+           comment = c("Original author of portions of the C code migrated from the Rarr package")),
+        person("German Network for Bioinformatics Infrastructure - de.NBI", role = "fnd")
     )
 Description: This package provides a dependency-free way to read 'NumPy' '.npy' and '.npz'
     files in R. It support all data types supported by 'NumPy', with all sizes (converted
