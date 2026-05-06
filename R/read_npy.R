@@ -93,7 +93,21 @@ parse_npy_descr <- function(bytes) {
   ))
 }
 
+#' Parse a NumPy Array-protocol type strings
+#'
+#' @param descr A NumPy dtype description string, or a list of such strings fo
+#'   structured dtypes
+#'
+#' @return A list containing the parsed data type information, including the base
+#'   type, the number of bytes, and the endianness
+#'
 #' @export
+#'
+#' @examples
+#' parse_npy_datatype(">i8")
+#' parse_npy_datatype("|b1")
+#' parse_npy_datatype(list(c("r", "<i8"), c("g", "<i8"), c("b", "<i8")))
+#'
 parse_npy_datatype <- function(descr) {
   if (is.list(descr)) {
     # structured data type
@@ -158,6 +172,20 @@ parse_npy_datatype <- function(descr) {
   ))
 }
 
+#' Convert raw bytes to an R array based on the specified data type information
+#'
+#' This is a replacement for [readBin()] that can handle the various data types
+#' and endianness specified in the .npy file header.
+#'
+#' @param bytes A raw vector containing the bytes to convert
+#' @param what A character specifying the base type to convert to (e.g., `"float"`,
+#'   `"int"`, `"string"`, etc.)
+#' @param shape A numeric vector with desired shape of the output array
+#' @param size A numeric value with the number of bytes per element for the
+#'   specified type
+#' @param endian The endianness of the data (`"little"`, `"big"`, or `NA` for
+#'   single-byte types)
+#'
 #' @export
 convert_bytes_to_array <- function(bytes, what, shape, size, endian) {
   if (length(what) > 1L) {
