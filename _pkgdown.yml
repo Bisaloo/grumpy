@@ -2,3 +2,12 @@ url: https://hugogruson.fr/grumpy
 template:
   bootstrap: 5
 
+reference:
+  - title: "Main user-facing functions"
+    contents:
+      - read_npy
+      - read_npz
+  - title: "Low-level utilities"
+    contents:
+      - convert_bytes_to_array
+      - parse_npy_datatype
