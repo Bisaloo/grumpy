@@ -69,6 +69,15 @@ touchstone::benchmark_run(
   n = 100
 )
 
+# int64
+touchstone::benchmark_run(
+  {
+    library(grumpy)
+  },
+  read_int64 = read_npy("inst/extdata/test_int64_overflowing.npy"),
+  n = 100
+)
+
 # string
 touchstone::benchmark_run(
   {
@@ -110,7 +119,7 @@ touchstone::benchmark_run(
   {
     library(grumpy)
   },
-  read_uint32 = read_npy("inst/extdata/test_uint32.npy"),
+  read_uint32 = read_npy("inst/extdata/test_uint32_overflowing.npy"),
   n = 100
 )
 
@@ -119,7 +128,7 @@ touchstone::benchmark_run(
   {
     library(grumpy)
   },
-  read_uint64 = read_npy("inst/extdata/test_uint64.npy"),
+  read_uint64 = read_npy("inst/extdata/test_uint64_overflowing.npy"),
   n = 100
 )
 
