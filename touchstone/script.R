@@ -152,4 +152,13 @@ touchstone::benchmark_run(
   n = 100
 )
 
+# structured
+touchstone::benchmark_run(
+  {
+    library(grumpy)
+  },
+  read_structured = read_npy("inst/extdata/test_structured.npy"),
+  n = 100
+)
+
 touchstone::benchmark_analyze()
