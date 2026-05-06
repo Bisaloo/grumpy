@@ -27,7 +27,13 @@ The grumpy R package provides a way to read NumPy's `.npy` files into R. It supp
 
 ## Installation
 
-You can install the development version of grumpy like so:
+You can install the released version of grumpy with:
+
+``` r
+install.packages("grumpy")
+```
+
+and the development version like so:
 
 ``` r
 # install.packages("pak")
