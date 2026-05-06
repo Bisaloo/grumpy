@@ -200,33 +200,39 @@ parse_npy_data <- function(bytes, shape, datatype, typesize, endian) {
       float = .Call(
         C_type_convert_float,
         bytes,
-        typesize
+        typesize,
+        PACKAGE = "grumpy"
       ),
       int = .Call(
         C_type_convert_int,
         bytes,
-        typesize
+        typesize,
+        PACKAGE = "grumpy"
       ),
       uint = .Call(
         C_type_convert_uint,
         bytes,
-        typesize
+        typesize,
+        PACKAGE = "grumpy"
       ),
       bool = .Call(
         C_type_convert_bool,
         bytes,
-        typesize
+        typesize,
+        PACKAGE = "grumpy"
       ),
       string = .Call(
         C_type_convert_string,
         bytes,
-        typesize
+        typesize,
+        PACKAGE = "grumpy"
       ),
       unicode = .Call(
         C_type_convert_unicode,
         bytes,
         typesize,
-        endian
+        endian,
+        PACKAGE = "grumpy"
       ),
       stop("Unsupported data type: ", datatype, call. = FALSE)
     )
