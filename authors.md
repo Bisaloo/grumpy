@@ -2,12 +2,14 @@
 
 ## Authors
 
-- **Hugo Gruson**. Author, maintainer.
+- **Hugo Gruson**. Author, maintainer, copyright holder.
   [](https://orcid.org/0000-0002-4094-1476)
 
-- **Mike Smith**. Author.  
+- **Mike Smith**. Author, copyright holder.  
   Original author of portions of the C code migrated from the Rarr
   package
+
+- **German Network for Bioinformatics Infrastructure - de.NBI**. Funder.
 
 ## Citation
 
