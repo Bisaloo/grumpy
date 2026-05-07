@@ -24,3 +24,11 @@ single-byte types)}
 This is a replacement for \code{\link[=readBin]{readBin()}} that can handle the various data types
 and endianness specified in the .npy file header.
 }
+\examples{
+x <- matrix(c(3L, 6L, 2L, 1L, 12L, 0L), nrow = 2, ncol = 3)
+x
+
+writeBin(c(x), raw()) |>
+  convert_bytes_to_array("int", shape = c(2L, 3L), size = 4L, endian = "little")
+
+}

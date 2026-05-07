@@ -6,7 +6,7 @@
 \alias{grumpy-package}
 \title{grumpy: Read 'NumPy' '.npy' and '.npz' Files in R}
 \description{
-This package provides a dependency-free way to read 'NumPy' '.npy' and '.npz' files in R. It support all data types supported by 'NumPy', with all sizes (converted internally to R native size), both C and Fortran order, and any shape, up to an arbitrary number of dimensions.
+Lightweight way to read 'NumPy' '.npy' and '.npz' files in R. All data types supported by 'NumPy', with all sizes (converted internally to R native size), both C and Fortran order, and any shape, up to an arbitrary number of dimensions, are supported.
 }
 \seealso{
 Useful links:
@@ -18,11 +18,17 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Hugo Gruson \email{hugo.gruson+R@normalesup.org} (\href{https://orcid.org/0000-0002-4094-1476}{ORCID})
+\strong{Maintainer}: Hugo Gruson \email{hugo.gruson+R@normalesup.org} (\href{https://orcid.org/0000-0002-4094-1476}{ORCID}) [copyright holder]
 
 Authors:
 \itemize{
-  \item Mike Smith (Original author of portions of the C code migrated from the Rarr package)
+  \item Hugo Gruson \email{hugo.gruson+R@normalesup.org} (\href{https://orcid.org/0000-0002-4094-1476}{ORCID}) [copyright holder]
+  \item Mike Smith (Original author of portions of the C code migrated from the Rarr package) [copyright holder]
+}
+
+Other contributors:
+\itemize{
+  \item German Network for Bioinformatics Infrastructure - de.NBI [funder]
 }
 
 }

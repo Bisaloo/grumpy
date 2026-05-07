@@ -14,7 +14,6 @@ Description: Lightweight way to read 'NumPy' '.npy' and '.npz' files in R. All d
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.3
 Suggests: 
     knitr,
     rmarkdown,
@@ -25,3 +24,4 @@ URL: https://hugogruson.fr/grumpy/, https://github.com/Bisaloo/grumpy
 BugReports: https://github.com/Bisaloo/grumpy/issues
 Imports: 
     jsonlite
+Config/roxygen2/version: 8.0.0
