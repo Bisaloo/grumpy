@@ -187,6 +187,14 @@ parse_npy_datatype <- function(descr) {
 #'   single-byte types)
 #'
 #' @export
+#'
+#' @examples
+#' x <- matrix(c(3L, 6L, 2L, 1L, 12L, 0L), nrow = 2, ncol = 3)
+#' x
+#'
+#' writeBin(c(x), raw()) |>
+#'   convert_bytes_to_array("int", shape = c(2L, 3L), size = 4L, endian = "little")
+#'
 convert_bytes_to_array <- function(bytes, what, shape, size, endian) {
   if (length(what) > 1L) {
     # structured datatype
