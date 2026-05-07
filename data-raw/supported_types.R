@@ -27,6 +27,7 @@ supported_types <- list(
     nbytes = NA_integer_,
     endian = NA_character_
   )
-)
+) |>
+  list2env(hash = TRUE, parent = emptyenv())
 
 usethis::use_data(supported_types, internal = TRUE, overwrite = TRUE)
