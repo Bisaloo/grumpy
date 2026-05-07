@@ -123,52 +123,35 @@ parse_npy_datatype <- function(descr) {
       )
     )
   }
-  descr_components <- regmatches(
-    descr,
-    regexec("^([<>|]?)([a-zA-Z])([0-9]*)$", descr)
-  )[[1L]]
-  endian <- if (descr_components[2L] %in% c("", "|")) {
-    NA_character_
-  } else {
-    switch(
-      descr_components[2L],
-      `<` = "little",
-      `>` = "big",
-      stop(
-        "Invalid endianness: ",
-        descr_components[1L],
-        call. = FALSE
+  if (startsWith(descr, "|S")) {
+    return(
+      list(
+        endian = NA_character_,
+        base_type = "string",
+        nbytes = as.integer(sub("|S", "", descr, fixed = TRUE))
       )
     )
   }
-  python_type <- descr_components[3L]
-  n <- as.integer(descr_components[4L])
+  if (startsWith(descr, "<U") || startsWith(descr, ">U")) {
+    charlen <- as.integer(sub("^[<>]U", "", descr))
+    return(
+      list(
+        endian = if (startsWith(descr, "<")) "little" else "big",
+        base_type = "unicode",
+        nbytes = charlen * 4L
+      )
+    )
+  }
 
-  type_map <- list(
-    f = list(base_type = "float", size = n),
-    i = list(base_type = "int", size = n),
-    u = list(base_type = "uint", size = n),
-    `?` = list(base_type = "bool", size = 1L),
-    b = list(base_type = "bool", size = 1L),
-    a = list(base_type = "string", size = n),
-    S = list(base_type = "string", size = n),
-    U = list(base_type = "unicode", size = n * 4L),
-    c = list(base_type = "complex", size = n),
-    m = list(base_type = "timedelta", size = n),
-    M = list(base_type = "datetime", size = n),
-    V = list(base_type = "other", size = n),
-    O = list(base_type = "py_object", size = NA_integer_)
-  )
-
-  entry <- type_map[[python_type]]
+  entry <- supported_types[[descr]]
   if (is.null(entry)) {
-    stop("Unsupported data type: ", descr_components[1L], call. = FALSE)
+    stop("Unsupported data type: ", descr, call. = FALSE)
   }
 
   return(list(
-    endian = endian,
+    endian = entry$endian,
     base_type = entry$base_type,
-    nbytes = entry$size
+    nbytes = entry$nbytes
   ))
 }
 
