@@ -227,60 +227,66 @@ convert_bytes_to_array <- function(bytes, what, shape, size, endian) {
     for (j in seq_len(n_records)) {
       res[[j]] <- lapply(res_fields, `[[`, j)
     }
-  } else {
-    if (is.na(endian)) {
-      endian <- .Platform$endian
-    }
-    # FIXME: optimize this
-    if (what != "unicode" && endian != .Platform$endian) {
-      ind <- rep_len(rev(seq_len(size)), length(bytes)) +
-        (seq_along(bytes) - 1L) %/% size * size
-      bytes <- bytes[ind]
-    }
-    res <- switch(
-      what,
-      float = .Call(
-        C_type_convert_float,
-        bytes,
-        size,
-        PACKAGE = "grumpy"
-      ),
-      int = .Call(
-        C_type_convert_int,
-        bytes,
-        size,
-        PACKAGE = "grumpy"
-      ),
-      uint = .Call(
-        C_type_convert_uint,
-        bytes,
-        size,
-        PACKAGE = "grumpy"
-      ),
-      bool = .Call(
-        C_type_convert_bool,
-        bytes,
-        size,
-        PACKAGE = "grumpy"
-      ),
-      string = .Call(
-        C_type_convert_string,
-        bytes,
-        size,
-        PACKAGE = "grumpy"
-      ),
-      unicode = .Call(
-        C_type_convert_unicode,
-        bytes,
-        size,
-        endian,
-        PACKAGE = "grumpy"
-      ),
-      stop("Unsupported data type: ", what, call. = FALSE)
-    )
+    dim(res) <- shape
+    return(res)
   }
 
-  dim(res) <- shape
+  if (is.na(endian)) {
+    endian <- .Platform$endian
+  }
+  # FIXME: optimize this
+  if (what != "unicode" && endian != .Platform$endian) {
+    ind <- rep_len(rev(seq_len(size)), length(bytes)) +
+      (seq_along(bytes) - 1L) %/% size * size
+    bytes <- bytes[ind]
+  }
+  res <- switch(
+    what,
+    float = .Call(
+      C_type_convert_float,
+      bytes,
+      size,
+      shape,
+      PACKAGE = "grumpy"
+    ),
+    int = .Call(
+      C_type_convert_int,
+      bytes,
+      size,
+      shape,
+      PACKAGE = "grumpy"
+    ),
+    uint = .Call(
+      C_type_convert_uint,
+      bytes,
+      size,
+      shape,
+      PACKAGE = "grumpy"
+    ),
+    bool = .Call(
+      C_type_convert_bool,
+      bytes,
+      size,
+      shape,
+      PACKAGE = "grumpy"
+    ),
+    string = .Call(
+      C_type_convert_string,
+      bytes,
+      size,
+      shape,
+      PACKAGE = "grumpy"
+    ),
+    unicode = .Call(
+      C_type_convert_unicode,
+      bytes,
+      size,
+      shape,
+      endian,
+      PACKAGE = "grumpy"
+    ),
+    stop("Unsupported data type: ", what, call. = FALSE)
+  )
 
   return(res)
 }

@@ -1,7 +1,7 @@
 #include "type_conversion.h"
 #include <R_ext/Riconv.h>
 
-SEXP type_convert_int(SEXP input, SEXP _n_bytes) {
+SEXP type_convert_int(SEXP input, SEXP _n_bytes, SEXP dims) {
 
   const int n_bytes = INTEGER(_n_bytes)[0];
   const R_xlen_t length = xlength(input);
@@ -35,11 +35,15 @@ SEXP type_convert_int(SEXP input, SEXP _n_bytes) {
     }
   }
 
+  /* Set dim attribute if dims is not NULL / NA */
+  if (!isNull(dims) && xlength(dims) > 0) {
+    setAttrib(data, R_DimSymbol, dims);
+  }
   UNPROTECT(1);
   return(data);
 }
 
-SEXP type_convert_uint(SEXP input, SEXP _n_bytes) {
+SEXP type_convert_uint(SEXP input, SEXP _n_bytes, SEXP dims) {
 
   const int n_bytes = INTEGER(_n_bytes)[0];
   const R_xlen_t length = xlength(input);
@@ -73,11 +77,16 @@ SEXP type_convert_uint(SEXP input, SEXP _n_bytes) {
     }
   }
 
+  /* Set dim attribute if dims is not NULL / NA */
+  if (!isNull(dims) && xlength(dims) > 0) {
+    setAttrib(data, R_DimSymbol, dims);
+  }
+
   UNPROTECT(1);
   return(data);
 }
 
-SEXP type_convert_float(SEXP input, SEXP _n_bytes){
+SEXP type_convert_float(SEXP input, SEXP _n_bytes, SEXP dims){
 
   const int n_bytes = INTEGER(_n_bytes)[0];
   const R_xlen_t length = xlength(input);
@@ -111,11 +120,16 @@ SEXP type_convert_float(SEXP input, SEXP _n_bytes){
     error("%d byte floating point values are not currently supported\n", n_bytes);
   }
 
+  /* Set dim attribute if dims is not NULL / NA */
+  if (!isNull(dims) && xlength(dims) > 0) {
+    setAttrib(data, R_DimSymbol, dims);
+  }
+
   UNPROTECT(1);
   return(data);
 }
 
-SEXP type_convert_bool(SEXP input, SEXP _n_bytes) {
+SEXP type_convert_bool(SEXP input, SEXP _n_bytes, SEXP dims) {
 
   const R_xlen_t length = xlength(input);
   const void* raw_buffer = RAW(input);
@@ -133,11 +147,16 @@ SEXP type_convert_bool(SEXP input, SEXP _n_bytes) {
     p_data[i] = ((const int8_t *)raw_buffer)[i];
   }
 
+  /* Set dim attribute if dims is not NULL / NA */
+  if (!isNull(dims) && xlength(dims) > 0) {
+    setAttrib(data, R_DimSymbol, dims);
+  }
+
   UNPROTECT(1);
   return(data);
 }
 
-SEXP type_convert_string(SEXP input, SEXP _n_bytes) {
+SEXP type_convert_string(SEXP input, SEXP _n_bytes, SEXP dims) {
 
   const int n_bytes = INTEGER(_n_bytes)[0];
   const R_xlen_t length = xlength(input);
@@ -171,11 +190,16 @@ SEXP type_convert_string(SEXP input, SEXP _n_bytes) {
       SET_STRING_ELT(data, i, mkCharCE(field, CE_BYTES));
   }
 
+  /* Set dim attribute if dims is not NULL / NA */
+  if (!isNull(dims) && xlength(dims) > 0) {
+    setAttrib(data, R_DimSymbol, dims);
+  }
+
   UNPROTECT(1);
   return(data);
 }
 
-SEXP type_convert_unicode(SEXP input, SEXP _n_bytes, SEXP _endian) {
+SEXP type_convert_unicode(SEXP input, SEXP _n_bytes, SEXP dims, SEXP _endian) {
 
   // n_bytes is the total bytes per string element (num_codepoints * 4).
   // Bytes are passed as-is from the file; we select UTF-32LE or UTF-32BE
@@ -232,8 +256,13 @@ SEXP type_convert_unicode(SEXP input, SEXP _n_bytes, SEXP _endian) {
 
     SET_STRING_ELT(data, i, mkCharCE(utf8_buf, CE_UTF8));
   }
-
   Riconv_close(cd);
+
+  /* Set dim attribute if dims is not NULL / NA */
+  if (!isNull(dims) && xlength(dims) > 0) {
+    setAttrib(data, R_DimSymbol, dims);
+  }
+
   UNPROTECT(1);
   return(data);
 }
