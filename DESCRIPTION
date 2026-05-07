@@ -25,3 +25,5 @@ BugReports: https://github.com/Bisaloo/grumpy/issues
 Imports: 
     jsonlite
 Config/roxygen2/version: 8.0.0
+Depends: 
+    R (>= 3.5)

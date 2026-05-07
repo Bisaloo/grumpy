@@ -9,3 +9,5 @@
 ^touchstone$
 ^\.lintr$
 ^cran-comments\.md$
+^CRAN-SUBMISSION$
+^data-raw$
