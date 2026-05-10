@@ -37,8 +37,9 @@ SEXP type_convert_int(SEXP input, SEXP _n_bytes, SEXP dims) {
 
   /* Set dim attribute if dims is not NULL / NA */
   if (!isNull(dims) && xlength(dims) > 0) {
-    setAttrib(data, R_DimSymbol, dims);
+    data = Rf_dimgets(data, dims);
   }
+
   UNPROTECT(1);
   return(data);
 }
@@ -79,7 +80,7 @@ SEXP type_convert_uint(SEXP input, SEXP _n_bytes, SEXP dims) {
 
   /* Set dim attribute if dims is not NULL / NA */
   if (!isNull(dims) && xlength(dims) > 0) {
-    setAttrib(data, R_DimSymbol, dims);
+    data = Rf_dimgets(data, dims);
   }
 
   UNPROTECT(1);
@@ -122,7 +123,7 @@ SEXP type_convert_float(SEXP input, SEXP _n_bytes, SEXP dims){
 
   /* Set dim attribute if dims is not NULL / NA */
   if (!isNull(dims) && xlength(dims) > 0) {
-    setAttrib(data, R_DimSymbol, dims);
+    data = Rf_dimgets(data, dims);
   }
 
   UNPROTECT(1);
@@ -149,7 +150,7 @@ SEXP type_convert_bool(SEXP input, SEXP _n_bytes, SEXP dims) {
 
   /* Set dim attribute if dims is not NULL / NA */
   if (!isNull(dims) && xlength(dims) > 0) {
-    setAttrib(data, R_DimSymbol, dims);
+    data = Rf_dimgets(data, dims);
   }
 
   UNPROTECT(1);
@@ -192,7 +193,7 @@ SEXP type_convert_string(SEXP input, SEXP _n_bytes, SEXP dims) {
 
   /* Set dim attribute if dims is not NULL / NA */
   if (!isNull(dims) && xlength(dims) > 0) {
-    setAttrib(data, R_DimSymbol, dims);
+    data = Rf_dimgets(data, dims);
   }
 
   UNPROTECT(1);
@@ -260,7 +261,7 @@ SEXP type_convert_unicode(SEXP input, SEXP _n_bytes, SEXP dims, SEXP _endian) {
 
   /* Set dim attribute if dims is not NULL / NA */
   if (!isNull(dims) && xlength(dims) > 0) {
-    setAttrib(data, R_DimSymbol, dims);
+    data = Rf_dimgets(data, dims);
   }
 
   UNPROTECT(1);
