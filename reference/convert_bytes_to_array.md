@@ -35,6 +35,11 @@ convert_bytes_to_array(bytes, what, shape, size, endian)
   The endianness of the data (`"little"`, `"big"`, or `NA` for
   single-byte types)
 
+## Value
+
+An R array containing the converted data, with the specified shape and
+data type.
+
 ## Examples
 
 ``` r
@@ -44,9 +49,16 @@ x
 #> [1,]    3    2   12
 #> [2,]    6    1    0
 
-writeBin(c(x), raw()) |>
+y <- writeBin(c(x), raw()) |>
   convert_bytes_to_array("int", shape = c(2L, 3L), size = 4L, endian = "little")
+y
 #>      [,1] [,2] [,3]
 #> [1,]    3    2   12
 #> [2,]    6    1    0
+dim(y)
+#> [1] 2 3
+is.array(y)
+#> [1] TRUE
+storage.mode(y)
+#> [1] "integer"
 ```
