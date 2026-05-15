@@ -2,7 +2,7 @@
 #'
 #' @param file Path to the .npy file
 #'
-#' @return An array containing the data from the .npy file
+#' @returns An array containing the data from the .npy file
 #'
 #' @export
 #'
@@ -98,7 +98,7 @@ parse_npy_descr <- function(bytes) {
 #' @param descr A NumPy dtype description string, or a list of such strings fo
 #'   structured dtypes
 #'
-#' @return A list containing the parsed data type information, including the base
+#' @returns A list containing the parsed data type information, including the base
 #'   type, the number of bytes, and the endianness
 #'
 #' @export
@@ -169,14 +169,21 @@ parse_npy_datatype <- function(descr) {
 #' @param endian The endianness of the data (`"little"`, `"big"`, or `NA` for
 #'   single-byte types)
 #'
+#' @returns An R array containing the converted data, with the specified shape and
+#'   data type.
+#'
 #' @export
 #'
 #' @examples
 #' x <- matrix(c(3L, 6L, 2L, 1L, 12L, 0L), nrow = 2, ncol = 3)
 #' x
 #'
-#' writeBin(c(x), raw()) |>
+#' y <- writeBin(c(x), raw()) |>
 #'   convert_bytes_to_array("int", shape = c(2L, 3L), size = 4L, endian = "little")
+#' y
+#' dim(y)
+#' is.array(y)
+#' storage.mode(y)
 #'
 convert_bytes_to_array <- function(bytes, what, shape, size, endian) {
   if (length(what) > 1L) {
