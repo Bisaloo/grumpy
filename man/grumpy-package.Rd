@@ -4,9 +4,9 @@
 \name{grumpy-package}
 \alias{grumpy}
 \alias{grumpy-package}
-\title{grumpy: Read 'NumPy' '.npy' and '.npz' Files in R}
+\title{grumpy: Read 'NumPy' '.npy' and '.npz' Files}
 \description{
-Lightweight way to read 'NumPy' '.npy' and '.npz' files in R. All data types supported by 'NumPy', with all sizes (converted internally to R native size), both C and Fortran order, and any shape, up to an arbitrary number of dimensions, are supported.
+Lightweight way to read 'NumPy' '.npy' and '.npz' files in R. All data types supported by 'NumPy', with all sizes (converted internally to R native size), both C and 'Fortran' order, and any shape, up to an arbitrary number of dimensions, are supported.
 }
 \seealso{
 Useful links:
