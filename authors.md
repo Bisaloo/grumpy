@@ -17,12 +17,12 @@ Source:
 [`DESCRIPTION`](https://github.com/Bisaloo/grumpy/blob/main/DESCRIPTION)
 
 Gruson H, Smith M (2026). *grumpy: Read 'NumPy' '.npy' and '.npz'
-Files*. R package version 0.1.0, <https://hugogruson.fr/grumpy/>.
+Files*. R package version 0.1.1, <https://hugogruson.fr/grumpy/>.
 
     @Manual{,
       title = {grumpy: Read 'NumPy' '.npy' and '.npz' Files},
       author = {Hugo Gruson and Mike Smith},
       year = {2026},
-      note = {R package version 0.1.0},
+      note = {R package version 0.1.1},
       url = {https://hugogruson.fr/grumpy/},
     }
