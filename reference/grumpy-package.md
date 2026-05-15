@@ -1,8 +1,8 @@
-# grumpy: Read 'NumPy' '.npy' and '.npz' Files in R
+# grumpy: Read 'NumPy' '.npy' and '.npz' Files
 
 Lightweight way to read 'NumPy' '.npy' and '.npz' files in R. All data
 types supported by 'NumPy', with all sizes (converted internally to R
-native size), both C and Fortran order, and any shape, up to an
+native size), both C and 'Fortran' order, and any shape, up to an
 arbitrary number of dimensions, are supported.
 
 ## See also
