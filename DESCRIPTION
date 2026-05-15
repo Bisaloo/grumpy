@@ -1,5 +1,5 @@
 Package: grumpy
-Title: Read 'NumPy' '.npy' and '.npz' Files in R
+Title: Read 'NumPy' '.npy' and '.npz' Files
 Version: 0.1.0
 Authors@R: c(
     person("Hugo", "Gruson", , "hugo.gruson+R@normalesup.org", role = c("aut", "cre", "cph"),
@@ -8,8 +8,8 @@ Authors@R: c(
            comment = c("Original author of portions of the C code migrated from the Rarr package")),
         person("German Network for Bioinformatics Infrastructure - de.NBI", role = "fnd")
     )
-Description: Lightweight way to read 'NumPy' '.npy' and '.npz' files in R. All data types supported 
-    by 'NumPy', with all sizes (converted internally to R native size), both C and Fortran order, 
+Description: Lightweight way to read 'NumPy' '.npy' and '.npz' files in R. All data types supported
+    by 'NumPy', with all sizes (converted internally to R native size), both C and 'Fortran' order,
     and any shape, up to an arbitrary number of dimensions, are supported.
 License: MIT + file LICENSE
 Encoding: UTF-8
