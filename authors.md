@@ -14,13 +14,13 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/Bisaloo/grumpy/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/Bisaloo/grumpy/blob/v0.1.0/DESCRIPTION)
 
-Gruson H, Smith M (2026). *grumpy: Read 'NumPy' '.npy' and '.npz'
-Files*. R package version 0.1.0, <https://hugogruson.fr/grumpy/>.
+Gruson H, Smith M (2026). *grumpy: Read 'NumPy' '.npy' and '.npz' Files
+in R*. R package version 0.1.0, <https://hugogruson.fr/grumpy/>.
 
     @Manual{,
-      title = {grumpy: Read 'NumPy' '.npy' and '.npz' Files},
+      title = {grumpy: Read 'NumPy' '.npy' and '.npz' Files in R},
       author = {Hugo Gruson and Mike Smith},
       year = {2026},
       note = {R package version 0.1.0},

@@ -36,7 +36,7 @@ and endianness specified in the .npy file header."></head><body>
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Convert raw bytes to an R array based on the specified data type information</h1>
-      <small class="dont-index">Source: <a href="https://github.com/Bisaloo/grumpy/blob/main/R/read_npy.R" class="external-link"><code>R/read_npy.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/Bisaloo/grumpy/blob/v0.1.0/R/read_npy.R" class="external-link"><code>R/read_npy.R</code></a></small>
       <div class="d-none name"><code>convert_bytes_to_array.Rd</code></div>
     </div>
 
@@ -77,11 +77,6 @@ specified type</p></dd>
 single-byte types)</p></dd>
 
 </dl></div>
-    <div class="section level2">
-    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>An R array containing the converted data, with the specified shape and
-data type.</p>
-    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
@@ -91,18 +86,11 @@ data type.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1,]    3    2   12</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [2,]    6    1    0</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readBin.html" class="external-link">writeBin</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/raw.html" class="external-link">raw</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/readBin.html" class="external-link">writeBin</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/raw.html" class="external-link">raw</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">convert_bytes_to_array</span><span class="op">(</span><span class="st">"int"</span>, shape <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2L</span>, <span class="fl">3L</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">4L</span>, endian <span class="op">=</span> <span class="st">"little"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">y</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      [,1] [,2] [,3]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1,]    3    2   12</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [2,]    6    1    0</span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2 3</span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/array.html" class="external-link">is.array</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/mode.html" class="external-link">storage.mode</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "integer"</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
