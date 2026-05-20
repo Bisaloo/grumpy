@@ -43,6 +43,19 @@ np.save("inst/extdata/test_empty.npy", np.array([], dtype="float32"))
 np.save("inst/extdata/test_str_unicode.npy", np.array(['¡Hola mundo!', 'Hej Världen!', 'Servus Woid!', 'Hei maailma!', 'Xin chào thế giới', 'Njatjeta Botë!', 'Γεια σου κόσμε!', 'こんにちは世界', '世界，你好！', 'Helló, világ!', 'Zdravo svete!', 'เฮลโลเวิลด์'], dtype="U20"))
 np.save("inst/extdata/test_str_bytes.npy", np.array([b"foo", b"bar", b"baz", b"qux", b"hello", b"world", b"alpha", b"beta", b"gamma", b"delta", b"eps", b"zeta"], dtype="S5"))
 
+# Structured array with nested structured field
+inner_dtype = np.dtype([("x", "float64"), ("y", "float64")])
+nested_dtype = np.dtype([("id", "int32"), ("coords", inner_dtype), ("label", "U5")])
+nested_data = np.array(
+    [
+        (1, (0.0, 1.0), "A"),
+        (2, (1.5, -1.5), "B"),
+        (3, (-2.0, 3.0), "C"),
+    ],
+    dtype=nested_dtype,
+)
+np.save("inst/extdata/test_nested_structured.npy", nested_data)
+
 # Structured array
 dtype = np.dtype([("id", "int32"), ("value", "float64"), ("name", "U10")])
 data = np.array([(1, 3.14, "Alice"), (2, 2.71, "Bob"), (3, 1.62, "Charlie"), (4, 0.0, "Dave"), (5, -1.0, "Eve"), (6, 2.0, "Frank"), (7, 33.12, "Grace")], dtype=dtype)
