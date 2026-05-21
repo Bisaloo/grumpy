@@ -1,5 +1,7 @@
 # Changelog
 
+## grumpy (development version)
+
 ## grumpy 0.1.1
 
 CRAN release: 2026-05-19

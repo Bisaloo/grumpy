@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">grumpy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,7 +60,7 @@
       <h1>Design principles</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/Bisaloo/grumpy/blob/v0.1.1/vignettes/design.Rmd" class="external-link"><code>vignettes/design.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/Bisaloo/grumpy/blob/main/vignettes/design.Rmd" class="external-link"><code>vignettes/design.Rmd</code></a></small>
       <div class="d-none name"><code>design.Rmd</code></div>
     </div>
 
@@ -82,15 +82,27 @@ etc.).</p>
 <h3 id="why-not-use-reticulate">Why not use <code>reticulate</code>?<a class="anchor" aria-label="anchor" href="#why-not-use-reticulate"></a>
 </h3>
 <ul>
-<li>When reading <code>.npy</code> files with <a href="https://rstudio.github.io/reticulate/" class="external-link">reticulate</a>,
-at some point in time, two (sometimes 3) copies of the data are made in
-memory: one in Python and one in R. This can be problematic for large
-files. With <a href="https://hugogruson.fr/grumpy/">grumpy</a>, only one copy of the data is made in
-memory.</li>
-<li>Reading data with <a href="https://rstudio.github.io/reticulate/" class="external-link">reticulate</a> requires a Python
+<li><p>When reading <code>.npy</code> files with
+<a href="https://rstudio.github.io/reticulate/" class="external-link">reticulate</a>, at some point in time, two or three copies of
+the data are made in memory. This can be problematic for large files.
+With <a href="https://hugogruson.fr/grumpy/">grumpy</a>, two copies of the data are made in memory,
+with plans to make just one copy in the cases where the data type
+matches R native types.</p></li>
+<li><p>Reading data with <a href="https://rstudio.github.io/reticulate/" class="external-link">reticulate</a> requires a Python
 installation and additional python packages, which users in restricted
 environments may not have access to. <a href="https://hugogruson.fr/grumpy/">grumpy</a> is a pure R
-package with no external dependencies.</li>
+package with no external dependencies. This is especially important as
+we expect <a href="https://hugogruson.fr/grumpy/">grumpy</a> to be used deep in the dependency graph
+of other packages, and we want to minimize the number of
+dependencies.</p></li>
+<li><p>A dedicated R package gives us more flexibility in how edge cases
+such as 64 bits integers are handled. <a href="https://rstudio.github.io/reticulate/" class="external-link">reticulate</a>
+automatically and silently converts 64 bits integers to double, which is
+a sensible default for many use cases. But we may want to have more
+control over this behavior, and <a href="https://hugogruson.fr/grumpy/">grumpy</a> will allow us to
+do that in the future. Another good example are structured data types
+(record arrays), which are returned as data.frames, not arrays, with
+<a href="https://rstudio.github.io/reticulate/" class="external-link">reticulate</a>.</p></li>
 </ul>
 </div>
 </div>
