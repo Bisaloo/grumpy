@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Design principles • grumpy</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Design principles">
 </head>
@@ -82,15 +82,27 @@ etc.).</p>
 <h3 id="why-not-use-reticulate">Why not use <code>reticulate</code>?<a class="anchor" aria-label="anchor" href="#why-not-use-reticulate"></a>
 </h3>
 <ul>
-<li>When reading <code>.npy</code> files with <a href="https://rstudio.github.io/reticulate/" class="external-link">reticulate</a>,
-at some point in time, two (sometimes 3) copies of the data are made in
-memory: one in Python and one in R. This can be problematic for large
-files. With <a href="https://hugogruson.fr/grumpy/">grumpy</a>, only one copy of the data is made in
-memory.</li>
-<li>Reading data with <a href="https://rstudio.github.io/reticulate/" class="external-link">reticulate</a> requires a Python
+<li><p>When reading <code>.npy</code> files with
+<a href="https://rstudio.github.io/reticulate/" class="external-link">reticulate</a>, at some point in time, two or three copies of
+the data are made in memory. This can be problematic for large files.
+With <a href="https://hugogruson.fr/grumpy/">grumpy</a>, two copies of the data are made in memory,
+with plans to make just one copy in the cases where the data type
+matches R native types.</p></li>
+<li><p>Reading data with <a href="https://rstudio.github.io/reticulate/" class="external-link">reticulate</a> requires a Python
 installation and additional python packages, which users in restricted
 environments may not have access to. <a href="https://hugogruson.fr/grumpy/">grumpy</a> is a pure R
-package with no external dependencies.</li>
+package with no external dependencies. This is especially important as
+we expect <a href="https://hugogruson.fr/grumpy/">grumpy</a> to be used deep in the dependency graph
+of other packages, and we want to minimize the number of
+dependencies.</p></li>
+<li><p>A dedicated R package gives us more flexibility in how edge cases
+such as 64 bits integers are handled. <a href="https://rstudio.github.io/reticulate/" class="external-link">reticulate</a>
+automatically and silently converts 64 bits integers to double, which is
+a sensible default for many use cases. But we may want to have more
+control over this behavior, and <a href="https://hugogruson.fr/grumpy/">grumpy</a> will allow us to
+do that in the future. Another good example are structured data types
+(record arrays), which are returned as data.frames, not arrays, with
+<a href="https://rstudio.github.io/reticulate/" class="external-link">reticulate</a>.</p></li>
 </ul>
 </div>
 </div>
