@@ -1,7 +1,36 @@
 #include "type_conversion.h"
 #include <R_ext/Riconv.h>
 
-SEXP type_convert_int(SEXP input, SEXP _n_bytes, SEXP dims) {
+
+SEXP type_convert(SEXP input, SEXP what, SEXP _n_bytes, SEXP dims, SEXP _endian) {
+  const char *type = CHAR(STRING_ELT(what, 0));
+  SEXP result;
+
+  if (strcmp(type, "float") == 0)
+    result = type_convert_float(input, _n_bytes);
+  else if (strcmp(type, "int") == 0)
+    result = type_convert_int(input, _n_bytes);
+  else if (strcmp(type, "uint") == 0)
+    result = type_convert_uint(input, _n_bytes);
+  else if (strcmp(type, "bool") == 0)
+    result = type_convert_bool(input, _n_bytes);
+  else if (strcmp(type, "string") == 0)
+    result = type_convert_string(input, _n_bytes);
+  else if (strcmp(type, "unicode") == 0)
+    result = type_convert_unicode(input, _n_bytes, _endian);
+  else
+    error("Unsupported data type: %s", type);
+
+  PROTECT(result);
+  if (!isNull(dims) && xlength(dims) > 0) {
+    Rf_dimgets(result, dims);
+  }
+  UNPROTECT(1);
+
+  return result;
+}
+
+SEXP type_convert_int(SEXP input, SEXP _n_bytes) {
 
   const int n_bytes = INTEGER(_n_bytes)[0];
   const R_xlen_t length = xlength(input);
@@ -35,16 +64,11 @@ SEXP type_convert_int(SEXP input, SEXP _n_bytes, SEXP dims) {
     }
   }
 
-  /* Set dim attribute if dims is not NULL / NA */
-  if (!isNull(dims) && xlength(dims) > 0) {
-    Rf_dimgets(data, dims);
-  }
-
   UNPROTECT(1);
   return(data);
 }
 
-SEXP type_convert_uint(SEXP input, SEXP _n_bytes, SEXP dims) {
+SEXP type_convert_uint(SEXP input, SEXP _n_bytes) {
 
   const int n_bytes = INTEGER(_n_bytes)[0];
   const R_xlen_t length = xlength(input);
@@ -78,16 +102,11 @@ SEXP type_convert_uint(SEXP input, SEXP _n_bytes, SEXP dims) {
     }
   }
 
-  /* Set dim attribute if dims is not NULL / NA */
-  if (!isNull(dims) && xlength(dims) > 0) {
-    Rf_dimgets(data, dims);
-  }
-
   UNPROTECT(1);
   return(data);
 }
 
-SEXP type_convert_float(SEXP input, SEXP _n_bytes, SEXP dims){
+SEXP type_convert_float(SEXP input, SEXP _n_bytes) {
 
   const int n_bytes = INTEGER(_n_bytes)[0];
   const R_xlen_t length = xlength(input);
@@ -121,16 +140,11 @@ SEXP type_convert_float(SEXP input, SEXP _n_bytes, SEXP dims){
     error("%d byte floating point values are not currently supported\n", n_bytes);
   }
 
-  /* Set dim attribute if dims is not NULL / NA */
-  if (!isNull(dims) && xlength(dims) > 0) {
-    Rf_dimgets(data, dims);
-  }
-
   UNPROTECT(1);
   return(data);
 }
 
-SEXP type_convert_bool(SEXP input, SEXP _n_bytes, SEXP dims) {
+SEXP type_convert_bool(SEXP input, SEXP _n_bytes) {
 
   const R_xlen_t length = xlength(input);
   const void* raw_buffer = RAW(input);
@@ -148,16 +162,11 @@ SEXP type_convert_bool(SEXP input, SEXP _n_bytes, SEXP dims) {
     p_data[i] = ((const int8_t *)raw_buffer)[i];
   }
 
-  /* Set dim attribute if dims is not NULL / NA */
-  if (!isNull(dims) && xlength(dims) > 0) {
-    Rf_dimgets(data, dims);
-  }
-
   UNPROTECT(1);
   return(data);
 }
 
-SEXP type_convert_string(SEXP input, SEXP _n_bytes, SEXP dims) {
+SEXP type_convert_string(SEXP input, SEXP _n_bytes) {
 
   const int n_bytes = INTEGER(_n_bytes)[0];
   const R_xlen_t length = xlength(input);
@@ -191,16 +200,11 @@ SEXP type_convert_string(SEXP input, SEXP _n_bytes, SEXP dims) {
       SET_STRING_ELT(data, i, mkCharCE(field, CE_BYTES));
   }
 
-  /* Set dim attribute if dims is not NULL / NA */
-  if (!isNull(dims) && xlength(dims) > 0) {
-    Rf_dimgets(data, dims);
-  }
-
   UNPROTECT(1);
   return(data);
 }
 
-SEXP type_convert_unicode(SEXP input, SEXP _n_bytes, SEXP dims, SEXP _endian) {
+SEXP type_convert_unicode(SEXP input, SEXP _n_bytes, SEXP _endian) {
 
   // n_bytes is the total bytes per string element (num_codepoints * 4).
   // Bytes are passed as-is from the file; we select UTF-32LE or UTF-32BE
@@ -258,11 +262,6 @@ SEXP type_convert_unicode(SEXP input, SEXP _n_bytes, SEXP dims, SEXP _endian) {
     SET_STRING_ELT(data, i, mkCharCE(utf8_buf, CE_UTF8));
   }
   Riconv_close(cd);
-
-  /* Set dim attribute if dims is not NULL / NA */
-  if (!isNull(dims) && xlength(dims) > 0) {
-    Rf_dimgets(data, dims);
-  }
 
   UNPROTECT(1);
   return(data);
