@@ -230,52 +230,14 @@ convert_bytes_to_array <- function(bytes, what, shape, size, endian) {
       (seq_along(bytes) - 1L) %/% size * size
     bytes <- bytes[ind]
   }
-  res <- switch(
+  res <- .Call(
+    C_type_convert,
+    bytes,
     what,
-    float = .Call(
-      C_type_convert_float,
-      bytes,
-      size,
-      shape,
-      PACKAGE = "grumpy"
-    ),
-    int = .Call(
-      C_type_convert_int,
-      bytes,
-      size,
-      shape,
-      PACKAGE = "grumpy"
-    ),
-    uint = .Call(
-      C_type_convert_uint,
-      bytes,
-      size,
-      shape,
-      PACKAGE = "grumpy"
-    ),
-    bool = .Call(
-      C_type_convert_bool,
-      bytes,
-      size,
-      shape,
-      PACKAGE = "grumpy"
-    ),
-    string = .Call(
-      C_type_convert_string,
-      bytes,
-      size,
-      shape,
-      PACKAGE = "grumpy"
-    ),
-    unicode = .Call(
-      C_type_convert_unicode,
-      bytes,
-      size,
-      shape,
-      endian,
-      PACKAGE = "grumpy"
-    ),
-    stop("Unsupported data type: ", what, call. = FALSE)
+    size,
+    shape,
+    endian,
+    PACKAGE = "grumpy"
   )
 
   return(res)

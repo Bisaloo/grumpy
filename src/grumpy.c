@@ -2,12 +2,7 @@
 #include "type_conversion.h"
 
 static const R_CallMethodDef callMethods[] = {
-  {"type_convert_int", (DL_FUNC) &type_convert_int, 3},
-  {"type_convert_uint", (DL_FUNC) &type_convert_uint, 3},
-  {"type_convert_float", (DL_FUNC) &type_convert_float, 3},
-  {"type_convert_bool", (DL_FUNC) &type_convert_bool, 3},
-  {"type_convert_string", (DL_FUNC) &type_convert_string, 3},
-  {"type_convert_unicode", (DL_FUNC) &type_convert_unicode, 4},
+  {"type_convert", (DL_FUNC) &type_convert, 5},
   {NULL, NULL, 0}
 };
 
