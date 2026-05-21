@@ -116,9 +116,8 @@ parse_npy_datatype <- function(descr) {
     })
     return(
       list(
-        types,
-        nbytes = vapply(types, function(x) x$nbytes, integer(1L)),
         base_type = vapply(types, function(x) x$base_type, character(1L)),
+        nbytes = vapply(types, function(x) x$nbytes, integer(1L)),
         endian = vapply(types, function(x) x$endian, character(1L))
       )
     )
@@ -126,9 +125,9 @@ parse_npy_datatype <- function(descr) {
   if (startsWith(descr, "|S")) {
     return(
       list(
-        endian = NA_character_,
         base_type = "string",
-        nbytes = as.integer(sub("|S", "", descr, fixed = TRUE))
+        nbytes = as.integer(sub("|S", "", descr, fixed = TRUE)),
+        endian = NA_character_
       )
     )
   }
@@ -136,9 +135,9 @@ parse_npy_datatype <- function(descr) {
     charlen <- as.integer(sub("^[<>]U", "", descr))
     return(
       list(
-        endian = if (startsWith(descr, "<")) "little" else "big",
         base_type = "unicode",
-        nbytes = charlen * 4L
+        nbytes = charlen * 4L,
+        endian = if (startsWith(descr, "<")) "little" else "big"
       )
     )
   }
@@ -149,9 +148,9 @@ parse_npy_datatype <- function(descr) {
   }
 
   return(list(
-    endian = entry$endian,
     base_type = entry$base_type,
-    nbytes = entry$nbytes
+    nbytes = entry$nbytes,
+    endian = entry$endian
   ))
 }
 
