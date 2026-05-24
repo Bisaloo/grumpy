@@ -1,9 +1,8 @@
 ---
 title: "Design principles"
-output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Design principles}
-  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEngine{quarto::html}
   %\VignetteEncoding{UTF-8}
 ---
 

@@ -15,10 +15,10 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 Suggests: 
-    knitr,
+    quarto,
     rmarkdown,
     testthat (>= 3.0.0)
-VignetteBuilder: knitr
+VignetteBuilder: quarto
 Config/testthat/edition: 3
 URL: https://hugogruson.fr/grumpy/, https://github.com/Bisaloo/grumpy
 BugReports: https://github.com/Bisaloo/grumpy/issues

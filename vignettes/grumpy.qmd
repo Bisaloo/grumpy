@@ -1,9 +1,8 @@
 ---
 title: "Getting started with grumpy"
-output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Getting started with grumpy}
-  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEngine{quarto::html}
   %\VignetteEncoding{UTF-8}
 ---
 
