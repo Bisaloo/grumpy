@@ -1,10 +1,14 @@
 ---
 title: "Supported features"
 vignette: >
-  %\VignetteIndexEntry{features}
+  %\VignetteIndexEntry{Supported features}
   %\VignetteEngine{quarto::html}
   %\VignetteEncoding{UTF-8}
 ---
+
+```{r setup, echo = FALSE}
+library(grumpy)
+```
 
 ## Data types
 
