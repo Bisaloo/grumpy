@@ -20,7 +20,7 @@ supported_types <- list(
   "<u4" = list(base_type = "uint", nbytes = 4L, endian = "little"),
   ">u8" = list(base_type = "uint", nbytes = 8L, endian = "big"),
   "<u8" = list(base_type = "uint", nbytes = 8L, endian = "little"),
-  "|?1" = list(base_type = "bool", nbytes = 1L, endian = NA_character_),
+  "|?" = list(base_type = "bool", nbytes = 1L, endian = NA_character_),
   "|b1" = list(base_type = "bool", nbytes = 1L, endian = NA_character_),
   "|O" = list(
     base_type = "py_object",
