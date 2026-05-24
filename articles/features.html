@@ -104,7 +104,10 @@
 <p><strong>Caveats</strong></p>
 <ul>
 <li>
-<code>int64</code>, <code>uint32</code> and <code>uint64</code> data types are currently limited to the maximum value of <code>int32</code>. Larger values are set to <code>NA_integer_</code>. Future plans are laid out in https://github.com/Bisaloo/grumpy/issues/13.</li>
+<code>i8</code>, <code>u4</code> and <code>u8</code> data types are currently limited to the maximum value of <code>int32</code>. Larger values are set to <code>NA_integer_</code>. Future plans are laid out in https://github.com/Bisaloo/grumpy/issues/13.</li>
+<li>structured data type support only one level of nesting and no array-cells for now.</li>
+<li>
+<code>f2</code> (half-precision floating point) is read as <code>f4</code> (single-precision floating point). No effort is made to evaluate whether the values in the original <code>f2</code> array can be represented in <code>f4</code> without loss of precision.</li>
 </ul>
 </blockquote>
 </div>
