@@ -59,6 +59,15 @@ read_npy <- function(file) {
     )
   }
 
+  if (any(header$base_type == "py_object")) {
+    stop(
+      "This file contains a Python object array. ",
+      "Reading .npy files with Python object arrays is not supported. ",
+      "A common reason for this is when the file is saved with `np.save(..., allow_pickle=True)`. ",
+      call. = FALSE
+    )
+  }
+
   # Read the data
   num_elements <- prod(header$shape)
   bytes <- readBin(con, "raw", n = sum(num_elements * header$nbytes))
