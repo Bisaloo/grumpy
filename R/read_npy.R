@@ -135,13 +135,13 @@ parse_npy_datatype <- function(descr) {
     return(
       list(
         base_type = "string",
-        nbytes = as.integer(sub("|S", "", descr, fixed = TRUE)),
+        nbytes = as.integer(substring(descr, 3L)),
         endian = NA_character_
       )
     )
   }
   if (startsWith(descr, "<U") || startsWith(descr, ">U")) {
-    charlen <- as.integer(sub("^[<>]U", "", descr))
+    charlen <- as.integer(substring(descr, 3L))
     return(
       list(
         base_type = "unicode",
