@@ -15,68 +15,68 @@ touchstone::benchmark_run(
 
 # Types ----------
 
-# bool
-touchstone::benchmark_run(
-  {
-    library(grumpy)
-  },
-  read_bool = read_npy("inst/extdata/test_bool.npy"),
-  n = 100
-)
+# # bool
+# touchstone::benchmark_run(
+#   {
+#     library(grumpy)
+#   },
+#   read_bool = read_npy("inst/extdata/test_bool.npy"),
+#   n = 100
+# )
 
-# float32
-touchstone::benchmark_run(
-  {
-    library(grumpy)
-  },
-  read_float32 = read_npy("inst/extdata/test_float32.npy"),
-  n = 100
-)
+# # float32
+# touchstone::benchmark_run(
+#   {
+#     library(grumpy)
+#   },
+#   read_float32 = read_npy("inst/extdata/test_float32.npy"),
+#   n = 100
+# )
 
-# float64
-touchstone::benchmark_run(
-  {
-    library(grumpy)
-  },
-  read_float64 = read_npy("inst/extdata/test_float64.npy"),
-  n = 100
-)
+# # float64
+# touchstone::benchmark_run(
+#   {
+#     library(grumpy)
+#   },
+#   read_float64 = read_npy("inst/extdata/test_float64.npy"),
+#   n = 100
+# )
 
-# int8
-touchstone::benchmark_run(
-  {
-    library(grumpy)
-  },
-  read_int8 = read_npy("inst/extdata/test_int8.npy"),
-  n = 100
-)
+# # int8
+# touchstone::benchmark_run(
+#   {
+#     library(grumpy)
+#   },
+#   read_int8 = read_npy("inst/extdata/test_int8.npy"),
+#   n = 100
+# )
 
-# int16
-touchstone::benchmark_run(
-  {
-    library(grumpy)
-  },
-  read_int16 = read_npy("inst/extdata/test_int16.npy"),
-  n = 100
-)
+# # int16
+# touchstone::benchmark_run(
+#   {
+#     library(grumpy)
+#   },
+#   read_int16 = read_npy("inst/extdata/test_int16.npy"),
+#   n = 100
+# )
 
-# int32
-touchstone::benchmark_run(
-  {
-    library(grumpy)
-  },
-  read_int32 = read_npy("inst/extdata/test_int32.npy"),
-  n = 100
-)
+# # int32
+# touchstone::benchmark_run(
+#   {
+#     library(grumpy)
+#   },
+#   read_int32 = read_npy("inst/extdata/test_int32.npy"),
+#   n = 100
+# )
 
-# int64
-touchstone::benchmark_run(
-  {
-    library(grumpy)
-  },
-  read_int64 = read_npy("inst/extdata/test_int64_overflowing.npy"),
-  n = 100
-)
+# # int64
+# touchstone::benchmark_run(
+#   {
+#     library(grumpy)
+#   },
+#   read_int64 = read_npy("inst/extdata/test_int64_overflowing.npy"),
+#   n = 100
+# )
 
 # string
 touchstone::benchmark_run(
@@ -87,87 +87,87 @@ touchstone::benchmark_run(
   n = 100
 )
 
-# unicode
-touchstone::benchmark_run(
-  {
-    library(grumpy)
-  },
-  read_unicode = read_npy("inst/extdata/test_str_unicode.npy"),
-  n = 100
-)
+# # unicode
+# touchstone::benchmark_run(
+#   {
+#     library(grumpy)
+#   },
+#   read_unicode = read_npy("inst/extdata/test_str_unicode.npy"),
+#   n = 100
+# )
 
-# uint8
-touchstone::benchmark_run(
-  {
-    library(grumpy)
-  },
-  read_uint8 = read_npy("inst/extdata/test_uint8.npy"),
-  n = 100
-)
+# # uint8
+# touchstone::benchmark_run(
+#   {
+#     library(grumpy)
+#   },
+#   read_uint8 = read_npy("inst/extdata/test_uint8.npy"),
+#   n = 100
+# )
 
-# uint16
-touchstone::benchmark_run(
-  {
-    library(grumpy)
-  },
-  read_uint16 = read_npy("inst/extdata/test_uint16.npy"),
-  n = 100
-)
+# # uint16
+# touchstone::benchmark_run(
+#   {
+#     library(grumpy)
+#   },
+#   read_uint16 = read_npy("inst/extdata/test_uint16.npy"),
+#   n = 100
+# )
 
-# uint32
-touchstone::benchmark_run(
-  {
-    library(grumpy)
-  },
-  read_uint32 = read_npy("inst/extdata/test_uint32_overflowing.npy"),
-  n = 100
-)
+# # uint32
+# touchstone::benchmark_run(
+#   {
+#     library(grumpy)
+#   },
+#   read_uint32 = read_npy("inst/extdata/test_uint32_overflowing.npy"),
+#   n = 100
+# )
 
-# uint64
-touchstone::benchmark_run(
-  {
-    library(grumpy)
-  },
-  read_uint64 = read_npy("inst/extdata/test_uint64_overflowing.npy"),
-  n = 100
-)
+# # uint64
+# touchstone::benchmark_run(
+#   {
+#     library(grumpy)
+#   },
+#   read_uint64 = read_npy("inst/extdata/test_uint64_overflowing.npy"),
+#   n = 100
+# )
 
-# More ----------
+# # More ----------
 
-# npz
-touchstone::benchmark_run(
-  {
-    library(grumpy)
-  },
-  read_npz = read_npz("inst/extdata/test.npz"),
-  n = 100
-)
+# # npz
+# touchstone::benchmark_run(
+#   {
+#     library(grumpy)
+#   },
+#   read_npz = read_npz("inst/extdata/test.npz"),
+#   n = 100
+# )
 
-# bigendian
-touchstone::benchmark_run(
-  {
-    library(grumpy)
-  },
-  read_bigendian = read_npy("inst/extdata/test_bigendian.npy"),
-  n = 100
-)
+# # bigendian
+# touchstone::benchmark_run(
+#   {
+#     library(grumpy)
+#   },
+#   read_bigendian = read_npy("inst/extdata/test_bigendian.npy"),
+#   n = 100
+# )
 
-# empty
-touchstone::benchmark_run(
-  {
-    library(grumpy)
-  },
-  read_empty = read_npy("inst/extdata/test_empty.npy"),
-  n = 100
-)
+# # empty
+# touchstone::benchmark_run(
+#   {
+#     library(grumpy)
+#   },
+#   read_empty = read_npy("inst/extdata/test_empty.npy"),
+#   n = 100
+# )
 
-# structured
-touchstone::benchmark_run(
-  {
-    library(grumpy)
-  },
-  read_structured = read_npy("inst/extdata/test_structured.npy"),
-  n = 100
-)
+# # structured
+# touchstone::benchmark_run(
+#   {
+#     library(grumpy)
+#   },
+#   read_structured = read_npy("inst/extdata/test_structured.npy"),
+#   n = 100
+# )
 
 touchstone::benchmark_analyze()
