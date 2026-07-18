@@ -195,9 +195,9 @@ SEXP type_convert_string(SEXP input, SEXP _n_bytes) {
     // We cannot do one without the other as strings may not be NUL terminated (truncated) and
     // mkCharLenCE complains about NUL characters in the string.
     if (len > (size_t)n_bytes)
-      SET_STRING_ELT(data, i, mkCharLenCE(field, n_bytes, CE_BYTES));
+      SET_STRING_ELT(data, i, mkCharLenCE(field, n_bytes, CE_NATIVE));
     else
-      SET_STRING_ELT(data, i, mkCharCE(field, CE_BYTES));
+      SET_STRING_ELT(data, i, mkCharCE(field, CE_NATIVE));
   }
 
   UNPROTECT(1);
