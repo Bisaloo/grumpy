@@ -5,8 +5,9 @@
 **Reading** `.npy` and `.npz` files in R.
 
 Writing is out of scope. When working across multiple languages, one
-should prefer high-performance interoperable format (parquet, zarr,
-etc.).
+should prefer high-performance interoperable formats
+([parquet](https://parquet.apache.org/),
+[Zarr](https://zarr-specs.readthedocs.io/en/latest/v3/core/), etc.).
 
 ## FAQ
 

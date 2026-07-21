@@ -21,8 +21,10 @@ It is thus important to be able to read and write files in both
 languages.
 
 Note however we would usually push users towards more advanced and
-performant formats such as Zarr for large datasets. Zarr datasets are
-supported for example by the `{Rarr}` Bioconductor package.
+performant formats such as
+[Zarr](https://zarr-specs.readthedocs.io/en/latest/v3/core/) for large
+datasets. Zarr datasets are supported for example by the
+[Rarr](https://huber-group-embl.github.io/Rarr/) Bioconductor package.
 
 ## Using grumpy
 

@@ -36,7 +36,8 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/design.html">Design principles</a></li>
+<li><a class="dropdown-item" href="../articles/beyond.html">Beyond grumpy and `.npy` files</a></li>
+    <li><a class="dropdown-item" href="../articles/design.html">Design principles</a></li>
     <li><a class="dropdown-item" href="../articles/features.html">Supported features</a></li>
   </ul>
 </li>
@@ -79,7 +80,7 @@
 <p>This package allows users to read a wide variety of <code>.npy</code> and <code>.npz</code> files in R. These file formats are commonly used in Python for storing NumPy arrays and compressed archives of arrays, respectively. By providing a convenient interface for reading these files, <code>grumpy</code> enables R users to easily access and work with data that has been saved in these formats, facilitating interoperability between Python and R.</p>
 <p>We envision users may want to perform some steps of their data analysis in Python and others in R.</p>
 <p>It is thus important to be able to read and write files in both languages.</p>
-<p>Note however we would usually push users towards more advanced and performant formats such as Zarr for large datasets. Zarr datasets are supported for example by the <code>{Rarr}</code> Bioconductor package.</p>
+<p>Note however we would usually push users towards more advanced and performant formats such as <a href="https://zarr-specs.readthedocs.io/en/latest/v3/core/" class="external-link">Zarr</a> for large datasets. Zarr datasets are supported for example by the <a href="https://huber-group-embl.github.io/Rarr/" class="external-link">Rarr</a> Bioconductor package.</p>
 </section><section class="level2"><h2 id="using-grumpy">Using grumpy<a class="anchor" aria-label="anchor" href="#using-grumpy"></a>
 </h2>
 <p>Most users are expected to mostly want to use <code><a href="../reference/read_npy.html">grumpy::read_npy()</a></code> and <code><a href="../reference/read_npz.html">grumpy::read_npz()</a></code> to read <code>.npy</code> and <code>.npz</code> files, respectively. These functions will return R objects that are equivalent to the original NumPy arrays, allowing users to easily manipulate and analyze the data in R.</p>
