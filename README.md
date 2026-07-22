@@ -23,7 +23,8 @@ is performant, flexible. Overall, it is designed to be used deep in the
 dependency graph of other packages.
 
 For more details on the motivation and design principles underpinning
-`{grumpy}`, see the dedicated vignette: .
+`{grumpy}`, see the dedicated vignette:
+`vignette("design", package = "grumpy")`.
 
 ## Installation
 
