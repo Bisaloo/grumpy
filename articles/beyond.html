@@ -100,40 +100,59 @@
 <code class="sourceCode R"><span><span class="va">size</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="va">f_zarr</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/file.info.html" class="external-link">file.info</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span>select <span class="op">=</span> <span class="st">"size"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">size</span></span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 320579</code></pre>
 </div>
-<p><strong>Without compression</strong>, the equivalent Zarr data is thus 320.577 kB on disk, so <code>round(8e8 / size)</code> times smaller than the <code>.npy</code> file. We could also use compression to further reduce the size of the Zarr file on disk, but this is out of scope for this vignette.</p>
+</div>
+<p><strong>Without compression</strong>, the equivalent Zarr data is thus 320 kB on disk, so <code>round(8e8 / size)</code> times smaller than the <code>.npy</code> file. We could also use compression to further reduce the size of the Zarr file on disk, but this is out of scope for this vignette.</p>
 </section><section class="level2"><h2 id="decoding-speed-comparison">Decoding speed comparison<a class="anchor" aria-label="anchor" href="#decoding-speed-comparison"></a>
 </h2>
 <p>We can also compare the speed of reading the <code>.npy</code> file with <a href="https://hugogruson.fr/grumpy/">grumpy</a> and the Zarr file with <a href="https://huber-group-embl.github.io/Rarr/" class="external-link">Rarr</a>. To do so, we need to actually generate the data. We do it via <a href="https://rstudio.github.io/reticulate/" class="external-link">reticulate</a> because writing <code>.npy</code> files is out of scope for <a href="https://hugogruson.fr/grumpy/">grumpy</a>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rstudio.github.io/reticulate/" class="external-link">reticulate</a></span><span class="op">)</span></span>
 <span><span class="va">np</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rstudio.github.io/reticulate/reference/import.html" class="external-link">import</a></span><span class="op">(</span><span class="st">"numpy"</span><span class="op">)</span></span></code></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Downloading uv...Done!</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">f_npy</span> <span class="op">&lt;-</span> <span class="fu">withr</span><span class="fu">::</span><span class="fu"><a href="https://withr.r-lib.org/reference/with_tempfile.html" class="external-link">local_tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".npy"</span><span class="op">)</span></span>
 <span><span class="va">np</span><span class="op">$</span><span class="fu">save</span><span class="op">(</span><span class="va">f_npy</span>, <span class="va">x</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">bench</span><span class="fu">::</span><span class="fu"><a href="https://bench.r-lib.org/reference/mark.html" class="external-link">mark</a></span><span class="op">(</span></span>
+<div class="sourceCode cell-code" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">bm</span> <span class="op">&lt;-</span> <span class="fu">bench</span><span class="fu">::</span><span class="fu"><a href="https://bench.r-lib.org/reference/mark.html" class="external-link">mark</a></span><span class="op">(</span></span>
 <span>  grumpy <span class="op">=</span> <span class="fu"><a href="../reference/read_npy.html">read_npy</a></span><span class="op">(</span><span class="va">f_npy</span><span class="op">)</span>,</span>
 <span>  zarr <span class="op">=</span> <span class="fu"><a href="https://huber-group-embl.github.io/Rarr/reference/read_zarr_array.html" class="external-link">read_zarr_array</a></span><span class="op">(</span><span class="va">f_zarr</span><span class="op">)</span>,</span>
-<span>  iterations <span class="op">=</span> <span class="fl">20</span></span>
+<span>  iterations <span class="op">=</span> <span class="fl">50</span></span>
 <span><span class="op">)</span></span></code></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Some expressions had a GC in every iteration; so filtering is
+disabled.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">bm</span></span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 6
+  expression      min   median `itr/sec` mem_alloc `gc/sec`
+  &lt;bch:expr&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
+1 grumpy        315ms    326ms      3.02    1.49GB     1.87
+2 zarr          805ms    862ms      1.14  782.74MB     7.15</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">bm</span>, relative <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: Some expressions had a GC in every iteration; so filtering is
 disabled.</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 6
-  expression      min   median `itr/sec` mem_alloc `gc/sec`
-  &lt;bch:expr&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 grumpy     342.68ms 356.64ms     2.74     1.49GB     1.64
-2 zarr          2.77s    2.92s     0.337    4.53GB     1.01</code></pre>
+  expression   min median `itr/sec` mem_alloc `gc/sec`
+  &lt;bch:expr&gt; &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+1 grumpy      1      1         2.65      1.95     1
+2 zarr        2.56   2.64      1         1        3.82</code></pre>
 </div>
 </div>
 <p>There is a small time penalty for reading the Zarr file, since the various chunks need to be read and concatenated together, but the memory footprint is much smaller, and the Zarr file is much smaller on disk. This is particularly important for large datasets that do not fit into memory, as it allows for out-of-core processing of the data.</p>

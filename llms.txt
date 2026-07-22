@@ -16,7 +16,8 @@ flexible. Overall, it is designed to be used deep in the dependency
 graph of other packages.
 
 For more details on the motivation and design principles underpinning
-[grumpy](https://hugogruson.fr/grumpy/), see the dedicated vignette: .
+[grumpy](https://hugogruson.fr/grumpy/), see the dedicated vignette:
+[`vignette("design", package = "grumpy")`](https://hugogruson.fr/grumpy/articles/design.md).
 
 ## Installation
 

@@ -60,9 +60,12 @@ size <- list.files(f_zarr, full.names = TRUE, recursive = TRUE) |>
   file.info() |>
   subset(select = "size") |>
   sum()
+size
 ```
 
-**Without compression**, the equivalent Zarr data is thus 320.577 kB on
+    [1] 320579
+
+**Without compression**, the equivalent Zarr data is thus 320 kB on
 disk, so `round(8e8 / size)` times smaller than the `.npy` file. We
 could also use compression to further reduce the size of the Zarr file
 on disk, but this is out of scope for this vignette.
@@ -93,21 +96,40 @@ np$save(f_npy, x)
 
 ``` r
 
-bench::mark(
+bm <- bench::mark(
   grumpy = read_npy(f_npy),
   zarr = read_zarr_array(f_zarr),
-  iterations = 20
+  iterations = 50
 )
 ```
 
     Warning: Some expressions had a GC in every iteration; so filtering is
     disabled.
 
+``` r
+
+bm
+```
+
     # A tibble: 2 × 6
       expression      min   median `itr/sec` mem_alloc `gc/sec`
       <bch:expr> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-    1 grumpy     342.68ms 356.64ms     2.74     1.49GB     1.64
-    2 zarr          2.77s    2.92s     0.337    4.53GB     1.01
+    1 grumpy        315ms    326ms      3.02    1.49GB     1.87
+    2 zarr          805ms    862ms      1.14  782.74MB     7.15
+
+``` r
+
+summary(bm, relative = TRUE)
+```
+
+    Warning: Some expressions had a GC in every iteration; so filtering is
+    disabled.
+
+    # A tibble: 2 × 6
+      expression   min median `itr/sec` mem_alloc `gc/sec`
+      <bch:expr> <dbl>  <dbl>     <dbl>     <dbl>    <dbl>
+    1 grumpy      1      1         2.65      1.95     1
+    2 zarr        2.56   2.64      1         1        3.82
 
 There is a small time penalty for reading the Zarr file, since the
 various chunks need to be read and concatenated together, but the memory
