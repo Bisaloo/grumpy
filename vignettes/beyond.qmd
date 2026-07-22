@@ -44,9 +44,10 @@ size <- list.files(f_zarr, full.names = TRUE, recursive = TRUE) |>
   file.info() |>
   subset(select = "size") |>
   sum()
+size
 ```
 
-**Without compression**, the equivalent Zarr data is thus 320.577 kB on disk, so `round(8e8 / size)` times smaller than the `.npy` file. We could also use compression to further reduce the size of the Zarr file on disk, but this is out of scope for this vignette.
+**Without compression**, the equivalent Zarr data is thus 320 kB on disk, so `round(8e8 / size)` times smaller than the `.npy` file. We could also use compression to further reduce the size of the Zarr file on disk, but this is out of scope for this vignette.
 
 ## Decoding speed comparison
 
@@ -61,11 +62,13 @@ np$save(f_npy, x)
 ```
 
 ```{r}
-bench::mark(
+bm <- bench::mark(
   grumpy = read_npy(f_npy),
   zarr = read_zarr_array(f_zarr),
-  iterations = 20
+  iterations = 50
 )
+bm
+summary(bm, relative = TRUE)
 ```
 
 There is a small time penalty for reading the Zarr file, since the various chunks need to be read and concatenated together, but the memory footprint is much smaller, and the Zarr file is much smaller on disk. This is particularly important for large datasets that do not fit into memory, as it allows for out-of-core processing of the data.
