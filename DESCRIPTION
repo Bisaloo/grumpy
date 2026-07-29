@@ -26,8 +26,6 @@ VignetteBuilder: quarto
 Config/testthat/edition: 3
 URL: https://hugogruson.fr/grumpy/, https://github.com/Bisaloo/grumpy
 BugReports: https://github.com/Bisaloo/grumpy/issues
-Imports: 
-    jsonlite
 Config/Needs/website:
     Huber-group-EMBL/Rarr
 Config/roxygen2/version: 8.0.0

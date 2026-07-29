@@ -88,8 +88,7 @@ parse_npy_descr <- function(bytes) {
   # We just ignore it, at least for now.
   header <- bytes |>
     rawToChar() |>
-    convert_py_dict_to_json() |>
-    jsonlite::fromJSON(simplifyMatrix = FALSE)
+    py_dict_to_r_list()
 
   parsed_descr <- parse_npy_datatype(header$descr)
 
@@ -251,13 +250,30 @@ convert_bytes_to_array <- function(bytes, what, shape, size, endian) {
   return(res)
 }
 
-convert_py_dict_to_json <- function(dict_str) {
-  dict_str |>
-    gsub("'", '"', x = _, fixed = TRUE) |>
-    gsub("None", "null", x = _, fixed = TRUE) |>
-    gsub("True", "true", x = _, fixed = TRUE) |>
-    gsub("False", "false", x = _, fixed = TRUE) |>
-    gsub("(", "[", x = _, fixed = TRUE) |>
-    gsub(")", "]", x = _, fixed = TRUE) |>
-    gsub(",\\s*(}|\\])", "\\1", x = _) # trailing commas
+py_dict_to_r_list <- function(x) {
+  x |>
+    # Logicals
+    gsub("\\bNone\\b", "NA", x = _) |>
+    gsub("\\bTrue\\b", "TRUE", x = _) |>
+    gsub("\\bFalse\\b", "FALSE", x = _) |>
+    # Trailing commas (before closing brackets/braces)
+    gsub(",\\s*([]})])", "\\1", x = _) |>
+    # Dict (single-quoted) keys to list names.
+    #   Keys are composed of:
+    #   - anything that is not the quote itself or a backslash,
+    #   - a backslash followed by any character (to allow for escaped quotes).
+    gsub("'(([^'\\\\]|\\\\.)*)'\\s*:", "'\\1' =", x = _) |>
+    # Dict (double-quoted) keys to list names.
+    gsub('"(([^"\\\\]|\\\\.)*)"\\s*:', '"\\1" =', x = _) |>
+    # Tuples to c(...)
+    gsub("(", "c(", x = _, fixed = TRUE) |>
+    # Lists to list(...)
+    gsub("[", "list(", x = _, fixed = TRUE) |>
+    gsub("{", "list(", x = _, fixed = TRUE) |>
+    # Closing brackets/braces
+    gsub("]", ")", x = _, fixed = TRUE) |>
+    gsub("}", ")", x = _, fixed = TRUE) |>
+    # Evaluate the resulting R expression
+    parse(text = _) |>
+    eval()
 }
