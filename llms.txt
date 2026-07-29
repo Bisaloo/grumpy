@@ -10,10 +10,8 @@ candidates for using the
 into R. However, this comes with downsides in terms of performance,
 flexibility, and robustness of the R package infrastructure.
 [grumpy](https://hugogruson.fr/grumpy/), on the other hand, is a pure R
-package with a single dependency
-([jsonlite](https://jeroen.r-universe.dev/jsonlite)), and is performant,
-flexible. Overall, it is designed to be used deep in the dependency
-graph of other packages.
+package with no dependency and is performant, flexible. Overall, it is
+designed to be used deep in the dependency graph of other packages.
 
 For more details on the motivation and design principles underpinning
 [grumpy](https://hugogruson.fr/grumpy/), see the dedicated vignette:
