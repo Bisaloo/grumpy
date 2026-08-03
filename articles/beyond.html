@@ -138,8 +138,8 @@ disabled.</code></pre>
 <pre><code># A tibble: 2 × 6
   expression      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 grumpy        307ms    318ms      3.11    1.49GB     1.93
-2 zarr          788ms    832ms      1.18  782.74MB     7.44</code></pre>
+1 grumpy        329ms    345ms      2.84    1.49GB     1.76
+2 zarr          825ms    880ms      1.11  782.75MB     7.01</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">bm</span>, relative <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
@@ -151,8 +151,8 @@ disabled.</code></pre>
 <pre><code># A tibble: 2 × 6
   expression   min median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt; &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-1 grumpy      1      1         2.64      1.95     1
-2 zarr        2.57   2.62      1         1        3.86</code></pre>
+1 grumpy      1      1         2.55      1.95     1
+2 zarr        2.50   2.55      1         1        3.98</code></pre>
 </div>
 </div>
 <p>There is a small time penalty for reading the Zarr file, since the various chunks need to be read and concatenated together, but the memory footprint is much smaller, and the Zarr file is much smaller on disk. This is particularly important for large datasets that do not fit into memory, as it allows for out-of-core processing of the data.</p>
