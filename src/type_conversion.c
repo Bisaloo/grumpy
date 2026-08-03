@@ -60,7 +60,7 @@ SEXP type_convert_int(SEXP input, SEXP _n_bytes) {
     // for now we convert to 32bit int and overflow values are NA_integer
     int bit64conversion = 0;
     if (bit64conversion == 0) {
-      int64_to_int32(raw_buffer, data_length, p_data, true);
+      int64_to_int32(raw_buffer, data_length, p_data);
     }
   }
 
@@ -98,7 +98,7 @@ SEXP type_convert_uint(SEXP input, SEXP _n_bytes) {
     // for now we convert to 32bit int and overflow values are NA_integer
     int bit64conversion = 0;
     if (bit64conversion == 0) {
-      int64_to_int32(raw_buffer, data_length, p_data, false);
+      uint64_to_int32(raw_buffer, data_length, p_data);
     }
   }
 
