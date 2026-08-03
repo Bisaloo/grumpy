@@ -10,7 +10,7 @@ void uint32_to_int32(const void* restrict in_buf, size_t n, void* restrict out_b
 
   for (i = 0; i < n; i++) {
     if (in[i] > INT_MAX) {
-      out[i] = INT_MIN;
+      out[i] = INT_MIN; // NA
       n_overflow++;
     } else {
       out[i] = in[i];
@@ -37,11 +37,11 @@ void int64_to_int32(const void* restrict in_buf, size_t n, void* restrict out_bu
     const int64_t* restrict in = (const int64_t *)in_buf;
     for (i=0; i<n; i++) {
       if (in[i] > INT_MAX) {
-        out[i] = INT_MIN;
+        out[i] = INT_MIN; // NA
         n_overflow++;
       }
       else if (in[i] < INT_MIN) {
-        out[i] = INT_MIN;
+        out[i] = INT_MIN; // NA
         n_underflow++;
       } else {
         out[i] = in[i];
@@ -51,7 +51,7 @@ void int64_to_int32(const void* restrict in_buf, size_t n, void* restrict out_bu
     const uint64_t* restrict in = (const uint64_t *)in_buf;
     for (i=0; i<n; i++) {
       if (in[i] > INT_MAX) {
-        out[i] = INT_MIN;
+        out[i] = INT_MIN; // NA
         n_overflow++;
       } else {
         out[i] = in[i];
