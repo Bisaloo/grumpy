@@ -24,6 +24,15 @@ touchstone::benchmark_run(
   n = 100
 )
 
+# float16
+touchstone::benchmark_run(
+  {
+    library(grumpy)
+  },
+  read_float16 = read_npy("inst/extdata/test_float16.npy"),
+  n = 100
+)
+
 # float32
 touchstone::benchmark_run(
   {
