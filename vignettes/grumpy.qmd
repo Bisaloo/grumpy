@@ -29,6 +29,8 @@ Most users are expected to mostly want to use `grumpy::read_npy()` and `grumpy::
 read_npy(system.file("extdata", "test_2d.npy", package = "grumpy"))
 ```
 
+If supported on your platform (POSIX-compatible platforms; i.e., Linux and macOS), `grumpy` can also memory-map the data payload of `.npy` files, resulting in reduced memory usage for large arrays. This is done by setting the `lazy` argument to `TRUE` when calling `read_npy()`.
+
 ### Structured datatypes
 
 One notable example are structured datatypes, where each element of the array is a record with named fields.
