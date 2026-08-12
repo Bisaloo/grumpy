@@ -34,7 +34,7 @@ SEXP type_convert_int(SEXP input, SEXP _n_bytes) {
 
   const int n_bytes = INTEGER(_n_bytes)[0];
   const R_xlen_t length = xlength(input);
-  const void* raw_buffer = RAW(input);
+  const void* raw_buffer = RAW_RO(input);
 
   int *p_data;
   SEXP data;
@@ -71,7 +71,7 @@ SEXP type_convert_uint(SEXP input, SEXP _n_bytes) {
 
   const int n_bytes = INTEGER(_n_bytes)[0];
   const R_xlen_t length = xlength(input);
-  const void* raw_buffer = RAW(input);
+  const void* raw_buffer = RAW_RO(input);
 
   int *p_data;
   SEXP data;
@@ -108,7 +108,7 @@ SEXP type_convert_float(SEXP input, SEXP _n_bytes) {
 
   const int n_bytes = INTEGER(_n_bytes)[0];
   const R_xlen_t length = xlength(input);
-  const void* raw_buffer = RAW(input);
+  const void* raw_buffer = RAW_RO(input);
 
   R_xlen_t data_length, i;
   double *p_data;
@@ -144,7 +144,7 @@ SEXP type_convert_float(SEXP input, SEXP _n_bytes) {
 SEXP type_convert_bool(SEXP input, SEXP _n_bytes) {
 
   const R_xlen_t length = xlength(input);
-  const void* raw_buffer = RAW(input);
+  const void* raw_buffer = RAW_RO(input);
 
   int *p_data;
   R_xlen_t i;
@@ -167,7 +167,7 @@ SEXP type_convert_string(SEXP input, SEXP _n_bytes) {
 
   const int n_bytes = INTEGER(_n_bytes)[0];
   const R_xlen_t length = xlength(input);
-  const char* raw_buffer = (const char *)RAW(input);
+  const char* raw_buffer = (const char *)RAW_RO(input);
 
   const R_xlen_t data_length = length / n_bytes;
   R_xlen_t i;
@@ -177,7 +177,7 @@ SEXP type_convert_string(SEXP input, SEXP _n_bytes) {
 
   for (i = 0; i < data_length; i++) {
     const char *field = raw_buffer + i * n_bytes;
-    // Check for R's NA_integer_ sentinel written by writeBin(NA_integer_, raw()).
+    // Check for R's NA_integer_ sentinel written by writeBin(NA_integer_, RAW_RO)).
     // Using memcpy + NA_INTEGER comparison is endian-agnostic.
     if (n_bytes >= 4) {
       int sentinel;
@@ -208,7 +208,7 @@ SEXP type_convert_unicode(SEXP input, SEXP _n_bytes, SEXP _endian) {
   // based on the file's endianness so no R-side byte-swapping is needed.
   const size_t n_bytes = (size_t)INTEGER(_n_bytes)[0];
   const R_xlen_t length = xlength(input);
-  const char *raw_buffer = (const char *)RAW(input);
+  const char *raw_buffer = (const char *)RAW_RO(input);
 
   const R_xlen_t data_length = length / n_bytes;
   R_xlen_t i;
