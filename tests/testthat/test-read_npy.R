@@ -316,3 +316,15 @@ test_that("scalar or empty arrays work", {
     expect_no_condition() |>
     expect_length(0L)
 })
+
+test_that("lazy raw reading gives identical results", {
+  skip_on_os("windows")
+  skip_on_os("emscripten")
+
+  f <- system.file("extdata", "test.npy", package = "grumpy")
+
+  expect_identical(
+    read_npy(f, lazy = TRUE),
+    read_npy(f, lazy = FALSE)
+  )
+})
