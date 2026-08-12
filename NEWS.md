@@ -1,5 +1,14 @@
 # grumpy (development version)
 
+## Significant new features
+
+* `read_npy()` gains a new `lazy` argument. When `lazy = TRUE`, raw bytes are
+  read lazily using ALTREP and mmap against the `.npy` file on disk, resulting
+  in much better speed & memory performance. This is following a feature
+  request from @btraven00 in #11. 
+
+## Minor improvements
+
 * Elements of structured datatypes are now named if names were provided during
 the dataset creation.
 * `read_npz()` now adds names to the list it returns. The names are the names
