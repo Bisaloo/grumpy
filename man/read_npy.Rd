@@ -4,10 +4,16 @@
 \alias{read_npy}
 \title{Read a .npy file}
 \usage{
-read_npy(file, ...)
+read_npy(file, lazy = FALSE, ...)
 }
 \arguments{
 \item{file}{Path to the .npy file}
+
+\item{lazy}{If \code{TRUE}, and \code{file} is a path (not a connection), the data
+payload is memory-mapped rather than read into memory upfront via
+\code{\link[=readBin]{readBin()}}. This limits the number of copies in memory when the npy file
+contains types native to R. Requires a POSIX platform; ignored (with a
+warning) otherwise. Defaults to \code{FALSE}.}
 
 \item{...}{Ignored. Reserved for future use.}
 }
