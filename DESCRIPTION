@@ -28,6 +28,6 @@ URL: https://hugogruson.fr/grumpy/, https://github.com/Bisaloo/grumpy
 BugReports: https://github.com/Bisaloo/grumpy/issues
 Config/Needs/website:
     Huber-group-EMBL/Rarr
-Config/roxygen2/version: 8.0.0
+Config/roxygen2/version: 8.1.0
 Depends: 
     R (>= 4.2.0)

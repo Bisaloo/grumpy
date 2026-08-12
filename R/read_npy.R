@@ -1,6 +1,7 @@
 #' Read a .npy file
 #'
 #' @param file Path to the .npy file
+#' @param ... Ignored. Reserved for future use.
 #'
 #' @returns An array containing the data from the .npy file
 #'
@@ -11,7 +12,7 @@
 #'   system.file("extdata", "test.npy", package = "grumpy")
 #' )
 
-read_npy <- function(file) {
+read_npy <- function(file, ...) {
   if (is.character(file)) {
     if (!file.exists(file)) {
       stop("File does not exist: ", file, call. = FALSE)
