@@ -13,6 +13,8 @@
 #' )
 
 read_npy <- function(file, ...) {
+  chkDots(...)
+
   if (is.character(file)) {
     if (!file.exists(file)) {
       stop("File does not exist: ", file, call. = FALSE)
