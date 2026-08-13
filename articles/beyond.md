@@ -114,8 +114,8 @@ bm
     # A tibble: 2 × 6
       expression      min   median `itr/sec` mem_alloc `gc/sec`
       <bch:expr> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-    1 grumpy        307ms    320ms      3.08    1.49GB     1.91
-    2 zarr          816ms    869ms      1.13  782.44MB     7.08
+    1 grumpy        322ms    335ms      2.88    1.49GB     1.78
+    2 zarr          828ms    884ms      1.11  782.44MB     6.99
 
 ``` r
 
@@ -128,8 +128,8 @@ summary(bm, relative = TRUE)
     # A tibble: 2 × 6
       expression   min median `itr/sec` mem_alloc `gc/sec`
       <bch:expr> <dbl>  <dbl>     <dbl>     <dbl>    <dbl>
-    1 grumpy      1      1         2.73      1.95     1
-    2 zarr        2.66   2.72      1         1        3.71
+    1 grumpy      1      1         2.59      1.95     1
+    2 zarr        2.57   2.64      1         1        3.92
 
 There is a small time penalty for reading the Zarr file, since the
 various chunks need to be read and concatenated together, but the memory
