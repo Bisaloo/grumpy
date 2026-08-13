@@ -1,6 +1,11 @@
 #' Read a .npy file
 #'
 #' @param file Path to the .npy file
+#' @param lazy If `TRUE`, and `file` is a path (not a connection), the data
+#'   payload is memory-mapped rather than read into memory upfront via
+#'   [readBin()]. This limits the number of copies in memory when the npy file
+#'   contains types native to R. Requires a POSIX platform; ignored (with a
+#'   warning) otherwise. Defaults to `FALSE`.
 #' @param ... Ignored. Reserved for future use.
 #'
 #' @returns An array containing the data from the .npy file
@@ -11,8 +16,7 @@
 #' read_npy(
 #'   system.file("extdata", "test.npy", package = "grumpy")
 #' )
-
-read_npy <- function(file, ...) {
+read_npy <- function(file, lazy = FALSE, ...) {
   chkDots(...)
 
   if (is.character(file)) {
@@ -22,6 +26,14 @@ read_npy <- function(file, ...) {
     con <- file(file, "rb")
     on.exit(close(con))
   } else if (inherits(file, "connection")) {
+    if (lazy) {
+      warning(
+        "`lazy = TRUE` is only supported when `file` is a path; ",
+        "ignoring it for connections.",
+        call. = FALSE
+      )
+      lazy <- FALSE
+    }
     con <- file
   } else {
     stop(
@@ -73,13 +85,50 @@ read_npy <- function(file, ...) {
 
   # Read the data
   num_elements <- prod(header$shape)
-  bytes <- readBin(con, "raw", n = sum(num_elements * header$nbytes))
+  n_bytes <- sum(num_elements * header$nbytes)
+
+  if (lazy) {
+    # Offset of the payload is wherever the connection currently sits:
+    # 6 (magic) + 2 (version) + header_len_field_size (2 or 4) + header_len
+    payload_offset <- seek(con, origin = "current")
+    # When lazy = TRUE, we know `file` is a path, not a connection, so we can
+    # mmap it directly.
+    bytes <- mmap_raw(file, offset = payload_offset, length = n_bytes)
+  } else {
+    bytes <- readBin(con, "raw", n = n_bytes)
+  }
+
   convert_bytes_to_array(
     bytes,
     what = header$base_type,
     shape = header$shape,
     size = header$nbytes,
     endian = header$endian
+  )
+}
+
+#' Create an ALTREP raw vector backed by a memory-mapped file slice
+#'
+#' Internal helper used by [read_npy()] when `lazy = TRUE`. The returned
+#' object behaves like an ordinary raw vector (as produced by [readBin()]),
+#' but its bytes are only paged in from disk on first access, and no R-level
+#' allocation happens for the full payload upfront. It can be passed to
+#' [convert_bytes_to_array()] exactly like a materialized raw vector.
+#'
+#' @param path Path to the file to map.
+#' @param offset Byte offset of the start of the desired slice.
+#' @param length Number of bytes to expose.
+#'
+#' @returns An ALTREP raw vector of length `length`.
+#'
+#' @noRd
+mmap_raw <- function(path, offset, length) {
+  .Call(
+    C_grumpy_make_mmap_raw,
+    path.expand(path),
+    as.double(offset),
+    as.double(length),
+    PACKAGE = "grumpy"
   )
 }
 
