@@ -5,7 +5,7 @@ Read a .npy file
 ## Usage
 
 ``` r
-read_npy(file)
+read_npy(file, ...)
 ```
 
 ## Arguments
@@ -13,6 +13,10 @@ read_npy(file)
 - file:
 
   Path to the .npy file
+
+- ...:
+
+  Ignored. Reserved for future use.
 
 ## Value
 
