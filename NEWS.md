@@ -1,5 +1,7 @@
 # grumpy (development version)
 
+* Elements of structured datatypes are now named if names were provided during
+the dataset creation.
 * `read_npz()` now adds names to the list ir returns. The names are the names
 of the bundled `.npy` files without the file extension.
 
