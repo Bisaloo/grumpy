@@ -58,7 +58,7 @@ np.save("inst/extdata/test_nested_structured.npy", nested_data)
 
 # Structured array
 dtype = np.dtype([("id", "int32"), ("value", "float64"), ("name", "U10")])
-data = np.array([(1, 3.14, "Alice"), (2, 2.71, "Bob"), (3, 1.62, "Charlie"), (4, 0.0, "Dave"), (5, -1.0, "Eve"), (6, 2.0, "Frank"), (7, 33.12, "Grace")], dtype=dtype)
+data = np.array([(1, 3.14, "Alice"), (2, 2.71, "Bob"), (3, 1.62, "Charlie"), (4, 0.0, "Dave"), (5, -1.0, "Eve"), (6, 2.0, "Frank"), (7, 33.12, "Grace"), (8, 13.9, "Hugo")], dtype=dtype).reshape((2, 4))
 np.save("inst/extdata/test_structured.npy", data)
 
 # NPZ archive (multiple arrays)
