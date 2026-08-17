@@ -9,8 +9,8 @@ convert_bytes_to_array(bytes, what, shape, size, endian)
 \arguments{
 \item{bytes}{A raw vector containing the bytes to convert}
 
-\item{what}{A character specifying the base type to convert to (e.g., \code{"float"},
-\code{"int"}, \code{"string"}, etc.)}
+\item{what}{A character specifying the base type to convert to (e.g.,
+\code{"float"}, \code{"int"}, \code{"string"}, etc.)}
 
 \item{shape}{A numeric vector with desired shape of the output array}
 
@@ -21,8 +21,7 @@ specified type}
 single-byte types)}
 }
 \value{
-An R array containing the converted data, with the specified shape and
-data type.
+An R array containing the converted data, with the specified shape
 }
 \description{
 This is a replacement for \code{\link[=readBin]{readBin()}} that can handle the various data types
@@ -33,7 +32,12 @@ x <- matrix(c(3L, 6L, 2L, 1L, 12L, 0L), nrow = 2, ncol = 3)
 x
 
 y <- writeBin(c(x), raw()) |>
-  convert_bytes_to_array("int", shape = c(2L, 3L), size = 4L, endian = "little")
+  convert_bytes_to_array(
+     "int",
+     shape = c(2L, 3L),
+     size = 4L,
+     endian = "little"
+  )
 y
 dim(y)
 is.array(y)
