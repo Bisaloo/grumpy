@@ -12,7 +12,7 @@ library(grumpy)
 
 ## NumPy format versions
 
-`.npy` format versions 1.0, 2.0, and 3.0 (latest at the time of writing) as all supported.
+[`.npy` format versions](https://numpy.org/doc/stable/reference/generated/numpy.lib.format.html#version-numbering) 1.0, 2.0, and 3.0 (latest at the time of writing) as all supported.
 
 ## Data types
 
