@@ -1,5 +1,5 @@
 ---
-title: "Supported features"
+title: "NumPy format compatibility"
 vignette: >
   %\VignetteIndexEntry{Supported features}
   %\VignetteEngine{quarto::html}
@@ -10,9 +10,13 @@ vignette: >
 library(grumpy)
 ```
 
+## NumPy format versions
+
+`.npy` format versions 1.0, 2.0, and 3.0 (latest at the time of writing) as all supported.
+
 ## Data types
 
-The following data types are supported:
+The following data types are supported (use `parse_npy_datatype()` to decode them in plain language):
 
 ```{r, echo = FALSE, results = "asis"}
 types <- grumpy:::supported_types |> 
@@ -46,3 +50,7 @@ The following data types are not yet supported, because we are unsure of their u
 ## Dimensions
 
 Any number of dimensions is supported, including zero-dimensional arrays (scalar values) and one-dimensional arrays (vectors). The shape of the original NumPy array is preserved in the output R object, and can be accessed with the `dim()` function.
+
+## Pickled objects
+
+Python object array created with `np.save(..., allow_pickle = True)` are not supported.
