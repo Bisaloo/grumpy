@@ -279,9 +279,10 @@ test_that("structured arrays work", {
           list(4L, 0.0, "Dave"),
           list(5L, -1.0, "Eve"),
           list(6L, 2.0, "Frank"),
-          list(7L, 33.12, "Grace")
+          list(7L, 33.12, "Grace"),
+          list(8L, 13.9, "Hugo")
         ),
-        dim = 7L
+        dim = c(2L, 4L)
       )
     )
 })
