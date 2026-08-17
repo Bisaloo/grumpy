@@ -37,8 +37,8 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="../articles/beyond.html">Beyond grumpy and `.npy` files</a></li>
+    <li><a class="dropdown-item" href="../articles/compatibility.html">NumPy format compatibility</a></li>
     <li><a class="dropdown-item" href="../articles/design.html">Design principles</a></li>
-    <li><a class="dropdown-item" href="../articles/features.html">Supported features</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -81,16 +81,16 @@
 </div>
 <section class="level2"><h2 id="introduction-to-zarr">Introduction to Zarr<a class="anchor" aria-label="anchor" href="#introduction-to-zarr"></a>
 </h2>
-<p>If you are now understanding how the <code>.npy</code> file format works, the Zarr format is a natural extension of it. Zarr is a chunked, compressed, N-dimensional array storage format. Each chunk of data corresponds to a small sub-array of the original array, and is stored in a separate file, <strong>in a format nearly identical to <code>.npy</code></strong>. The chunk is then usually compressed with high-performance compression algorithms such as <code>zlib</code>, <code>blosc</code>, or <code>zstd</code>.</p>
+<p>If you now understand how the <code>.npy</code> file format works, the Zarr format is a natural extension of it. Zarr is a chunked, compressed, N-dimensional array storage format. Each chunk of data corresponds to a small sub-array of the original array, and is stored in a separate file, <strong>in a format nearly identical to <code>.npy</code></strong>. The chunk is then usually compressed with high-performance compression algorithms such as <code>zlib</code>, <code>blosc</code>, or <code>zstd</code>.</p>
 <p>One benefit of this chunked approach is that it allows for efficient reading and writing of large arrays, as only the necessary chunks need to be read or written, rather than the entire array. This is particularly useful for large datasets that do not fit into memory, as it allows for out-of-core processing of the data. It also provides strong benefits when some chunks are “empty” (e.g. filled with zeros, such as the white/black background of an image), as these chunks can be skipped during reading and writing, and thus reduce the overall storage requirements of the dataset.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">0</span>, nrow <span class="op">=</span> <span class="fl">1e4</span>, ncol <span class="op">=</span> <span class="fl">1e4</span><span class="op">)</span></span>
-<span><span class="va">x</span><span class="op">[</span><span class="fl">300</span><span class="op">:</span><span class="fl">400</span>, <span class="fl">700</span><span class="op">:</span><span class="fl">800</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fl">101</span> <span class="op">*</span> <span class="fl">101</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">0L</span>, nrow <span class="op">=</span> <span class="fl">1000L</span>, ncol <span class="op">=</span> <span class="fl">1000L</span><span class="op">)</span></span>
+<span><span class="va">x</span><span class="op">[</span><span class="fl">300L</span><span class="op">:</span><span class="fl">400L</span>, <span class="fl">700L</span><span class="op">:</span><span class="fl">800L</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fl">101L</span> <span class="op">*</span> <span class="fl">101L</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">f_zarr</span> <span class="op">&lt;-</span> <span class="fu">withr</span><span class="fu">::</span><span class="fu"><a href="https://withr.r-lib.org/reference/with_tempfile.html" class="external-link">local_tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".zarr"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">Rarr</span><span class="fu">::</span><span class="fu"><a href="https://huber-group-embl.github.io/Rarr/reference/write_zarr_array.html" class="external-link">write_zarr_array</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">f_zarr</span>, chunk_dim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">100</span><span class="op">)</span>, compressor <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">Rarr</span><span class="fu">::</span><span class="fu"><a href="https://huber-group-embl.github.io/Rarr/reference/write_zarr_array.html" class="external-link">write_zarr_array</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">f_zarr</span>, chunk_dim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100L</span>, <span class="fl">100L</span><span class="op">)</span>, compressor <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
 </div>
 </section><section class="level2"><h2 id="storage-size-comparison">Storage size comparison<a class="anchor" aria-label="anchor" href="#storage-size-comparison"></a>
 </h2>
@@ -103,10 +103,10 @@
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">size</span></span></code></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 320579</code></pre>
+<pre><code>[1] 80576</code></pre>
 </div>
 </div>
-<p><strong>Without compression</strong>, the equivalent Zarr data is thus 320 kB on disk, so <code>round(8e8 / size)</code> times smaller than the <code>.npy</code> file. We could also use compression to further reduce the size of the Zarr file on disk, but this is out of scope for this vignette.</p>
+<p><strong>Without compression</strong>, the equivalent Zarr data is thus 320 kB on disk, so 9929 times smaller than the <code>.npy</code> file. We could also use compression to further reduce the size of the Zarr file on disk, but this is out of scope for this vignette.</p>
 </section><section class="level2"><h2 id="decoding-speed-comparison">Decoding speed comparison<a class="anchor" aria-label="anchor" href="#decoding-speed-comparison"></a>
 </h2>
 <p>We can also compare the speed of reading the <code>.npy</code> file with <a href="https://hugogruson.fr/grumpy/">grumpy</a> and the Zarr file with <a href="https://huber-group-embl.github.io/Rarr/" class="external-link">Rarr</a>. To do so, we need to actually generate the data. We do it via <a href="https://rstudio.github.io/reticulate/" class="external-link">reticulate</a> because writing <code>.npy</code> files is out of scope for <a href="https://hugogruson.fr/grumpy/">grumpy</a>.</p>
@@ -126,33 +126,24 @@
 <code class="sourceCode R"><span><span class="va">bm</span> <span class="op">&lt;-</span> <span class="fu">bench</span><span class="fu">::</span><span class="fu"><a href="https://bench.r-lib.org/reference/mark.html" class="external-link">mark</a></span><span class="op">(</span></span>
 <span>  grumpy <span class="op">=</span> <span class="fu"><a href="../reference/read_npy.html">read_npy</a></span><span class="op">(</span><span class="va">f_npy</span><span class="op">)</span>,</span>
 <span>  zarr <span class="op">=</span> <span class="fu"><a href="https://huber-group-embl.github.io/Rarr/reference/read_zarr_array.html" class="external-link">read_zarr_array</a></span><span class="op">(</span><span class="va">f_zarr</span><span class="op">)</span>,</span>
-<span>  iterations <span class="op">=</span> <span class="fl">50</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: Some expressions had a GC in every iteration; so filtering is
-disabled.</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">bm</span></span></code></pre></div>
+<span>  iterations <span class="op">=</span> <span class="fl">50L</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">bm</span></span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 6
   expression      min   median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-1 grumpy        322ms    335ms      2.88    1.49GB     1.78
-2 zarr          828ms    884ms      1.11  782.44MB     6.99</code></pre>
+1 grumpy       1.36ms   2.94ms      390.    7.72MB    239.
+2 zarr         9.41ms   9.85ms      101.    4.44MB     22.1</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">bm</span>, relative <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: Some expressions had a GC in every iteration; so filtering is
-disabled.</code></pre>
-</div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 6
   expression   min median `itr/sec` mem_alloc `gc/sec`
   &lt;bch:expr&gt; &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-1 grumpy      1      1         2.59      1.95     1
-2 zarr        2.57   2.64      1         1        3.92</code></pre>
+1 grumpy      1      1         3.88      1.74     10.8
+2 zarr        6.89   3.35      1         1         1  </code></pre>
 </div>
 </div>
 <p>There is a small time penalty for reading the Zarr file, since the various chunks need to be read and concatenated together, but the memory footprint is much smaller, and the Zarr file is much smaller on disk. This is particularly important for large datasets that do not fit into memory, as it allows for out-of-core processing of the data.</p>

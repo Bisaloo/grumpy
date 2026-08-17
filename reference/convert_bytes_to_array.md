@@ -37,8 +37,7 @@ convert_bytes_to_array(bytes, what, shape, size, endian)
 
 ## Value
 
-An R array containing the converted data, with the specified shape and
-data type.
+An R array containing the converted data, with the specified shape
 
 ## Examples
 
@@ -50,7 +49,12 @@ x
 #> [2,]    6    1    0
 
 y <- writeBin(c(x), raw()) |>
-  convert_bytes_to_array("int", shape = c(2L, 3L), size = 4L, endian = "little")
+  convert_bytes_to_array(
+     "int",
+     shape = c(2L, 3L),
+     size = 4L,
+     endian = "little"
+  )
 y
 #>      [,1] [,2] [,3]
 #> [1,]    3    2   12

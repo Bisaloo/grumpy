@@ -12,13 +12,19 @@ parse_npy_datatype(descr)
 
 - descr:
 
-  A NumPy dtype description string, or a list of such strings fo
+  A NumPy dtype description string, or a list of such strings for
   structured dtypes
 
 ## Value
 
 A list containing the parsed data type information, including the base
 type, the number of bytes, and the endianness
+
+## Details
+
+If a `list` is passed to `descr`, each element can be of length 1, or of
+length 2 in which case the first element corresponds to the name of the
+field and the second to its dtype.
 
 ## Examples
 
@@ -43,6 +49,8 @@ parse_npy_datatype("|b1")
 #> $endian
 #> [1] NA
 #> 
+# A structured datatype where each element has 3 components, all integers,
+# named "r", "g" and "b".
 parse_npy_datatype(list(c("r", "<i8"), c("g", "<i8"), c("b", "<i8")))
 #> $base_type
 #> [1] "int" "int" "int"

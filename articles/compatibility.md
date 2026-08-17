@@ -1,0 +1,97 @@
+# NumPy format compatibility
+
+## NumPy format versions
+
+[`.npy` format
+versions](https://numpy.org/doc/stable/reference/generated/numpy.lib.format.html#version-numbering)
+1.0, 2.0, and 3.0 (latest at the time of writing) as all supported.
+
+## Data types
+
+The following data types are supported (use
+[`parse_npy_datatype()`](https://hugogruson.fr/grumpy/reference/parse_npy_datatype.md)
+to decode them in plain language):
+
+- `|?`
+
+- `|b1`
+
+- `>f2`
+
+- `<f2`
+
+- `>f4`
+
+- `<f4`
+
+- `>f8`
+
+- `<f8`
+
+- `|i1`
+
+- `<i2`
+
+- `>i2`
+
+- `>i4`
+
+- `<i4`
+
+- `>i8`
+
+- `<i8`
+
+- `|O`
+
+- `|u1`
+
+- `>u2`
+
+- `<u2`
+
+- `<u4`
+
+- `>u4`
+
+- `<u8`
+
+- `>u8`
+
+- structured data types (record arrays). Each element of the array is a
+  combination of multiple fields, which can be of different data types.
+
+> **Caveats**
+>
+> - `i8`, `u4` and `u8` data types are currently limited to the maximum
+>   value of `int32`. Larger values are set to `NA_integer_`. Future
+>   plans are laid out in https://github.com/Bisaloo/grumpy/issues/13.
+> - structured data type support only one level of nesting and no
+>   array-cells for now.
+> - `f2` (half-precision floating point) is read as `f4`
+>   (single-precision floating point). No effort is made to evaluate
+>   whether the values in the original `f2` array can be represented in
+>   `f4` without loss of precision.
+
+The following data types are not yet supported, because we are unsure of
+their use cases. If you need support for any of these, please [open an
+issue](https://github.com/Bisaloo/grumpy/issues).
+
+- `b*`: signed byte
+- `B*`: unsigned byte
+- `c64`: complex-floating point
+- `c128`: double-precision complex floating point
+- `m8`: timedelta
+- `M8`: datetime
+
+## Dimensions
+
+Any number of dimensions is supported, including zero-dimensional arrays
+(scalar values) and one-dimensional arrays (vectors). The shape of the
+original NumPy array is preserved in the output R object, and can be
+accessed with the [`dim()`](https://rdrr.io/r/base/dim.html) function.
+
+## Pickled objects
+
+Python object array created with `np.save(..., allow_pickle = True)` are
+not supported.

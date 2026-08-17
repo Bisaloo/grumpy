@@ -5,14 +5,14 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Design principles • grumpy</title>
+<title>NumPy format compatibility • grumpy</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><script src="design_files/libs/quarto-html/popper.min.js"></script><script src="design_files/libs/quarto-html/tippy.umd.min.js"></script><link href="design_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="design_files/libs/quarto-html/light-border.css" rel="stylesheet">
-<!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Design principles">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><script src="compatibility_files/libs/quarto-html/popper.min.js"></script><script src="compatibility_files/libs/quarto-html/tippy.umd.min.js"></script><link href="compatibility_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="compatibility_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="NumPy format compatibility">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -57,12 +57,12 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>Design principles</h1>
+      <h1>NumPy format compatibility</h1>
 
 
 
 
-      <small class="dont-index">Source: <a href="https://github.com/Bisaloo/grumpy/blob/main/vignettes/design.qmd" class="external-link"><code>vignettes/design.qmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/Bisaloo/grumpy/blob/main/vignettes/compatibility.qmd" class="external-link"><code>vignettes/compatibility.qmd</code></a></small>
       <div class="d-none name"><code></code></div>
     </div>
 
@@ -71,33 +71,71 @@
 
 
 
-    <section class="section level2"><h2 id="scope">Scope<a class="anchor" aria-label="anchor" href="#scope"></a>
+    <section class="level2"><h2 id="numpy-format-versions">NumPy format versions<a class="anchor" aria-label="anchor" href="#numpy-format-versions"></a>
 </h2>
-<p><strong>Reading</strong> <code>.npy</code> and <code>.npz</code> files in R.</p>
-<p>Writing is out of scope. When working across multiple languages, one should prefer high-performance interoperable formats (<a href="https://parquet.apache.org/" class="external-link">parquet</a>, <a href="https://zarr-specs.readthedocs.io/en/latest/v3/core/" class="external-link">Zarr</a>, etc.).</p>
-</section><section class="section level2"><h2 id="dependencies">Dependencies<a class="anchor" aria-label="anchor" href="#dependencies"></a>
+<p><a href="https://numpy.org/doc/stable/reference/generated/numpy.lib.format.html#version-numbering" class="external-link"><code>.npy</code> format versions</a> 1.0, 2.0, and 3.0 (latest at the time of writing) as all supported.</p>
+</section><section class="level2"><h2 id="data-types">Data types<a class="anchor" aria-label="anchor" href="#data-types"></a>
 </h2>
-<p>Because <a href="https://hugogruson.fr/grumpy/">grumpy</a> is a intended to be used deep in the dependency graph of other packages, we want to minimize the number of dependencies. There is currently no dependency, and no new dependency should be added unless it provides a significant performance improvement.</p>
-</section><section class="section level2"><h2 id="function-signatures">Function signatures<a class="anchor" aria-label="anchor" href="#function-signatures"></a>
-</h2>
-<section class="level2"><h3 id="inputs">Inputs<a class="anchor" aria-label="anchor" href="#inputs"></a>
-</h3>
+<p>The following data types are supported (use <code><a href="../reference/parse_npy_datatype.html">parse_npy_datatype()</a></code> to decode them in plain language):</p>
 <ul>
-<li>The first argument of <code><a href="../reference/read_npy.html">read_npy()</a></code> and <code><a href="../reference/read_npz.html">read_npz()</a></code> is named <code>file</code> and is a connection or the path to the file to read. This is consistent with base R functions such as <code><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv()</a></code>, <code><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS()</a></code>, etc.</li>
-</ul></section><section class="level2"><h3 id="outputs">Outputs<a class="anchor" aria-label="anchor" href="#outputs"></a>
-</h3>
+<li><p><code>|?</code></p></li>
+<li><p><code>|b1</code></p></li>
+<li><p><code>&gt;f2</code></p></li>
+<li><p><code>&lt;f2</code></p></li>
+<li><p><code>&gt;f4</code></p></li>
+<li><p><code>&lt;f4</code></p></li>
+<li><p><code>&gt;f8</code></p></li>
+<li><p><code>&lt;f8</code></p></li>
+<li><p><code>|i1</code></p></li>
+<li><p><code>&lt;i2</code></p></li>
+<li><p><code>&gt;i2</code></p></li>
+<li><p><code>&gt;i4</code></p></li>
+<li><p><code>&lt;i4</code></p></li>
+<li><p><code>&gt;i8</code></p></li>
+<li><p><code>&lt;i8</code></p></li>
+<li><p><code>|O</code></p></li>
+<li><p><code>|u1</code></p></li>
+<li><p><code>&gt;u2</code></p></li>
+<li><p><code>&lt;u2</code></p></li>
+<li><p><code>&lt;u4</code></p></li>
+<li><p><code>&gt;u4</code></p></li>
+<li><p><code>&lt;u8</code></p></li>
+<li><p><code>&gt;u8</code></p></li>
+<li><p>structured data types (record arrays). Each element of the array is a combination of multiple fields, which can be of different data types.</p></li>
+</ul>
+<div>
+<blockquote>
+<p><strong>Caveats</strong></p>
 <ul>
-<li>The output of <code><a href="../reference/read_npy.html">read_npy()</a></code> is always an array (i.e., <code><a href="https://rdrr.io/r/base/array.html" class="external-link">is.array()</a></code> is <code>TRUE</code>), even for structured datatypes. This is to keep the output consistent and as conceptually close as possible to the original NumPy array.</li>
-<li>The output of <code><a href="../reference/read_npz.html">read_npz()</a></code> is always a named list of arrays, even if the <code>.npz</code> file contains only one array. A stable output type is important for downstream analysis.</li>
-</ul></section></section><section class="section level2"><h2 id="faq">FAQ<a class="anchor" aria-label="anchor" href="#faq"></a>
+<li>
+<code>i8</code>, <code>u4</code> and <code>u8</code> data types are currently limited to the maximum value of <code>int32</code>. Larger values are set to <code>NA_integer_</code>. Future plans are laid out in https://github.com/Bisaloo/grumpy/issues/13.</li>
+<li>structured data type support only one level of nesting and no array-cells for now.</li>
+<li>
+<code>f2</code> (half-precision floating point) is read as <code>f4</code> (single-precision floating point). No effort is made to evaluate whether the values in the original <code>f2</code> array can be represented in <code>f4</code> without loss of precision.</li>
+</ul>
+</blockquote>
+</div>
+<p>The following data types are not yet supported, because we are unsure of their use cases. If you need support for any of these, please <a href="https://github.com/Bisaloo/grumpy/issues" class="external-link">open an issue</a>.</p>
+<ul>
+<li>
+<code>b*</code>: signed byte</li>
+<li>
+<code>B*</code>: unsigned byte</li>
+<li>
+<code>c64</code>: complex-floating point</li>
+<li>
+<code>c128</code>: double-precision complex floating point</li>
+<li>
+<code>m8</code>: timedelta</li>
+<li>
+<code>M8</code>: datetime</li>
+</ul></section><section class="level2"><h2 id="dimensions">Dimensions<a class="anchor" aria-label="anchor" href="#dimensions"></a>
 </h2>
-<section class="level2"><h3 id="why-not-use-reticulate">Why not use <code>reticulate</code>?<a class="anchor" aria-label="anchor" href="#why-not-use-reticulate"></a>
-</h3>
-<ul>
-<li><p>When reading <code>.npy</code> files with <a href="https://rstudio.github.io/reticulate/" class="external-link">reticulate</a>, at some point in time, two or three copies of the data are made in memory. This can be problematic for large files. With <a href="https://hugogruson.fr/grumpy/">grumpy</a>, two copies of the data are made in memory, with plans to make just one copy in the cases where the data type matches R native types.</p></li>
-<li><p>Reading data with <a href="https://rstudio.github.io/reticulate/" class="external-link">reticulate</a> requires a Python installation and additional python packages, which users in restricted environments may not have access to. <a href="https://hugogruson.fr/grumpy/">grumpy</a> is a pure R package with no external dependencies. This is especially important as we expect <a href="https://hugogruson.fr/grumpy/">grumpy</a> to be used deep in the dependency graph of other packages, and we want to minimize the number of dependencies.</p></li>
-<li><p>A dedicated R package gives us more flexibility in how edge cases such as 64-bit integers are handled. <a href="https://rstudio.github.io/reticulate/" class="external-link">reticulate</a> automatically and silently converts 64-bit integers to double, which is a sensible default for many use cases. But we may want to have more control over this behavior, and <a href="https://hugogruson.fr/grumpy/">grumpy</a> will allow us to do that in the future. Another good example are structured data types (record arrays), which are returned as <code>data.frame</code>s, not <code>array</code>s, with <a href="https://rstudio.github.io/reticulate/" class="external-link">reticulate</a>.</p></li>
-</ul></section></section><script id="quarto-html-after-body" type="application/javascript">
+<p>Any number of dimensions is supported, including zero-dimensional arrays (scalar values) and one-dimensional arrays (vectors). The shape of the original NumPy array is preserved in the output R object, and can be accessed with the <code><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim()</a></code> function.</p>
+</section><section class="level2"><h2 id="pickled-objects">Pickled objects<a class="anchor" aria-label="anchor" href="#pickled-objects"></a>
+</h2>
+<p>Python object array created with <code>np.save(..., allow_pickle = True)</code> are not supported.</p>
+</section><script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);

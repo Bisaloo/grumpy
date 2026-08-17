@@ -1,6 +1,6 @@
-# Read a .npz file
+# Read a `.npz` file
 
-Read a .npz file
+Read a `.npz` file
 
 ## Usage
 
@@ -12,11 +12,11 @@ read_npz(file)
 
 - file:
 
-  Path to the .npz file
+  Path to the `.npz` file
 
 ## Value
 
-A list of arrays containing the data from the .npz file
+A named list of arrays containing the data from the `.npz` file
 
 ## Examples
 
@@ -24,10 +24,10 @@ A list of arrays containing the data from the .npz file
 read_npz(
   system.file("extdata", "test.npz", package = "grumpy")
 )
-#> [[1]]
+#> $x
 #> [1] 1 2 3
 #> 
-#> [[2]]
+#> $y
 #> [1] 4 5 6
 #> 
 ```

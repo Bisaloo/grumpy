@@ -21,8 +21,8 @@ library(Rarr)
 
 ## Introduction to Zarr
 
-If you are now understanding how the `.npy` file format works, the Zarr
-format is a natural extension of it. Zarr is a chunked, compressed,
+If you now understand how the `.npy` file format works, the Zarr format
+is a natural extension of it. Zarr is a chunked, compressed,
 N-dimensional array storage format. Each chunk of data corresponds to a
 small sub-array of the original array, and is stored in a separate file,
 **in a format nearly identical to `.npy`**. The chunk is then usually
@@ -41,12 +41,12 @@ requirements of the dataset.
 
 ``` r
 
-x <- matrix(0, nrow = 1e4, ncol = 1e4)
-x[300:400, 700:800] <- seq_len(101 * 101)
+x <- matrix(0L, nrow = 1000L, ncol = 1000L)
+x[300L:400L, 700L:800L] <- seq_len(101L * 101L)
 
 f_zarr <- withr::local_tempfile(fileext = ".zarr")
 
-Rarr::write_zarr_array(x, f_zarr, chunk_dim = c(100, 100), compressor = NULL)
+Rarr::write_zarr_array(x, f_zarr, chunk_dim = c(100L, 100L), compressor = NULL)
 ```
 
 ## Storage size comparison
@@ -63,12 +63,12 @@ size <- list.files(f_zarr, full.names = TRUE, recursive = TRUE) |>
 size
 ```
 
-    [1] 320579
+    [1] 80576
 
 **Without compression**, the equivalent Zarr data is thus 320 kB on
-disk, so `round(8e8 / size)` times smaller than the `.npy` file. We
-could also use compression to further reduce the size of the Zarr file
-on disk, but this is out of scope for this vignette.
+disk, so 9929 times smaller than the `.npy` file. We could also use
+compression to further reduce the size of the Zarr file on disk, but
+this is out of scope for this vignette.
 
 ## Decoding speed comparison
 
@@ -99,37 +99,27 @@ np$save(f_npy, x)
 bm <- bench::mark(
   grumpy = read_npy(f_npy),
   zarr = read_zarr_array(f_zarr),
-  iterations = 50
+  iterations = 50L
 )
-```
-
-    Warning: Some expressions had a GC in every iteration; so filtering is
-    disabled.
-
-``` r
-
 bm
 ```
 
     # A tibble: 2 × 6
       expression      min   median `itr/sec` mem_alloc `gc/sec`
       <bch:expr> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-    1 grumpy        322ms    335ms      2.88    1.49GB     1.78
-    2 zarr          828ms    884ms      1.11  782.44MB     6.99
+    1 grumpy       1.36ms   2.94ms      390.    7.72MB    239.
+    2 zarr         9.41ms   9.85ms      101.    4.44MB     22.1
 
 ``` r
 
 summary(bm, relative = TRUE)
 ```
 
-    Warning: Some expressions had a GC in every iteration; so filtering is
-    disabled.
-
     # A tibble: 2 × 6
       expression   min median `itr/sec` mem_alloc `gc/sec`
       <bch:expr> <dbl>  <dbl>     <dbl>     <dbl>    <dbl>
-    1 grumpy      1      1         2.59      1.95     1
-    2 zarr        2.57   2.64      1         1        3.92
+    1 grumpy      1      1         3.88      1.74     10.8
+    2 zarr        6.89   3.35      1         1         1  
 
 There is a small time penalty for reading the Zarr file, since the
 various chunks need to be read and concatenated together, but the memory
