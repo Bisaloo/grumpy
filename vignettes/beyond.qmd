@@ -19,7 +19,7 @@ library(Rarr)
 
 ## Introduction to Zarr
 
-If you are now understanding how the `.npy` file format works, the Zarr format is a natural extension of it.
+If you now understand how the `.npy` file format works, the Zarr format is a natural extension of it.
 Zarr is a chunked, compressed, N-dimensional array storage format. Each chunk of data corresponds to a small sub-array of the original array, and is stored in a separate file, **in a format nearly identical to `.npy`**. The chunk is then usually compressed with high-performance compression algorithms such as `zlib`, `blosc`, or `zstd`.
 
 One benefit of this chunked approach is that it allows for efficient reading and writing of large arrays, as only the necessary chunks need to be read or written, rather than the entire array.
@@ -47,7 +47,7 @@ size <- list.files(f_zarr, full.names = TRUE, recursive = TRUE) |>
 size
 ```
 
-**Without compression**, the equivalent Zarr data is thus 320 kB on disk, so `round(8e8 / size)` times smaller than the `.npy` file. We could also use compression to further reduce the size of the Zarr file on disk, but this is out of scope for this vignette.
+**Without compression**, the equivalent Zarr data is thus 320 kB on disk, so `r round(8e8 / size)` times smaller than the `.npy` file. We could also use compression to further reduce the size of the Zarr file on disk, but this is out of scope for this vignette.
 
 ## Decoding speed comparison
 
