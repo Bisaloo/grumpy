@@ -154,9 +154,19 @@ parse_npy_datatype <- function(descr) {
     types <- lapply(descr, function(field) {
       parse_npy_datatype(field[[2L]])
     })
+    nms <- vapply(
+      descr,
+      function(field) {
+        field[[1L]]
+      },
+      character(1L)
+    )
     return(
       list(
-        base_type = vapply(types, function(x) x$base_type, character(1L)),
+        base_type = setNames(
+          vapply(types, function(x) x$base_type, character(1L)),
+          nms
+        ),
         nbytes = vapply(types, function(x) x$nbytes, integer(1L)),
         endian = vapply(types, function(x) x$endian, character(1L))
       )
@@ -239,7 +249,7 @@ convert_bytes_to_array <- function(bytes, what, shape, size, endian) {
     field_start <- c(0L, cumsum(size)[-length(size)])
 
     # Convert each field via strided index extraction
-    res_fields <- vector("list", length(what))
+    res_fields <- vector("list", length(what)) |> setNames(names(what))
     for (i in seq_along(what)) {
       starts <- seq(
         field_start[[i]] + 1L,
