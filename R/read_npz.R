@@ -2,9 +2,10 @@
 #'
 #' @param file Path to the .npz file
 #'
-#' @return A list of arrays containing the data from the .npz file
+#' @return A named list of arrays containing the data from the .npz file
 #'
 #' @importFrom utils unzip
+#' @importFrom stats setNames
 #'
 #' @export
 #'
@@ -24,5 +25,6 @@ read_npz <- function(file) {
     con <- unz(file, name, "rb")
     on.exit(close(con))
     read_npy(con)
-  })
+  }) |>
+    setNames(gsub("\\.npy$", "", files$Name))
 }

@@ -10,7 +10,7 @@ read_npz(file)
 \item{file}{Path to the .npz file}
 }
 \value{
-A list of arrays containing the data from the .npz file
+A named list of arrays containing the data from the .npz file
 }
 \description{
 Read a .npz file
