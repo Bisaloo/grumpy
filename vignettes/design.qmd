@@ -12,6 +12,22 @@ vignette: >
 
 Writing is out of scope. When working across multiple languages, one should prefer high-performance interoperable formats ([parquet](https://parquet.apache.org/), [Zarr](https://zarr-specs.readthedocs.io/en/latest/v3/core/), etc.).
 
+# Dependencies
+
+Because `{grumpy}` is a intended to be used deep in the dependency graph of other packages, we want to minimize the number of dependencies.
+There is currently no dependency, and no new dependency should be added unless it provides a significant performance improvement.
+
+# Function signatures
+
+## Inputs
+
+- The first argument of `read_npy()` and `read_npz()` is named `file` and is a connection or the path to the file to read. This is consistent with base R functions such as `read.csv()`, `readRDS()`, etc.
+
+## Outputs
+
+- The output of `read_npy()` is always an array (i.e., `is.array()` is `TRUE`), even for structured datatypes. This is to keep the output consistent and as conceptually close as possible to the original NumPy array.
+- The output of `read_npz()` is always a named list of arrays, even if the `.npz` file contains only one array. A stable output type is important for downstream analysis.
+
 # FAQ
 
 ## Why not use `reticulate`?
@@ -19,4 +35,4 @@ Writing is out of scope. When working across multiple languages, one should pref
 - When reading `.npy` files with `{reticulate}`, at some point in time, two or three copies of the data are made in memory. This can be problematic for large files. With `{grumpy}`, two copies of the data are made in memory, with plans to make just one copy in the cases where the data type matches R native types.
 
 - Reading data with `{reticulate}` requires a Python installation and additional python packages, which users in restricted environments may not have access to. `{grumpy}` is a pure R package with no external dependencies. This is especially important as we expect `{grumpy}` to be used deep in the dependency graph of other packages, and we want to minimize the number of dependencies.
-- A dedicated R package gives us more flexibility in how edge cases such as 64 bits integers are handled. `{reticulate}` automatically and silently converts 64 bits integers to double, which is a sensible default for many use cases. But we may want to have more control over this behavior, and `{grumpy}` will allow us to do that in the future. Another good example are structured data types (record arrays), which are returned as data.frames, not arrays, with `{reticulate}`.
+- A dedicated R package gives us more flexibility in how edge cases such as 64-bit integers are handled. `{reticulate}` automatically and silently converts 64-bit integers to double, which is a sensible default for many use cases. But we may want to have more control over this behavior, and `{grumpy}` will allow us to do that in the future. Another good example are structured data types (record arrays), which are returned as `data.frame`s, not `array`s, with `{reticulate}`.
