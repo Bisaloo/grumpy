@@ -1,8 +1,8 @@
-#' Read a .npz file
+#' Read a `.npz` file
 #'
-#' @param file Path to the .npz file
+#' @param file Path to the `.npz` file
 #'
-#' @return A named list of arrays containing the data from the .npz file
+#' @return A named list of arrays containing the data from the `.npz` file
 #'
 #' @importFrom utils unzip
 #' @importFrom stats setNames

@@ -2,23 +2,44 @@
 % Please edit documentation in R/read_npy.R
 \name{read_npy}
 \alias{read_npy}
-\title{Read a .npy file}
+\title{Read a \code{.npy} file}
 \usage{
 read_npy(file, ...)
 }
 \arguments{
-\item{file}{Path to the .npy file}
+\item{file}{Path to the \code{.npy} file}
 
 \item{...}{Ignored. Reserved for future use.}
 }
 \value{
-An array containing the data from the .npy file
+An array containing the data from the \code{.npy} file
 }
 \description{
-Read a .npy file
+Read a \code{.npy} file
 }
 \examples{
+# Array of integers. NumPy "<i4" dtype
 read_npy(
-  system.file("extdata", "test.npy", package = "grumpy")
+  system.file("extdata", "test_int32.npy", package = "grumpy")
+)
+
+# Array of logicals. NumPy "|b1" dtype
+read_npy(
+  system.file("extdata", "test_bool.npy", package = "grumpy")
+)
+
+# Array of numerics. NumPy "<f8" dtype
+read_npy(
+  system.file("extdata", "test_float64.npy", package = "grumpy")
+)
+
+# Array of strings. NumPy "<U" dtype
+read_npy(
+  system.file("extdata", "test_str_unicode.npy", package = "grumpy")
+)
+
+# "Array" of lists. Numpy structured dtype
+read_npy(
+  system.file("extdata", "test_structured.npy", package = "grumpy")
 )
 }

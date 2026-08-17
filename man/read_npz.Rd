@@ -2,18 +2,18 @@
 % Please edit documentation in R/read_npz.R
 \name{read_npz}
 \alias{read_npz}
-\title{Read a .npz file}
+\title{Read a \code{.npz} file}
 \usage{
 read_npz(file)
 }
 \arguments{
-\item{file}{Path to the .npz file}
+\item{file}{Path to the \code{.npz} file}
 }
 \value{
-A named list of arrays containing the data from the .npz file
+A named list of arrays containing the data from the \code{.npz} file
 }
 \description{
-Read a .npz file
+Read a \code{.npz} file
 }
 \examples{
 read_npz(

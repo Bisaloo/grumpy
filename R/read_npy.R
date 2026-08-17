@@ -1,15 +1,36 @@
-#' Read a .npy file
+#' Read a `.npy` file
 #'
-#' @param file Path to the .npy file
+#' @param file Path to the `.npy` file
 #' @param ... Ignored. Reserved for future use.
 #'
-#' @returns An array containing the data from the .npy file
+#' @returns An array containing the data from the `.npy` file
 #'
 #' @export
 #'
 #' @examples
+#' # Array of integers. NumPy "<i4" dtype
 #' read_npy(
-#'   system.file("extdata", "test.npy", package = "grumpy")
+#'   system.file("extdata", "test_int32.npy", package = "grumpy")
+#' )
+#'
+#' # Array of logicals. NumPy "|b1" dtype
+#' read_npy(
+#'   system.file("extdata", "test_bool.npy", package = "grumpy")
+#' )
+#'
+#' # Array of numerics. NumPy "<f8" dtype
+#' read_npy(
+#'   system.file("extdata", "test_float64.npy", package = "grumpy")
+#' )
+#'
+#' # Array of strings. NumPy "<U" dtype
+#' read_npy(
+#'   system.file("extdata", "test_str_unicode.npy", package = "grumpy")
+#' )
+#'
+#' # "Array" of lists. Numpy structured dtype
+#' read_npy(
+#'   system.file("extdata", "test_structured.npy", package = "grumpy")
 #' )
 
 read_npy <- function(file, ...) {
@@ -106,17 +127,24 @@ parse_npy_descr <- function(bytes) {
 
 #' Parse a NumPy Array-protocol type strings
 #'
-#' @param descr A NumPy dtype description string, or a list of such strings fo
+#' @param descr A NumPy dtype description string, or a list of such strings for
 #'   structured dtypes
 #'
-#' @returns A list containing the parsed data type information, including the base
-#'   type, the number of bytes, and the endianness
+#' @returns A list containing the parsed data type information, including the
+#'   base type, the number of bytes, and the endianness
+#'
+#' @details
+#' If a `list` is passed to `descr`, each element can be of length 1, or of
+#' length 2 in which case the first element corresponds to the name of the field
+#' and the second to its dtype.
 #'
 #' @export
 #'
 #' @examples
 #' parse_npy_datatype(">i8")
 #' parse_npy_datatype("|b1")
+#' # A structured datatype where each element has 3 components, all integers,
+#' # named "r", "g" and "b".
 #' parse_npy_datatype(list(c("r", "<i8"), c("g", "<i8"), c("b", "<i8")))
 #'
 parse_npy_datatype <- function(descr) {

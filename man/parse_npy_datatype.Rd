@@ -7,19 +7,26 @@
 parse_npy_datatype(descr)
 }
 \arguments{
-\item{descr}{A NumPy dtype description string, or a list of such strings fo
+\item{descr}{A NumPy dtype description string, or a list of such strings for
 structured dtypes}
 }
 \value{
-A list containing the parsed data type information, including the base
-type, the number of bytes, and the endianness
+A list containing the parsed data type information, including the
+base type, the number of bytes, and the endianness
 }
 \description{
 Parse a NumPy Array-protocol type strings
 }
+\details{
+If a \code{list} is passed to \code{descr}, each element can be of length 1, or of
+length 2 in which case the first element corresponds to the name of the field
+and the second to its dtype.
+}
 \examples{
 parse_npy_datatype(">i8")
 parse_npy_datatype("|b1")
+# A structured datatype where each element has 3 components, all integers,
+# named "r", "g" and "b".
 parse_npy_datatype(list(c("r", "<i8"), c("g", "<i8"), c("b", "<i8")))
 
 }
