@@ -19,10 +19,10 @@ library(grumpy)
 The following data types are supported (use `parse_npy_datatype()` to decode them in plain language):
 
 ```{r, echo = FALSE, results = "asis"}
-types <- grumpy:::supported_types |> 
-  as.list() |> 
+types <- grumpy:::supported_types |>
+  as.list() |>
   names()
-types <- types[order(gsub("[<>|]", "", types))] 
+types <- types[order(gsub("[<>|]", "", types))]
 sprintf("- `%s`", types) |>
   cat(sep = "\n")
 ```

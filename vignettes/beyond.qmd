@@ -27,12 +27,12 @@ This is particularly useful for large datasets that do not fit into memory, as i
 It also provides strong benefits when some chunks are "empty" (e.g. filled with zeros, such as the white/black background of an image), as these chunks can be skipped during reading and writing, and thus reduce the overall storage requirements of the dataset.
 
 ```{r}
-x <- matrix(0, nrow = 1e4, ncol = 1e4)
-x[300:400, 700:800] <- seq_len(101 * 101)
+x <- matrix(0L, nrow = 1000L, ncol = 1000L)
+x[300L:400L, 700L:800L] <- seq_len(101L * 101L)
 
 f_zarr <- withr::local_tempfile(fileext = ".zarr")
 
-Rarr::write_zarr_array(x, f_zarr, chunk_dim = c(100, 100), compressor = NULL)
+Rarr::write_zarr_array(x, f_zarr, chunk_dim = c(100L, 100L), compressor = NULL)
 ```
 
 ## Storage size comparison
@@ -65,7 +65,7 @@ np$save(f_npy, x)
 bm <- bench::mark(
   grumpy = read_npy(f_npy),
   zarr = read_zarr_array(f_zarr),
-  iterations = 50
+  iterations = 50L
 )
 bm
 summary(bm, relative = TRUE)

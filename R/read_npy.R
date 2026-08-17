@@ -87,7 +87,8 @@ read_npy <- function(file, ...) {
     stop(
       "This file contains a Python object array. ",
       "Reading .npy files with Python object arrays is not supported. ",
-      "A common reason for this is when the file is saved with `np.save(..., allow_pickle=True)`. ",
+      "A common reason for this is when the file is saved with ",
+      "`np.save(..., allow_pickle=True)`. ",
       call. = FALSE
     )
   }
@@ -151,7 +152,7 @@ parse_npy_datatype <- function(descr) {
   if (is.list(descr)) {
     # structured data type
     types <- lapply(descr, function(field) {
-      parse_npy_datatype(field[[2]])
+      parse_npy_datatype(field[[2L]])
     })
     return(
       list(
@@ -199,16 +200,16 @@ parse_npy_datatype <- function(descr) {
 #' and endianness specified in the .npy file header.
 #'
 #' @param bytes A raw vector containing the bytes to convert
-#' @param what A character specifying the base type to convert to (e.g., `"float"`,
-#'   `"int"`, `"string"`, etc.)
+#' @param what A character specifying the base type to convert to (e.g.,
+#'   `"float"`, `"int"`, `"string"`, etc.)
 #' @param shape A numeric vector with desired shape of the output array
 #' @param size A numeric value with the number of bytes per element for the
 #'   specified type
 #' @param endian The endianness of the data (`"little"`, `"big"`, or `NA` for
 #'   single-byte types)
 #'
-#' @returns An R array containing the converted data, with the specified shape and
-#'   data type.
+#' @returns An R array containing the converted data, with the specified shape
+#    and data type.
 #'
 #' @export
 #'
@@ -217,7 +218,12 @@ parse_npy_datatype <- function(descr) {
 #' x
 #'
 #' y <- writeBin(c(x), raw()) |>
-#'   convert_bytes_to_array("int", shape = c(2L, 3L), size = 4L, endian = "little")
+#'   convert_bytes_to_array(
+#'      "int",
+#'      shape = c(2L, 3L),
+#'      size = 4L,
+#'      endian = "little"
+#'   )
 #' y
 #' dim(y)
 #' is.array(y)
@@ -240,7 +246,7 @@ convert_bytes_to_array <- function(bytes, what, shape, size, endian) {
         by = record_size,
         length.out = n_records
       )
-      idx <- rep(starts, each = size[[i]]) + seq_len(size[[i]]) - 1
+      idx <- rep(starts, each = size[[i]]) + seq_len(size[[i]]) - 1L
       res_fields[[i]] <- convert_bytes_to_array(
         bytes[idx],
         what = what[[i]],
