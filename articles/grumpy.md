@@ -91,13 +91,13 @@ dim(struct)
 struct[[1L]]
 ```
 
-    [[1]]
+    $id
     [1] 1
 
-    [[2]]
+    $value
     [1] 3.14
 
-    [[3]]
+    $name
     [1] "Alice"
 
 Note that in many cases, this is not efficient for any downstream

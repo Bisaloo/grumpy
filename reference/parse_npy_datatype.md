@@ -53,7 +53,8 @@ parse_npy_datatype("|b1")
 # named "r", "g" and "b".
 parse_npy_datatype(list(c("r", "<i8"), c("g", "<i8"), c("b", "<i8")))
 #> $base_type
-#> [1] "int" "int" "int"
+#>     r     g     b 
+#> "int" "int" "int" 
 #> 
 #> $nbytes
 #> [1] 8 8 8
