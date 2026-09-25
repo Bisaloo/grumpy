@@ -2,7 +2,7 @@
 % Please edit documentation in R/read_npy.R
 \name{parse_npy_datatype}
 \alias{parse_npy_datatype}
-\title{Parse a NumPy Array-protocol type strings}
+\title{Parse a NumPy Array-protocol type string}
 \usage{
 parse_npy_datatype(descr)
 }
@@ -15,7 +15,7 @@ A list containing the parsed data type information, including the
 base type, the number of bytes, and the endianness
 }
 \description{
-Parse a NumPy Array-protocol type strings
+Parse a NumPy Array-protocol type string
 }
 \details{
 If a \code{list} is passed to \code{descr}, each element can be of length 1, or of

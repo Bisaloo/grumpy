@@ -22,6 +22,7 @@ single-byte types)}
 }
 \value{
 An R array containing the converted data, with the specified shape
+and data type.
 }
 \description{
 This is a replacement for \code{\link[=readBin]{readBin()}} that can handle the various data types
