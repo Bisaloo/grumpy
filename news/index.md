@@ -10,6 +10,9 @@
   resulting in much better speed & memory performance. This is following
   a feature request from [@btraven00](https://github.com/btraven00) in
   [\#11](https://github.com/Bisaloo/grumpy/issues/11).
+- [`read_npz()`](https://hugogruson.fr/grumpy/reference/read_npz.md)
+  gains a new `arrays` argument to allow reading only a subset of the
+  arrays in the npz container.
 
 ### Minor improvements
 

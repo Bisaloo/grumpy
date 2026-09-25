@@ -45,6 +45,8 @@
 <h3 id="significant-new-features-development-version">Significant new features<a class="anchor" aria-label="anchor" href="#significant-new-features-development-version"></a></h3>
 <ul><li>
 <code><a href="../reference/read_npy.html">read_npy()</a></code> gains a new <code>lazy</code> argument. When <code>lazy = TRUE</code>, raw bytes are read lazily using ALTREP and mmap against the <code>.npy</code> file on disk, resulting in much better speed &amp; memory performance. This is following a feature request from <a href="https://github.com/btraven00" class="external-link">@btraven00</a> in <a href="https://github.com/Bisaloo/grumpy/issues/11" class="external-link">#11</a>.</li>
+<li>
+<code><a href="../reference/read_npz.html">read_npz()</a></code> gains a new <code>arrays</code> argument to allow reading only a subset of the arrays in the npz container.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="minor-improvements-development-version">Minor improvements<a class="anchor" aria-label="anchor" href="#minor-improvements-development-version"></a></h3>

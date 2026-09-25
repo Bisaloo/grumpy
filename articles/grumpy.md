@@ -60,6 +60,48 @@ files, resulting in reduced memory usage for large arrays. This is done
 by setting the `lazy` argument to `TRUE` when calling
 [`read_npy()`](https://hugogruson.fr/grumpy/reference/read_npy.md).
 
+[`read_npz()`](https://hugogruson.fr/grumpy/reference/read_npz.md) uses
+a similar interface to read `.npz` files, which are compressed archives
+of multiple `.npy` files. By default,
+[`read_npz()`](https://hugogruson.fr/grumpy/reference/read_npz.md) will
+read all arrays in the archive, but users can also specify a subset of
+arrays to read by providing their names or indices.
+
+``` r
+
+read_npz(system.file("extdata", "test.npz", package = "grumpy"))
+```
+
+    $x
+    [1] 1 2 3
+
+    $y
+    [1] 4 5 6
+
+``` r
+
+# we can read only some of the arrays in the archive
+read_npz(
+  system.file("extdata", "test.npz", package = "grumpy"),
+  arrays = "x"
+)
+```
+
+    $x
+    [1] 1 2 3
+
+``` r
+
+# or equivalently
+read_npz(
+  system.file("extdata", "test.npz", package = "grumpy"),
+  arrays = 1L
+)
+```
+
+    $x
+    [1] 1 2 3
+
 ### Structured datatypes
 
 A more complex data structure is provided by structured datatypes, where
