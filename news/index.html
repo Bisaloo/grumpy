@@ -41,10 +41,18 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="grumpy-development-version">grumpy (development version)<a class="anchor" aria-label="anchor" href="#grumpy-development-version"></a></h2>
+<div class="section level3">
+<h3 id="significant-new-features-development-version">Significant new features<a class="anchor" aria-label="anchor" href="#significant-new-features-development-version"></a></h3>
+<ul><li>
+<code><a href="../reference/read_npy.html">read_npy()</a></code> gains a new <code>lazy</code> argument. When <code>lazy = TRUE</code>, raw bytes are read lazily using ALTREP and mmap against the <code>.npy</code> file on disk, resulting in much better speed &amp; memory performance. This is following a feature request from <a href="https://github.com/btraven00" class="external-link">@btraven00</a> in <a href="https://github.com/Bisaloo/grumpy/issues/11" class="external-link">#11</a>.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="minor-improvements-development-version">Minor improvements<a class="anchor" aria-label="anchor" href="#minor-improvements-development-version"></a></h3>
 <ul><li>Elements of structured datatypes are now named if names were provided during the dataset creation.</li>
 <li>
 <code><a href="../reference/read_npz.html">read_npz()</a></code> now adds names to the list it returns. The names are the names of the bundled <code>.npy</code> files without the file extension.</li>
 </ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.1" id="grumpy-011">grumpy 0.1.1<a class="anchor" aria-label="anchor" href="#grumpy-011"></a></h2><p class="text-muted">CRAN release: 2026-05-19</p>
 <ul><li>The package title and description have been revised based on CRAN feedback.</li>

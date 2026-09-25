@@ -2,6 +2,17 @@
 
 ## grumpy (development version)
 
+### Significant new features
+
+- [`read_npy()`](https://hugogruson.fr/grumpy/reference/read_npy.md)
+  gains a new `lazy` argument. When `lazy = TRUE`, raw bytes are read
+  lazily using ALTREP and mmap against the `.npy` file on disk,
+  resulting in much better speed & memory performance. This is following
+  a feature request from [@btraven00](https://github.com/btraven00) in
+  [\#11](https://github.com/Bisaloo/grumpy/issues/11).
+
+### Minor improvements
+
 - Elements of structured datatypes are now named if names were provided
   during the dataset creation.
 - [`read_npz()`](https://hugogruson.fr/grumpy/reference/read_npz.md) now

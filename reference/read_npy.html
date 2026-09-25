@@ -46,7 +46,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">read_npy</span><span class="op">(</span><span class="va">file</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">read_npy</span><span class="op">(</span><span class="va">file</span>, lazy <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -55,6 +55,14 @@
 
 <dl><dt id="arg-file">file<a class="anchor" aria-label="anchor" href="#arg-file"></a></dt>
 <dd><p>Path to the <code>.npy</code> file</p></dd>
+
+
+<dt id="arg-lazy">lazy<a class="anchor" aria-label="anchor" href="#arg-lazy"></a></dt>
+<dd><p>If <code>TRUE</code>, and <code>file</code> is a path (not a connection), the data
+payload is memory-mapped rather than read into memory upfront via
+<code><a href="https://rdrr.io/r/base/readBin.html" class="external-link">readBin()</a></code>. This limits the number of copies in memory when the npy file
+contains types native to R. Requires a POSIX platform; ignored (with a
+warning) otherwise. Defaults to <code>FALSE</code>.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>

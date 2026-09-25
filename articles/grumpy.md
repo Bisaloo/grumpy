@@ -54,6 +54,12 @@ read_npy(system.file("extdata", "test_2d.npy", package = "grumpy"))
     [2,]    1    4    7   10
     [3,]    2    5    8   11
 
+If supported on your platform (POSIX-compatible platforms; i.e., Linux
+and macOS), `grumpy` can also memory-map the data payload of `.npy`
+files, resulting in reduced memory usage for large arrays. This is done
+by setting the `lazy` argument to `TRUE` when calling
+[`read_npy()`](https://hugogruson.fr/grumpy/reference/read_npy.md).
+
 ### Structured datatypes
 
 A more complex data structure is provided by structured datatypes, where

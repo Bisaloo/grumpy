@@ -5,7 +5,7 @@ Read a `.npy` file
 ## Usage
 
 ``` r
-read_npy(file, ...)
+read_npy(file, lazy = FALSE, ...)
 ```
 
 ## Arguments
@@ -13,6 +13,15 @@ read_npy(file, ...)
 - file:
 
   Path to the `.npy` file
+
+- lazy:
+
+  If `TRUE`, and `file` is a path (not a connection), the data payload
+  is memory-mapped rather than read into memory upfront via
+  [`readBin()`](https://rdrr.io/r/base/readBin.html). This limits the
+  number of copies in memory when the npy file contains types native
+  to R. Requires a POSIX platform; ignored (with a warning) otherwise.
+  Defaults to `FALSE`.
 
 - ...:
 

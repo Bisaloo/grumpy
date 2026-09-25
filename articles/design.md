@@ -48,12 +48,11 @@ improvement.
 
 - When reading `.npy` files with
   [reticulate](https://rstudio.github.io/reticulate/), at some point in
-  time, two or three copies of the data are made in memory. This can be
-  problematic for large files. With
-  [grumpy](https://hugogruson.fr/grumpy/), two copies of the data are
-  made in memory, with plans to make just one copy in the cases where
-  the data type matches R native types.
-
+  time, two (one in Python and one in R) or three copies of the data are
+  held in memory. This can be problematic for large files. With
+  [grumpy](https://hugogruson.fr/grumpy/), one (for types matching R
+  native types; i.e., `int32`, `float64`/`double`) or two copies of the
+  data are held in memory.
 - Reading data with [reticulate](https://rstudio.github.io/reticulate/)
   requires a Python installation and additional python packages, which
   users in restricted environments may not have access to.
@@ -62,7 +61,6 @@ improvement.
   [grumpy](https://hugogruson.fr/grumpy/) to be used deep in the
   dependency graph of other packages, and we want to minimize the number
   of dependencies.
-
 - A dedicated R package gives us more flexibility in how edge cases such
   as 64-bit integers are handled.
   [reticulate](https://rstudio.github.io/reticulate/) automatically and
