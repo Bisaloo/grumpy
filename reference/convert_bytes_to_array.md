@@ -37,7 +37,8 @@ convert_bytes_to_array(bytes, what, shape, size, endian)
 
 ## Value
 
-An R array containing the converted data, with the specified shape
+An R array containing the converted data, with the specified shape and
+data type.
 
 ## Examples
 

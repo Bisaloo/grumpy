@@ -1,6 +1,6 @@
-# Parse a NumPy Array-protocol type strings
+# Parse a NumPy Array-protocol type string
 
-Parse a NumPy Array-protocol type strings
+Parse a NumPy Array-protocol type string
 
 ## Usage
 

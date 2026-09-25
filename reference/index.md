@@ -16,4 +16,4 @@
   : Convert raw bytes to an R array based on the specified data type
   information
 - [`parse_npy_datatype()`](https://hugogruson.fr/grumpy/reference/parse_npy_datatype.md)
-  : Parse a NumPy Array-protocol type strings
+  : Parse a NumPy Array-protocol type string
