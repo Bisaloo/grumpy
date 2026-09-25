@@ -5,7 +5,9 @@
 * `read_npy()` gains a new `lazy` argument. When `lazy = TRUE`, raw bytes are
   read lazily using ALTREP and mmap against the `.npy` file on disk, resulting
   in much better speed & memory performance. This is following a feature
-  request from @btraven00 in #11. 
+  request from @btraven00 in #11.
+* `read_npz()` gains a new `arrays` argument to allow reading only a subset of
+  the arrays in the npz container.
 
 ## Minor improvements
 
