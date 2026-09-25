@@ -4,15 +4,8 @@
 #include <string.h>
 
 // FIXME: we only support POSIX mmap() for now.
-// Windows has a different API (CreateFileMapping / MapViewOfFile) and would 
+// Windows has a different API (CreateFileMapping / MapViewOfFile) and would
 // require a separate implementation.
-#ifndef _WIN32
-#include <fcntl.h>
-#include <sys/mman.h>
-#include <sys/stat.h>
-#include <unistd.h>
-#define GRUMPY_HAVE_MMAP 1
-#endif
 
 // ALTREP raw vector backed by a read-only mmap() of a slice of a file.
 //
@@ -20,7 +13,14 @@
 // we don't need to do anything transformation (e.g., int32).
 //
 // It could also be helpful in the future if we ever implement an `index`
-// argument to `read_npy()` that allows reading a subset of the data. 
+// argument to `read_npy()` that allows reading a subset of the data.
+
+#ifndef _WIN32
+
+#include <fcntl.h>
+#include <sys/mman.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 typedef struct {
   void *addr;      // mmap base address (page-aligned)
@@ -34,11 +34,9 @@ static R_altrep_class_t grumpy_mmap_raw_class;
 static void grumpy_mmap_xptr_finalize(SEXP xp) {
   grumpy_mmap_info *info = (grumpy_mmap_info *) R_ExternalPtrAddr(xp);
   if (info == NULL) return;
-#ifdef GRUMPY_HAVE_MMAP
   if (info->addr != NULL && info->addr != MAP_FAILED) {
     munmap(info->addr, info->map_len);
   }
-#endif
   free(info);
   R_ClearExternalPtr(xp);
 }
@@ -81,9 +79,6 @@ void grumpy_init_mmap_altrep(DllInfo *info) {
 }
 
 SEXP grumpy_make_mmap_raw(SEXP path_, SEXP offset_, SEXP length_) {
-#ifndef GRUMPY_HAVE_MMAP
-  error("mmap-backed reading is not supported on this platform");
-#else
   const char *path = CHAR(STRING_ELT(path_, 0));
   double offset = REAL(offset_)[0];
   double length = REAL(length_)[0];
@@ -123,5 +118,17 @@ SEXP grumpy_make_mmap_raw(SEXP path_, SEXP offset_, SEXP length_) {
   UNPROTECT(2);
 
   return ans;
-#endif /* GRUMPY_HAVE_MMAP */
 }
+
+#endif /* POSIX implementation */
+
+#ifdef _WIN32
+// Stubs so the package compiles on Windows; mmap-backed reading is unavailable.
+SEXP grumpy_make_mmap_raw(SEXP path_, SEXP offset_, SEXP length_) {
+  error("mmap-backed reading is not supported on Windows");
+}
+
+void grumpy_init_mmap_altrep(DllInfo *info) {
+  (void) info;
+}
+#endif
