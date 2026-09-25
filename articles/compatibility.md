@@ -4,7 +4,7 @@
 
 [`.npy` format
 versions](https://numpy.org/doc/stable/reference/generated/numpy.lib.format.html#version-numbering)
-1.0, 2.0, and 3.0 (latest at the time of writing) as all supported.
+1.0, 2.0, and 3.0 (latest at the time of writing) are all supported.
 
 ## Data types
 
@@ -66,7 +66,7 @@ to decode them in plain language):
 > - `i8`, `u4` and `u8` data types are currently limited to the maximum
 >   value of `int32`. Larger values are set to `NA_integer_`. Future
 >   plans are laid out in https://github.com/Bisaloo/grumpy/issues/13.
-> - structured data type support only one level of nesting and no
+> - structured data type supports only one level of nesting and no
 >   array-cells for now.
 > - `f2` (half-precision floating point) is read as `f4`
 >   (single-precision floating point). No effort is made to evaluate
