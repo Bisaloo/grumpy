@@ -126,7 +126,7 @@ parse_npy_descr <- function(bytes) {
   ))
 }
 
-#' Parse a NumPy Array-protocol type strings
+#' Parse a NumPy Array-protocol type string
 #'
 #' @param descr A NumPy dtype description string, or a list of such strings for
 #'   structured dtypes
@@ -219,7 +219,7 @@ parse_npy_datatype <- function(descr) {
 #'   single-byte types)
 #'
 #' @returns An R array containing the converted data, with the specified shape
-#    and data type.
+#'    and data type.
 #'
 #' @export
 #'
