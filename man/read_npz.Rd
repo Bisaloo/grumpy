@@ -4,10 +4,14 @@
 \alias{read_npz}
 \title{Read a \code{.npz} file}
 \usage{
-read_npz(file)
+read_npz(file, arrays = NULL)
 }
 \arguments{
 \item{file}{Path to the \code{.npz} file}
+
+\item{arrays}{Optional character vector of array names or numeric vector of
+indices to read from the \code{.npz} file. If \code{NULL} (the default), all arrays
+are read.}
 }
 \value{
 A named list of arrays containing the data from the \code{.npz} file
@@ -19,4 +23,10 @@ Read a \code{.npz} file
 read_npz(
   system.file("extdata", "test.npz", package = "grumpy")
 )
+
+read_npz(
+  system.file("extdata", "test.npz", package = "grumpy"),
+  arrays = "x"
+)
+
 }
