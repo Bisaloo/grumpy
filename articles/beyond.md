@@ -96,30 +96,17 @@ np$save(f_npy, x)
 
 ``` r
 
-bm <- bench::mark(
+microbenchmark::microbenchmark(
   grumpy = read_npy(f_npy),
   zarr = read_zarr_array(f_zarr),
-  iterations = 50L
+  times = 50L
 )
-bm
 ```
 
-    # A tibble: 2 × 6
-      expression      min   median `itr/sec` mem_alloc `gc/sec`
-      <bch:expr> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-    1 grumpy       1.68ms   3.54ms      300.    7.73MB     84.7
-    2 zarr         8.57ms   8.89ms      112.    4.28MB     21.3
-
-``` r
-
-summary(bm, relative = TRUE)
-```
-
-    # A tibble: 2 × 6
-      expression   min median `itr/sec` mem_alloc `gc/sec`
-      <bch:expr> <dbl>  <dbl>     <dbl>     <dbl>    <dbl>
-    1 grumpy      1      1         2.69      1.81     3.98
-    2 zarr        5.09   2.51      1         1        1   
+    Unit: milliseconds
+       expr      min       lq     mean   median       uq      max neval
+     grumpy 1.124316 1.176905 2.096737 1.264511 2.584294 7.972589    50
+       zarr 1.901726 2.475552 3.223916 2.733166 3.506649 7.561196    50
 
 There is a small time penalty for reading the Zarr file, since the
 various chunks need to be read and concatenated together, but the memory

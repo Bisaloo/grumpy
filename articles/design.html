@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">grumpy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1.9003</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1.9004</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -94,9 +94,34 @@
 <section class="level2"><h3 id="why-not-use-reticulate">Why not use <code>reticulate</code>?<a class="anchor" aria-label="anchor" href="#why-not-use-reticulate"></a>
 </h3>
 <ul>
-<li>When reading <code>.npy</code> files with <a href="https://rstudio.github.io/reticulate/" class="external-link">reticulate</a>, at some point in time, two (one in Python and one in R) or three copies of the data are held in memory. This can be problematic for large files. With <a href="https://hugogruson.fr/grumpy/">grumpy</a>, one (for types matching R native types; i.e., <code>int32</code>, <code>float64</code>/<code>double</code>) or two copies of the data are held in memory.</li>
-<li>Reading data with <a href="https://rstudio.github.io/reticulate/" class="external-link">reticulate</a> requires a Python installation and additional python packages, which users in restricted environments may not have access to. <a href="https://hugogruson.fr/grumpy/">grumpy</a> is a pure R package with no external dependencies. This is especially important as we expect <a href="https://hugogruson.fr/grumpy/">grumpy</a> to be used deep in the dependency graph of other packages, and we want to minimize the number of dependencies.</li>
-<li>A dedicated R package gives us more flexibility in how edge cases such as 64-bit integers are handled. <a href="https://rstudio.github.io/reticulate/" class="external-link">reticulate</a> automatically and silently converts 64-bit integers to double, which is a sensible default for many use cases. But we may want to have more control over this behavior, and <a href="https://hugogruson.fr/grumpy/">grumpy</a> will allow us to do that in the future. Another good example are structured data types (record arrays), which are returned as <code>data.frame</code>s, not <code>array</code>s, with <a href="https://rstudio.github.io/reticulate/" class="external-link">reticulate</a>.</li>
+<li>
+<p>When reading <code>.npy</code> files with <a href="https://rstudio.github.io/reticulate/" class="external-link">reticulate</a>, at some point in time, two (one in Python and one in R) or three copies of the data are held in memory. This can be problematic for large files. With <a href="https://hugogruson.fr/grumpy/">grumpy</a>, one (for types matching R native types; i.e., <code>int32</code>, <code>float64</code>/<code>double</code>) or two copies of the data are held in memory.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".npy"</span><span class="op">)</span></span>
+<span><span class="va">np</span> <span class="op">&lt;-</span> <span class="fu">reticulate</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/reticulate/reference/import.html" class="external-link">import</a></span><span class="op">(</span><span class="st">"numpy"</span><span class="op">)</span></span>
+<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="va">np</span><span class="op">$</span><span class="va">random</span><span class="op">$</span><span class="fu">rand</span><span class="op">(</span><span class="fl">1000L</span>, <span class="fl">1000L</span><span class="op">)</span></span>
+<span><span class="va">np</span><span class="op">$</span><span class="fu">save</span><span class="op">(</span><span class="va">f</span>, <span class="va">x</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">microbenchmark</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/microbenchmark/man/microbenchmark.html" class="external-link">microbenchmark</a></span><span class="op">(</span></span>
+<span>  reticulate <span class="op">=</span> <span class="op">{</span></span>
+<span>    <span class="va">x</span> <span class="op">&lt;-</span> <span class="va">np</span><span class="op">$</span><span class="fu">load</span><span class="op">(</span><span class="va">f</span><span class="op">)</span></span>
+<span>  <span class="op">}</span>,</span>
+<span>  grumpy <span class="op">=</span> <span class="op">{</span></span>
+<span>    <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">grumpy</span><span class="fu">::</span><span class="fu"><a href="../reference/read_npy.html">read_npy</a></span><span class="op">(</span><span class="va">f</span>, lazy <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  <span class="op">}</span>,</span>
+<span>  times <span class="op">=</span> <span class="fl">1e3</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Unit: microseconds
+       expr      min       lq     mean   median       uq      max neval
+ reticulate 1176.415 1537.833 4561.113 1697.130 3389.059 198413.7  1000
+     grumpy  445.484  737.510 3127.166  932.646 1718.693 170298.2  1000</code></pre>
+</div>
+</div>
+</li>
+<li><p>Reading data with <a href="https://rstudio.github.io/reticulate/" class="external-link">reticulate</a> requires a Python installation and additional python packages, which users in restricted environments may not have access to. <a href="https://hugogruson.fr/grumpy/">grumpy</a> is a pure R package with no external dependencies. This is especially important as we expect <a href="https://hugogruson.fr/grumpy/">grumpy</a> to be used deep in the dependency graph of other packages, and we want to minimize the number of dependencies.</p></li>
+<li><p>A dedicated R package gives us more flexibility in how edge cases such as 64-bit integers are handled. <a href="https://rstudio.github.io/reticulate/" class="external-link">reticulate</a> automatically and silently converts 64-bit integers to double, which is a sensible default for many use cases. But we may want to have more control over this behavior, and <a href="https://hugogruson.fr/grumpy/">grumpy</a> will allow us to do that in the future. Another good example are structured data types (record arrays), which are returned as <code>data.frame</code>s, not <code>array</code>s, with <a href="https://rstudio.github.io/reticulate/" class="external-link">reticulate</a>.</p></li>
 </ul></section></section><script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);

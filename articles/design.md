@@ -53,6 +53,30 @@ improvement.
   [grumpy](https://hugogruson.fr/grumpy/), one (for types matching R
   native types; i.e., `int32`, `float64`/`double`) or two copies of the
   data are held in memory.
+
+  ``` r
+
+  f <- tempfile(fileext = ".npy")
+  np <- reticulate::import("numpy")
+  x <- np$random$rand(1000L, 1000L)
+  np$save(f, x)
+
+  microbenchmark::microbenchmark(
+    reticulate = {
+      x <- np$load(f)
+    },
+    grumpy = {
+      x <- grumpy::read_npy(f, lazy = TRUE)
+    },
+    times = 1e3
+  )
+  ```
+
+      Unit: microseconds
+             expr      min       lq     mean   median       uq      max neval
+       reticulate 1176.415 1537.833 4561.113 1697.130 3389.059 198413.7  1000
+           grumpy  445.484  737.510 3127.166  932.646 1718.693 170298.2  1000
+
 - Reading data with [reticulate](https://rstudio.github.io/reticulate/)
   requires a Python installation and additional python packages, which
   users in restricted environments may not have access to.
@@ -61,6 +85,7 @@ improvement.
   [grumpy](https://hugogruson.fr/grumpy/) to be used deep in the
   dependency graph of other packages, and we want to minimize the number
   of dependencies.
+
 - A dedicated R package gives us more flexibility in how edge cases such
   as 64-bit integers are handled.
   [reticulate](https://rstudio.github.io/reticulate/) automatically and
