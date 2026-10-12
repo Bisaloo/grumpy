@@ -66,16 +66,37 @@ improvement.
       x <- np$load(f)
     },
     grumpy = {
-      x <- grumpy::read_npy(f, lazy = TRUE)
+      x <- grumpy::read_npy(f)
     },
     times = 1e3
   )
   ```
 
-      Unit: microseconds
+      Unit: milliseconds
              expr      min       lq     mean   median       uq      max neval
-       reticulate 1176.415 1537.833 4561.113 1697.130 3389.059 198413.7  1000
-           grumpy  445.484  737.510 3127.166  932.646 1718.693 170298.2  1000
+       reticulate 1.809184 2.196828 4.207102 2.344558 3.361956 153.3992  1000
+           grumpy 3.025567 3.297546 7.579654 3.532264 5.810628 153.2397  1000
+
+  ``` r
+
+  ## On platform that support it, lazy reading offers even better performance for large files
+  if (Sys.info()[["sysname"]] %in% c("Linux", "Darwin")) {
+    microbenchmark::microbenchmark(
+      reticulate = {
+        x <- np$load(f)
+      },
+      grumpy = {
+        x <- grumpy::read_npy(f, lazy = TRUE)
+      },
+      times = 1e3
+    )
+  }
+  ```
+
+      Unit: microseconds
+             expr      min        lq     mean   median       uq      max neval
+       reticulate 1826.319 2111.7970 3328.542 2251.769 2549.662 148225.2  1000
+           grumpy  666.338  810.6325 3026.811 1006.202 1263.919 152887.9  1000
 
 - Reading data with [reticulate](https://rstudio.github.io/reticulate/)
   requires a Python installation and additional python packages, which

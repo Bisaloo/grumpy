@@ -108,15 +108,34 @@
 <span>    <span class="va">x</span> <span class="op">&lt;-</span> <span class="va">np</span><span class="op">$</span><span class="fu">load</span><span class="op">(</span><span class="va">f</span><span class="op">)</span></span>
 <span>  <span class="op">}</span>,</span>
 <span>  grumpy <span class="op">=</span> <span class="op">{</span></span>
-<span>    <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">grumpy</span><span class="fu">::</span><span class="fu"><a href="../reference/read_npy.html">read_npy</a></span><span class="op">(</span><span class="va">f</span>, lazy <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>    <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">grumpy</span><span class="fu">::</span><span class="fu"><a href="../reference/read_npy.html">read_npy</a></span><span class="op">(</span><span class="va">f</span><span class="op">)</span></span>
 <span>  <span class="op">}</span>,</span>
 <span>  times <span class="op">=</span> <span class="fl">1e3</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Unit: microseconds
+<pre><code>Unit: milliseconds
        expr      min       lq     mean   median       uq      max neval
- reticulate 1176.415 1537.833 4561.113 1697.130 3389.059 198413.7  1000
-     grumpy  445.484  737.510 3127.166  932.646 1718.693 170298.2  1000</code></pre>
+ reticulate 1.809184 2.196828 4.207102 2.344558 3.361956 153.3992  1000
+     grumpy 3.025567 3.297546 7.579654 3.532264 5.810628 153.2397  1000</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## On platform that support it, lazy reading offers even better performance for large files</span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.info.html" class="external-link">Sys.info</a></span><span class="op">(</span><span class="op">)</span><span class="op">[[</span><span class="st">"sysname"</span><span class="op">]</span><span class="op">]</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Linux"</span>, <span class="st">"Darwin"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu">microbenchmark</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/microbenchmark/man/microbenchmark.html" class="external-link">microbenchmark</a></span><span class="op">(</span></span>
+<span>    reticulate <span class="op">=</span> <span class="op">{</span></span>
+<span>      <span class="va">x</span> <span class="op">&lt;-</span> <span class="va">np</span><span class="op">$</span><span class="fu">load</span><span class="op">(</span><span class="va">f</span><span class="op">)</span></span>
+<span>    <span class="op">}</span>,</span>
+<span>    grumpy <span class="op">=</span> <span class="op">{</span></span>
+<span>      <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">grumpy</span><span class="fu">::</span><span class="fu"><a href="../reference/read_npy.html">read_npy</a></span><span class="op">(</span><span class="va">f</span>, lazy <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>    <span class="op">}</span>,</span>
+<span>    times <span class="op">=</span> <span class="fl">1e3</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Unit: microseconds
+       expr      min        lq     mean   median       uq      max neval
+ reticulate 1826.319 2111.7970 3328.542 2251.769 2549.662 148225.2  1000
+     grumpy  666.338  810.6325 3026.811 1006.202 1263.919 152887.9  1000</code></pre>
 </div>
 </div>
 </li>
