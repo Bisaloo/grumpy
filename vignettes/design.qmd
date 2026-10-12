@@ -45,10 +45,23 @@ There is currently no dependency, and no new dependency should be added unless i
       x <- np$load(f)
     },
     grumpy = {
-      x <- grumpy::read_npy(f, lazy = TRUE)
+      x <- grumpy::read_npy(f)
     },
     times = 1e3
   )
+
+  ## On platform that support it, lazy reading offers even better performance for large files
+  if (Sys.info()[["sysname"]] %in% c("Linux", "Darwin")) {
+    microbenchmark::microbenchmark(
+      reticulate = {
+        x <- np$load(f)
+      },
+      grumpy = {
+        x <- grumpy::read_npy(f, lazy = TRUE)
+      },
+      times = 1e3
+    )
+  }
   ```
 
 - Reading data with `{reticulate}` requires a Python installation and additional python packages, which users in restricted environments may not have access to. `{grumpy}` is a pure R package with no external dependencies. This is especially important as we expect `{grumpy}` to be used deep in the dependency graph of other packages, and we want to minimize the number of dependencies.
