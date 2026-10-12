@@ -62,13 +62,11 @@ np$save(f_npy, x)
 ```
 
 ```{r}
-bm <- bench::mark(
+microbenchmark::microbenchmark(
   grumpy = read_npy(f_npy),
   zarr = read_zarr_array(f_zarr),
-  iterations = 50L
+  times = 50L
 )
-bm
-summary(bm, relative = TRUE)
 ```
 
 There is a small time penalty for reading the Zarr file, since the various chunks need to be read and concatenated together, but the memory footprint is much smaller, and the Zarr file is much smaller on disk. This is particularly important for large datasets that do not fit into memory, as it allows for out-of-core processing of the data.

@@ -15,7 +15,7 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 Suggests: 
-    bench,
+    microbenchmark,
     quarto,
     Rarr,
     reticulate,
