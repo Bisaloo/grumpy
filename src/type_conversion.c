@@ -79,6 +79,8 @@ SEXP type_convert_int(const void* raw_buffer, R_xlen_t buf_len, int type_len) {
         p_data[i] = ((const int64_t *)raw_buffer)[i];
       }
     }
+  } else {
+    Rf_error("%d byte signed integer values are not currently supported\n", type_len);
   }
   UNPROTECT(1);
   return(data);
@@ -147,7 +149,9 @@ SEXP type_convert_uint(const void* raw_buffer, R_xlen_t buf_len, int type_len) {
         p_data[i] = ((const uint64_t *)raw_buffer)[i];
       }
     }
-  }  
+  } else {
+    Rf_error("%d byte unsigned integer values are not currently supported\n", type_len);
+  }
 
   UNPROTECT(1);
   return(data);
