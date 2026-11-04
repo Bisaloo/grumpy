@@ -1,6 +1,5 @@
 #include "grumpy.h"
 
-#include "bit64_conversion.h"
 #include "float16_conversion.h"
 
 SEXP type_convert(SEXP input, SEXP what, SEXP _n_bytes, SEXP dims, SEXP _endian);

@@ -36,65 +36,118 @@ SEXP type_convert(SEXP input, SEXP what, SEXP _n_bytes, SEXP dims, SEXP _endian)
 
 SEXP type_convert_int(const void* raw_buffer, R_xlen_t buf_len, int type_len) {
 
-  int *p_data;
   SEXP data;
   const R_xlen_t data_length = buf_len / type_len;
   R_xlen_t i;
 
-  // space for the converted output
-  data = PROTECT(allocVector(INTSXP, data_length));
-  p_data = INTEGER(data);
-
-  if(type_len == 1) {
+  if (type_len == 1) {
+    data = PROTECT(allocVector(INTSXP, data_length));
+    int *p_data = INTEGER(data);
     for (i = 0; i < data_length; i++) {
       p_data[i] = ((const int8_t *)raw_buffer)[i];
     }
-  } else if(type_len == 2) {
+  } else if (type_len == 2) {
+    data = PROTECT(allocVector(INTSXP, data_length));
+    int *p_data = INTEGER(data);
     for (i = 0; i < data_length; i++) {
       p_data[i] = ((const int16_t *)raw_buffer)[i];
     }
-  } else if(type_len == 4) {
+  } else if (type_len == 4) {
+    data = PROTECT(allocVector(INTSXP, data_length));
+    int *p_data = INTEGER(data);
     memcpy(p_data, raw_buffer, buf_len);
+    UNPROTECT(1);
+    return(data);
   } else if (type_len == 8) {
-    // for now we convert to 32bit int and overflow values are NA_integer
-    int bit64conversion = 0;
-    if (bit64conversion == 0) {
-      int64_to_int32(raw_buffer, data_length, p_data);
+    bool out_of_range = false;
+    for (i = 0; i < data_length; i++) {
+      if (((const int64_t *)raw_buffer)[i] > INT_MAX || ((const int64_t *)raw_buffer)[i] < INT_MIN) {
+        out_of_range = true;
+        break;
+      }
+    }
+    if (out_of_range) {
+      data = PROTECT(allocVector(REALSXP, data_length));
+      double *p_data = REAL(data);
+      for (i = 0; i < data_length; i++) {
+        p_data[i] = (double)((const int64_t *)raw_buffer)[i];
+      }
+    } else {
+      data = PROTECT(allocVector(INTSXP, data_length));
+      int *p_data = INTEGER(data);
+      for (i = 0; i < data_length; i++) {
+        p_data[i] = ((const int64_t *)raw_buffer)[i];
+      }
     }
   }
-
   UNPROTECT(1);
   return(data);
 }
 
 SEXP type_convert_uint(const void* raw_buffer, R_xlen_t buf_len, int type_len) {
 
-  int *p_data;
   SEXP data;
   const R_xlen_t data_length = buf_len / type_len;
   R_xlen_t i;
 
-  // space for the converted output
-  data = PROTECT(allocVector(INTSXP, data_length));
-  p_data = INTEGER(data);
-
-  if(type_len == 1) {
+  if (type_len == 1) {
+    data = PROTECT(allocVector(INTSXP, data_length));
+    int *p_data = INTEGER(data);
     for (i = 0; i < data_length; i++) {
       p_data[i] = ((const uint8_t *)raw_buffer)[i];
     }
-  } else if(type_len == 2) {
+    UNPROTECT(1);
+    return(data);
+  } else if (type_len == 2) {
+    data = PROTECT(allocVector(INTSXP, data_length));
+    int *p_data = INTEGER(data);
     for (i = 0; i < data_length; i++) {
       p_data[i] = ((const uint16_t *)raw_buffer)[i];
     }
-  } else if(type_len == 4) {
-    uint32_to_int32(raw_buffer, data_length, p_data);
-  } else if (type_len == 8) {
-    // for now we convert to 32bit int and overflow values are NA_integer
-    int bit64conversion = 0;
-    if (bit64conversion == 0) {
-      uint64_to_int32(raw_buffer, data_length, p_data);
+  } else if (type_len == 4) {
+    bool out_of_range = false;
+    for (i = 0; i < data_length; i++) {
+      if (((const uint32_t *)raw_buffer)[i] > INT_MAX) {
+        out_of_range = true;
+        break;
+      }
     }
-  }
+    if (out_of_range) {
+      // We follow base R's convention of converting out-of-range integers to double silently
+      data = PROTECT(allocVector(REALSXP, data_length));
+      double *p_data = REAL(data);
+      for (i = 0; i < data_length; i++) {
+        p_data[i] = (double)((const uint32_t *)raw_buffer)[i];
+      }
+    } else {
+      data = PROTECT(allocVector(INTSXP, data_length));
+      int *p_data = INTEGER(data);
+      for (i = 0; i < data_length; i++) {
+        p_data[i] = ((const uint32_t *)raw_buffer)[i];
+      }
+    }
+  } else if (type_len == 8) {
+    bool out_of_range = false;
+    for (i = 0; i < data_length; i++) {
+      if (((const uint64_t *)raw_buffer)[i] > INT_MAX) {
+        out_of_range = true;
+        break;
+      }
+    }
+    if (out_of_range) {
+      data = PROTECT(allocVector(REALSXP, data_length));
+      double *p_data = REAL(data);
+      for (i = 0; i < data_length; i++) {
+        p_data[i] = (double)((const uint64_t *)raw_buffer)[i];
+      }
+    } else {
+      data = PROTECT(allocVector(INTSXP, data_length));
+      int *p_data = INTEGER(data);
+      for (i = 0; i < data_length; i++) {
+        p_data[i] = ((const uint64_t *)raw_buffer)[i];
+      }
+    }
+  }  
 
   UNPROTECT(1);
   return(data);

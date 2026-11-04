@@ -35,8 +35,7 @@ test_that("different types work", {
 
   system.file("extdata", "test_int64.npy", package = "grumpy") |>
     read_npy() |>
-    expect_identical(array(-5L:6L, dim = 12L)) |>
-    expect_warning("overflow")
+    expect_identical(array(-5L:6L, dim = 12L))
 
   system.file("extdata", "test_uint8.npy", package = "grumpy") |>
     read_npy() |>
@@ -71,43 +70,41 @@ test_that("different types work", {
     read_npy() |>
     expect_identical(array(
       c(
-        0L,
-        1L,
-        10L,
-        100L,
-        1000L,
-        10000L,
-        100000L,
-        1000000L,
-        65536L,
-        16777216L,
-        NA_integer_,
-        NA_integer_
+        0,
+        1,
+        10,
+        100,
+        1000,
+        10000,
+        100000,
+        1000000,
+        2^16,
+        2^24,
+        2^31,
+        2^32 - 1
       ),
       dim = 12L
-    )) |>
-    expect_warning("overflow")
+    ))
 
   system.file("extdata", "test_uint64_overflowing.npy", package = "grumpy") |>
     read_npy() |>
     expect_identical(array(
       c(
-        0L,
-        1L,
-        10L,
-        100L,
-        1000L,
-        10000L,
-        100000L,
-        65536L,
-        NA_integer_,
-        NA_integer_,
-        NA_integer_,
-        NA_integer_
+        0,
+        1,
+        10,
+        100,
+        1000,
+        10000,
+        100000,
+        2^16,
+        2^32,
+        2^48,
+        2^63,
+        2^64 - 1
       ),
       dim = 12L
-    )) |>
-    expect_warning("overflow")
+    ))
 
   system.file("extdata", "test_float16.npy", package = "grumpy") |>
     read_npy() |>
