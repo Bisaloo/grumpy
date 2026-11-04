@@ -87,14 +87,6 @@ read_npy <- function(file, lazy = FALSE, ...) {
 
   header <- parse_npy_descr(readBin(con, "raw", n = header_len))
 
-  # TODO: improve int64 support
-  if (any(header$base_type %in% c("uint", "int") & header$nbytes == 8L)) {
-    warning(
-      "64-bit integers may overflow when converted to R integers.",
-      call. = FALSE
-    )
-  }
-
   if (any(header$base_type == "py_object")) {
     stop(
       "This file contains a Python object array. ",
