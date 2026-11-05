@@ -1,6 +1,7 @@
 #include "type_conversion.h"
 #include <R_ext/Riconv.h>
-
+#include <float.h>
+#define R_DBL_EXACT_INT_MAX ((double)(1LL << DBL_MANT_DIG))  /* 2^53 */
 
 SEXP type_convert(SEXP input, SEXP what, SEXP _n_bytes, SEXP dims, SEXP _endian) {
   const char *type = CHAR(STRING_ELT(what, 0));
@@ -141,6 +142,15 @@ SEXP type_convert_uint(const void* raw_buffer, R_xlen_t buf_len, int type_len) {
       double *p_data = REAL(data);
       for (i = 0; i < data_length; i++) {
         p_data[i] = (double)((const uint64_t *)raw_buffer)[i];
+      }
+      int n_inexact = 0;
+      for (i = 0; i < data_length; i++) {
+        if (p_data[i] > R_DBL_EXACT_INT_MAX) {
+          n_inexact++;
+        }
+      }
+      if (n_inexact > 0) {
+        Rf_warning("%i values exceed 2^53 and may not be represented exactly as doubles", n_inexact);
       }
     } else {
       data = PROTECT(allocVector(INTSXP, data_length));
