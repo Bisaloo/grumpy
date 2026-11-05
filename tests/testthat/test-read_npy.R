@@ -104,7 +104,8 @@ test_that("different types work", {
         2^64 - 1
       ),
       dim = 12L
-    ))
+    )) |>
+    expect_warning("2 values exceed 2^53", fixed = TRUE)
 
   system.file("extdata", "test_float16.npy", package = "grumpy") |>
     read_npy() |>
