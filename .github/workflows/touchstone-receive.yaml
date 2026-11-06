@@ -63,3 +63,6 @@ jobs:
           benchmarking_ref: ${{ matrix.config.benchmarking_ref }}
           benchmarking_path: ${{ matrix.config.benchmarking_path }}
           r-version: ${{ matrix.config.r }}
+          # Install gert from source as P3M version doesn't link to the correct libgit version
+          extra-packages: |
+            gert?source
