@@ -103,10 +103,10 @@ microbenchmark::microbenchmark(
 )
 ```
 
-    Unit: milliseconds
-       expr      min       lq     mean   median       uq       max neval
-     grumpy 1.265876 1.468087 3.784181 4.188218 4.338050 10.871730    50
-       zarr 2.031926 2.155270 3.656740 3.578769 4.262778  8.614889    50
+    Unit: microseconds
+       expr      min       lq     mean    median       uq      max neval
+     grumpy  919.009  965.019 2171.879  999.1755 3144.912 7079.380    50
+       zarr 1518.760 1668.075 2254.758 1846.9535 2634.747 6064.657    50
 
 There is a small time penalty for reading the Zarr file, since the
 various chunks need to be read and concatenated together, but the memory
