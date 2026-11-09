@@ -224,16 +224,6 @@ SEXP type_convert_string(const char* raw_buffer, R_xlen_t buf_len, int type_len)
 
   for (i = 0; i < data_length; i++) {
     const char *field = raw_buffer + i * type_len;
-    // Check for R's NA_integer_ sentinel written by writeBin(NA_integer_, RAW_RO)).
-    // Using memcpy + NA_INTEGER comparison is endian-agnostic.
-    if (type_len >= 4) {
-      int sentinel;
-      memcpy(&sentinel, field, 4);
-      if (sentinel == NA_INTEGER) {
-        SET_STRING_ELT(data, i, NA_STRING);
-        continue;
-      }
-    }
     const size_t len = strlen(field);
     // Read up to max length or NUL terminator.
     // We cannot do one without the other as strings may not be NUL terminated (truncated) and
@@ -271,15 +261,6 @@ SEXP type_convert_unicode(const char* raw_buffer, R_xlen_t buf_len, int type_len
 
   for (i = 0; i < data_length; i++) {
     const char *inbuf = raw_buffer + i * type_len;
-    // Check for R's NA_integer_ sentinel.
-    if (type_len >= 4) {
-      int sentinel;
-      memcpy(&sentinel, inbuf, 4);
-      if (sentinel == NA_INTEGER) {
-        SET_STRING_ELT(data, i, NA_STRING);
-        continue;
-      }
-    }
 
     // Find the actual length: stop at the first null codepoint (4 zero bytes),
     // or at type_len if there is no null terminator.
