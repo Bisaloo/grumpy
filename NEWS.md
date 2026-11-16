@@ -10,7 +10,7 @@
   the arrays in the npz container.
 * Integers that don't fit in the `int32` range are now automatically and 
   silently converted to `double`s, in line with what base R is doing. This is
-  following features requests from Robrecht Cannoodt and Gabriel Hoffman in 
+  following feature requests from Robrecht Cannoodt and Gabriel Hoffman in 
   downstream dependencies.
 
 ## Minor improvements
