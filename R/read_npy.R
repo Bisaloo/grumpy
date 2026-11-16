@@ -362,6 +362,6 @@ py_dict_to_r_list <- function(x) {
     gsub("]", ")", x = _, fixed = TRUE) |>
     gsub("}", ")", x = _, fixed = TRUE) |>
     # Evaluate the resulting R expression
-    parse(text = _) |>
+    str2lang() |>
     eval()
 }
