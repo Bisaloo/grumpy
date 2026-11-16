@@ -1,4 +1,4 @@
-# grumpy (development version)
+# grumpy 0.2.0
 
 ## Significant new features
 
