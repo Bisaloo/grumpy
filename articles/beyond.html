@@ -128,10 +128,10 @@
 <span>  times <span class="op">=</span> <span class="fl">50L</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Unit: microseconds
+<pre><code>Unit: milliseconds
    expr      min       lq     mean   median       uq      max neval
- grumpy  925.850  993.642 2372.006 2467.584 3251.679 9120.149    50
-   zarr 1513.006 1698.232 2748.447 2389.664 3132.992 6903.825    50</code></pre>
+ grumpy 1.265250 1.370897 2.983490 3.221557 4.167662 7.673210    50
+   zarr 2.091868 2.328600 3.578397 3.524141 3.848468 7.464961    50</code></pre>
 </div>
 </div>
 <p>There is a small time penalty for reading the Zarr file, since the various chunks need to be read and concatenated together, but the memory footprint is much smaller, and the Zarr file is much smaller on disk. This is particularly important for large datasets that do not fit into memory, as it allows for out-of-core processing of the data.</p>
