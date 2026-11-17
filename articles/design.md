@@ -74,8 +74,8 @@ improvement.
 
       Unit: milliseconds
              expr      min       lq     mean   median       uq      max neval
-       reticulate 1.136735 1.490048 3.606783 1.650762 3.286396 182.5819  1000
-           grumpy 1.949819 2.241358 5.583113 2.491811 4.244851 154.2744  1000
+       reticulate 2.468814 3.221241 5.328137 3.517426 5.161102 138.0710  1000
+           grumpy 2.009692 2.968269 6.484457 3.296473 5.099464 145.6058  1000
 
   ``` r
 
@@ -95,8 +95,8 @@ improvement.
 
       Unit: microseconds
              expr      min       lq     mean   median       uq      max neval
-       reticulate 1142.033 1434.094 3058.359 1604.729 2459.439 142908.1  1000
-           grumpy  404.233  618.863 2282.800  742.908 1242.593 141682.1  1000
+       reticulate 2286.790 2934.155 5102.905 3198.190 3982.100 134947.2  1000
+           grumpy  734.527 1004.154 1881.959 1133.608 1410.677 132503.4  1000
 
 - Reading data with [reticulate](https://rstudio.github.io/reticulate/)
   requires a Python installation and additional python packages, which
