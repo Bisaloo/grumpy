@@ -2,6 +2,8 @@
 
 ## grumpy 0.2.0
 
+CRAN release: 2026-11-16
+
 ### Significant new features
 
 - [`read_npy()`](https://hugogruson.fr/grumpy/reference/read_npy.md)
