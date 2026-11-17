@@ -131,6 +131,17 @@ read_npy <- function(file, lazy = FALSE, ...) {
     )
   }
 
+  if (header$base_type %in% c("str", "unicode") && header$nbytes == 0L) {
+    # This should not happen in recent versions of NumPy but some older files
+    # might still be around.
+    # See https://github.com/Bisaloo/grumpy/issues/35
+    warning(
+      "String length is zero. Returning empty strings instead.",
+      call. = FALSE
+    )
+    return(array("", dim = header$shape))
+  }
+
   convert_bytes_to_array(
     bytes,
     what = header$base_type,

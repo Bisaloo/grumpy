@@ -355,6 +355,37 @@ test_that("lazy raw reading gives identical results", {
   )
 })
 
+test_that("zero-length string dtypes return empty strings", {
+  # (Now) invalid string lengths are handled gracefully with a warning and
+  # empty strings.
+  # See https://github.com/Bisaloo/grumpy/issues/35
+  for (f in c("test_str_bytes_zero_len.npy", "test_str_unicode_zero_len.npy")) {
+    path <- system.file("extdata", f, package = "grumpy")
+
+    expect_warning(
+      x <- read_npy(path),
+      "String length is zero. Returning empty strings instead.",
+      fixed = TRUE
+    )
+    expect_identical(x, array("", dim = 1L))
+  }
+
+  skip_on_os("windows")
+  skip_on_os("emscripten")
+
+  # The zero-length payload must not reach mmap() with a zero length.
+  for (f in c("test_str_bytes_zero_len.npy", "test_str_unicode_zero_len.npy")) {
+    path <- system.file("extdata", f, package = "grumpy")
+
+    expect_warning(
+      x <- read_npy(path, lazy = TRUE),
+      "String length is zero. Returning empty strings instead.",
+      fixed = TRUE
+    )
+    expect_identical(x, array("", dim = 1L))
+  }
+})
+
 test_that("truncated / corrupted files give an error", {
   # See https://github.com/Bisaloo/grumpy/issues/35
   f <- system.file("extdata", "test_truncated.npy", package = "grumpy")

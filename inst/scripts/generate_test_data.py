@@ -77,3 +77,23 @@ np.save("inst/extdata/test_large_header.npy", np.zeros(2, dtype=dt))
 np.save("inst/extdata/test_truncated.npy", np.arange(10, dtype="<f8"))
 with open("inst/extdata/test_truncated.npy", "r+b") as f:
     f.truncate(f.seek(0, 2) - 3)
+
+
+# Zero-length string dtypes. See https://github.com/Bisaloo/grumpy/issues/35
+# np.save() cannot produce these: dtype="S0" is written as "|S1" and "<U0" as
+# "<U1". They are therefore hand-written v1 headers with an empty payload.
+# NumPy loads them as array([b''], dtype='|S0') and array([''], dtype='<U0').
+def write_v1_empty_payload(path, descr, shape=(1,)):
+    header = "{'descr': '%s', 'fortran_order': False, 'shape': %r, }" % (descr, shape)
+    # Pad with spaces so the header is a multiple of 64 bytes, as NumPy does.
+    unpadded = 6 + 2 + 2 + len(header) + 1
+    header += " " * (-unpadded % 64) + "\n"
+    with open(path, "wb") as f:
+        f.write(b"\x93NUMPY")
+        f.write(bytes([1, 0]))  # version 1.0
+        f.write(len(header).to_bytes(2, "little"))
+        f.write(header.encode())
+
+
+write_v1_empty_payload("inst/extdata/test_str_bytes_zero_len.npy", "|S0")
+write_v1_empty_payload("inst/extdata/test_str_unicode_zero_len.npy", "<U0")

@@ -15,6 +15,10 @@
   expected number of bytes. This could happen in the case of, e.g., a partial
   or interrupted download. Thanks to a report from Rohit Goswami as part of the
   rOpenSci review.
+* `|S0` and `<U0` types (which can no longer be written by recent versions of
+  NumPy) no longer error, and now return an array of `""`, modelled on NumPy's
+  behaviour. Thanks to a report from Rohit Goswami as part of the
+  rOpenSci review.
 
 # grumpy 0.2.0
 
