@@ -61,7 +61,7 @@
 
 
 
-      <small class="dont-index">Source: <a href="https://github.com/Bisaloo/grumpy/blob/main/vignettes/beyond.qmd" class="external-link"><code>vignettes/beyond.qmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/Bisaloo/grumpy/blob/v0.2.0/vignettes/beyond.qmd" class="external-link"><code>vignettes/beyond.qmd</code></a></small>
       <div class="d-none name"><code></code></div>
     </div>
 
@@ -128,10 +128,10 @@
 <span>  times <span class="op">=</span> <span class="fl">50L</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Unit: microseconds
-   expr      min       lq     mean   median       uq        max neval
- grumpy  988.223 1060.121 2303.773 2467.149 3468.012   4903.992    50
-   zarr 1599.525 1810.109 5268.941 1985.947 2701.097 147330.516    50</code></pre>
+<pre><code>Unit: milliseconds
+   expr      min       lq     mean   median       uq       max neval
+ grumpy 1.246500 1.355532 2.984880 3.353201 4.158110  7.678834    50
+   zarr 2.119124 2.382265 3.802234 3.562096 3.751047 10.282929    50</code></pre>
 </div>
 </div>
 <p>There is a small time penalty for reading the Zarr file, since the various chunks need to be read and concatenated together, but the memory footprint is much smaller, and the Zarr file is much smaller on disk. This is particularly important for large datasets that do not fit into memory, as it allows for out-of-core processing of the data.</p>

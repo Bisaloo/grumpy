@@ -1,4 +1,4 @@
 # License
 
     YEAR: 2026
-    COPYRIGHT HOLDER: grumpy authors; Rarr authors, European Molecular Biology Laboratory
+    COPYRIGHT HOLDER: grumpy authors

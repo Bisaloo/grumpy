@@ -1,7 +1,6 @@
 # MIT License
 
-Copyright (c) 2026 grumpy authors Copyright (c) 2025 Rarr authors,
-European Molecular Biology Laboratory
+Copyright (c) 2026 grumpy authors
 
 Permission is hereby granted, free of charge, to any person obtaining a
 copy of this software and associated documentation files (the
