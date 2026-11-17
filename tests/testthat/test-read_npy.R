@@ -354,3 +354,9 @@ test_that("lazy raw reading gives identical results", {
     read_npy(f, lazy = FALSE)
   )
 })
+
+test_that("truncated / corrupted files give an error", {
+  # See https://github.com/Bisaloo/grumpy/issues/35
+  f <- system.file("extdata", "test_truncated.npy", package = "grumpy")
+  expect_error(read_npy(f), "Failed to read the expected number of bytes")
+})

@@ -72,3 +72,8 @@ np.savez(
 # Large header (long structured dtype)
 dt = np.dtype([("f%05d" % i, "<i4") for i in range(2500)])
 np.save("inst/extdata/test_large_header.npy", np.zeros(2, dtype=dt))
+
+# Truncated / corrupted file
+np.save("inst/extdata/test_truncated.npy", np.arange(10, dtype="<f8"))
+with open("inst/extdata/test_truncated.npy", "r+b") as f:
+    f.truncate(f.seek(0, 2) - 3)

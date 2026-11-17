@@ -11,6 +11,10 @@
 * Code chunks using the Rarr package in the `beyond.Rmd` vignette now run
   conditionally on the presence of the Rarr package, as requested by the CRAN
   team.
+* A clear error message is now returned when the `.npy` doesn't contain the
+  expected number of bytes. This could happen in the case of, e.g., a partial
+  or interrupted download. Thanks to a report from Rohit Goswami as part of the
+  rOpenSci review.
 
 # grumpy 0.2.0
 

@@ -121,6 +121,16 @@ read_npy <- function(file, lazy = FALSE, ...) {
     bytes <- readBin(con, "raw", n = n_bytes)
   }
 
+  if (length(bytes) != n_bytes) {
+    # This should normally not happen unless the file is truncated or corrupted.
+    # See https://github.com/Bisaloo/grumpy/issues/35
+    stop(
+      "Failed to read the expected number of bytes from the .npy file: ",
+      file,
+      call. = FALSE
+    )
+  }
+
   convert_bytes_to_array(
     bytes,
     what = header$base_type,
