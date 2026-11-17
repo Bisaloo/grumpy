@@ -46,6 +46,7 @@
 <ul><li>grumpy no longer errors with an obscure error on large headers. This typically could happen for long or complex structured datatypes. Thanks to a report from Rohit Goswami as part of the rOpenSci review.</li>
 <li>grumpy no longer read past the string buffer for <code>|S</code> type. The user-facing consequence is faster processing of array with <code>|S</code> type. Thanks to a report from Rohit Goswami as part of the rOpenSci review.</li>
 <li>Code chunks using the Rarr package in the <code>beyond.Rmd</code> vignette now run conditionally on the presence of the Rarr package, as requested by the CRAN team.</li>
+<li>A clear error message is now returned when the <code>.npy</code> doesn’t contain the expected number of bytes. This could happen in the case of, e.g., a partial or interrupted download. Thanks to a report from Rohit Goswami as part of the rOpenSci review.</li>
 </ul></div>
 </div>
     <div class="section level2">
