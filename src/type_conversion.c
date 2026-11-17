@@ -223,16 +223,31 @@ SEXP type_convert_string(const char* raw_buffer, R_xlen_t buf_len, int type_len)
 
   data = PROTECT(allocVector(STRSXP, data_length));
 
+  R_xlen_t n_truncated = 0;
+
   for (i = 0; i < data_length; i++) {
     const char *field = raw_buffer + i * type_len;
-    const size_t len = strlen(field);
-    // Read up to max length or NUL terminator.
-    // We cannot do one without the other as strings may not be NUL terminated (truncated) and
-    // mkCharLenCE complains about NUL characters in the string.
-    if (len > (size_t)type_len)
-      SET_STRING_ELT(data, i, mkCharLenCE(field, type_len, CE_NATIVE));
-    else
-      SET_STRING_ELT(data, i, mkCharCE(field, CE_NATIVE));
+    // Embedded NUL are valid in NumPy but truncated (with a warning) in R.
+    // We do however accept strings that are shorter than type_len if the rest
+    // of the buffer is padded with NULs.
+    const char *nul = memchr(field, '\0', type_len);
+    const size_t len = nul ? (size_t)(nul - field) : type_len;
+    if (nul && len + 1 < type_len) {
+      for (size_t j = len + 1; j < type_len; j++) {
+        if (field[j] != '\0') {
+          n_truncated++;
+          break;
+        }
+      }
+    }
+    SET_STRING_ELT(data, i, mkCharLenCE(field, len, CE_NATIVE));
+  }
+
+  if (n_truncated == 1) {
+    Rf_warning("1 string contains embedded NUL bytes and was truncated at the first NUL");
+  } else if (n_truncated > 1) {
+    Rf_warning("%lld strings contain embedded NUL bytes and were truncated at the first NUL",
+               (long long)n_truncated);
   }
 
   UNPROTECT(1);

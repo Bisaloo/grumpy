@@ -42,6 +42,7 @@ np.save("inst/extdata/test_empty.npy", np.array([], dtype="float32"))
 # String types (unicode and byte strings)
 np.save("inst/extdata/test_str_unicode.npy", np.array(['¡Hola mundo!', 'Hej Världen!', 'Servus Woid!', 'Hei maailma!', 'Xin chào thế giới', 'Njatjeta Botë!', 'Γεια σου κόσμε!', 'こんにちは世界', '世界，你好！', 'Helló, világ!', 'Zdravo svete!', 'เฮลโลเวิลด์'], dtype="U20"))
 np.save("inst/extdata/test_str_bytes.npy", np.array([b"foo", b"bar", b"baz", b"qux", b"hello", b"world", b"alpha", b"beta", b"gamma", b"delta", b"eps", b"zeta"], dtype="S5"))
+np.save("inst/extdata/test_str_bytes_embedded_nul.npy", np.array([b"ab\x00cd"], dtype="S5"))
 
 # Structured array with nested structured field
 inner_dtype = np.dtype([("x", "float64"), ("y", "float64")])

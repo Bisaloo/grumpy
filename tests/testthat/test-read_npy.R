@@ -317,6 +317,7 @@ test_that("scalar or empty arrays work", {
 })
 
 test_that("large headers are read correctly", {
+  # See https://github.com/Bisaloo/grumpy/issues/36
   x <- system.file("extdata", "test_large_header.npy", package = "grumpy") |>
     read_npy() |>
     expect_no_condition()
@@ -326,6 +327,20 @@ test_that("large headers are read correctly", {
     x[[1]],
     setNames(as.list(integer(2500)), paste0("f", sprintf("%05d", 0:2499)))
   )
+})
+
+test_that("embedded NUL in byte strings are handled correctly", {
+  # See https://github.com/Bisaloo/grumpy/issues/34
+  f <- system.file(
+    "extdata",
+    "test_str_bytes_embedded_nul.npy",
+    package = "grumpy"
+  )
+
+  expect_warning(x <- read_npy(f), "embedded NUL bytes")
+
+  # The string is truncated at the first NUL
+  expect_identical(x, array("ab"))
 })
 
 test_that("lazy raw reading gives identical results", {
