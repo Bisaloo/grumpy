@@ -27,8 +27,8 @@ convert_bytes_to_array(bytes, what, shape, size, endian)
 
 - size:
 
-  A numeric value with the number of bytes per element for the specified
-  type
+  An integer value with the number of bytes per element for the
+  specified type
 
 - endian:
 
