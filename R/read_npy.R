@@ -346,11 +346,8 @@ convert_bytes_to_array <- function(bytes, what, shape, size, endian) {
     return(array("", dim = shape))
   }
 
-  if (is.na(endian)) {
-    endian <- .Platform$endian
-  }
   # FIXME: optimize this
-  if (what != "unicode" && endian != .Platform$endian) {
+  if (what != "unicode" && !is.na(endian) && endian != .Platform$endian) {
     ind <- rep_len(rev(seq_len(size)), length(bytes)) +
       (seq_along(bytes) - 1L) %/% size * size
     bytes <- bytes[ind]
