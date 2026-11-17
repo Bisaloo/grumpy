@@ -399,3 +399,11 @@ test_that("truncated / corrupted files give an error", {
     "Failed to read the expected number of bytes"
   )
 })
+
+test_that("malicious payload from header is ignored and has no effect", {
+  # See https://github.com/Bisaloo/grumpy/issues/33
+  f <- system.file("extdata", "test_malicious_header.npy", package = "grumpy")
+  expect_no_condition(x <- read_npy(f))
+  expect_identical(x, array(1.0))
+  expect_false(exists("pwned"))
+})
