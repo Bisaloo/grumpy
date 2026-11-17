@@ -14,7 +14,7 @@ convert_bytes_to_array(bytes, what, shape, size, endian)
 
 \item{shape}{A numeric vector with desired shape of the output array}
 
-\item{size}{A numeric value with the number of bytes per element for the
+\item{size}{An integer value with the number of bytes per element for the
 specified type}
 
 \item{endian}{The endianness of the data (\code{"little"}, \code{"big"}, or \code{NA} for

@@ -273,7 +273,7 @@ parse_npy_datatype <- function(descr) {
 #' @param what A character specifying the base type to convert to (e.g.,
 #'   `"float"`, `"int"`, `"string"`, etc.)
 #' @param shape A numeric vector with desired shape of the output array
-#' @param size A numeric value with the number of bytes per element for the
+#' @param size An integer value with the number of bytes per element for the
 #'   specified type
 #' @param endian The endianness of the data (`"little"`, `"big"`, or `NA` for
 #'   single-byte types)
