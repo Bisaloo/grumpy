@@ -1,5 +1,19 @@
 # Changelog
 
+## grumpy (development version)
+
+### Bug fixes
+
+- grumpy no longer errors with an obscure error on large headers. This
+  typically could happen for long or complex structured datatypes.
+  Thanks to a report from Rohit Goswami as part of the rOpenSci review.
+- grumpy no longer read past the string buffer for `|S` type. The
+  user-facing consequence is faster processing of array with `|S` type.
+  Thanks to a report from Rohit Goswami as part of the rOpenSci review.
+- Code chunks using the Rarr package in the `beyond.Rmd` vignette now
+  run conditionally on the presence of the Rarr package, as requested by
+  the CRAN team.
+
 ## grumpy 0.2.0
 
 CRAN release: 2026-11-16

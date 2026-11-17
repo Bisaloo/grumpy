@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">grumpy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,6 +39,15 @@
       <small>Source: <a href="https://github.com/Bisaloo/grumpy/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="development version" id="grumpy-development-version">grumpy (development version)<a class="anchor" aria-label="anchor" href="#grumpy-development-version"></a></h2>
+<div class="section level3">
+<h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
+<ul><li>grumpy no longer errors with an obscure error on large headers. This typically could happen for long or complex structured datatypes. Thanks to a report from Rohit Goswami as part of the rOpenSci review.</li>
+<li>grumpy no longer read past the string buffer for <code>|S</code> type. The user-facing consequence is faster processing of array with <code>|S</code> type. Thanks to a report from Rohit Goswami as part of the rOpenSci review.</li>
+<li>Code chunks using the Rarr package in the <code>beyond.Rmd</code> vignette now run conditionally on the presence of the Rarr package, as requested by the CRAN team.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.0" id="grumpy-020">grumpy 0.2.0<a class="anchor" aria-label="anchor" href="#grumpy-020"></a></h2><p class="text-muted">CRAN release: 2026-11-16</p>
 <div class="section level3">

@@ -45,6 +45,9 @@ x <- matrix(0L, nrow = 1000L, ncol = 1000L)
 x[300L:400L, 700L:800L] <- seq_len(101L * 101L)
 
 f_zarr <- withr::local_tempfile(fileext = ".zarr")
+```
+
+``` r
 
 Rarr::write_zarr_array(x, f_zarr, chunk_dim = c(100L, 100L), compressor = NULL)
 ```
@@ -104,9 +107,9 @@ microbenchmark::microbenchmark(
 ```
 
     Unit: milliseconds
-       expr      min       lq     mean   median       uq       max neval
-     grumpy 1.314976 1.410387 3.137637 3.458992 4.160005  8.204869    50
-       zarr 2.094013 2.398777 3.661424 3.652076 4.099886 11.557254    50
+       expr      min       lq     mean   median       uq        max neval
+     grumpy 1.358743 1.533078 3.735540 4.543409 4.722603   8.753417    50
+       zarr 2.777898 2.923881 6.817421 4.348581 4.945599 120.476127    50
 
 There is a small time penalty for reading the Zarr file, since the
 various chunks need to be read and concatenated together, but the memory
