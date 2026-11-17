@@ -31,7 +31,9 @@ x <- matrix(0L, nrow = 1000L, ncol = 1000L)
 x[300L:400L, 700L:800L] <- seq_len(101L * 101L)
 
 f_zarr <- withr::local_tempfile(fileext = ".zarr")
+```
 
+```{r, eval = requireNamespace("Rarr", quietly = TRUE)}
 Rarr::write_zarr_array(x, f_zarr, chunk_dim = c(100L, 100L), compressor = NULL)
 ```
 
@@ -61,7 +63,7 @@ f_npy <- withr::local_tempfile(fileext = ".npy")
 np$save(f_npy, x)
 ```
 
-```{r}
+```{r, eval = requireNamespace("Rarr", quietly = TRUE)}
 microbenchmark::microbenchmark(
   grumpy = read_npy(f_npy),
   zarr = read_zarr_array(f_zarr),
