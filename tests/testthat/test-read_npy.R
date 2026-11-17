@@ -390,4 +390,12 @@ test_that("truncated / corrupted files give an error", {
   # See https://github.com/Bisaloo/grumpy/issues/35
   f <- system.file("extdata", "test_truncated.npy", package = "grumpy")
   expect_error(read_npy(f), "Failed to read the expected number of bytes")
+
+  skip_on_os("windows")
+  skip_on_os("emscripten")
+
+  expect_error(
+    read_npy(f, lazy = TRUE),
+    "Failed to read the expected number of bytes"
+  )
 })

@@ -90,6 +90,21 @@ SEXP grumpy_make_mmap_raw(SEXP path_, SEXP offset_, SEXP length_) {
   if (fd < 0)
     error("Cannot open file for mmap: %s", path);
 
+  // Clamp to what the file actually contains (truncated files), so that
+  // length() matches what readBin() would return and we never touch pages
+  // beyond EOF (which would raise SIGBUS).
+  struct stat st;
+  if (fstat(fd, &st) != 0) {
+    close(fd);
+    error("Cannot stat file for mmap: %s", path);
+  }
+  double avail = ((double) st.st_size > offset) ? (double) st.st_size - offset : 0;
+  if (length > avail) length = avail;
+  if (length == 0) {
+    close(fd);
+    return allocVector(RAWSXP, 0);
+  }
+
   long page_size = sysconf(_SC_PAGE_SIZE);
   size_t page_offset = ((size_t) offset) % page_size;
   off_t map_start = (off_t) offset - (off_t) page_offset;
