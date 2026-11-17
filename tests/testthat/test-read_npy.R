@@ -316,6 +316,18 @@ test_that("scalar or empty arrays work", {
     expect_length(0L)
 })
 
+test_that("large headers are read correctly", {
+  x <- system.file("extdata", "test_large_header.npy", package = "grumpy") |>
+    read_npy() |>
+    expect_no_condition()
+
+  expect_length(x, 2L)
+  expect_identical(
+    x[[1]],
+    setNames(as.list(integer(2500)), paste0("f", sprintf("%05d", 0:2499)))
+  )
+})
+
 test_that("lazy raw reading gives identical results", {
   skip_on_os("windows")
   skip_on_os("emscripten")

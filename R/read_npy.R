@@ -78,13 +78,22 @@ read_npy <- function(file, lazy = FALSE, ...) {
   )
 
   header_len <- if (format_version[1L] == 1L) {
-    readBin(con, "integer", n = 1L, size = 2L, endian = "little")
+    # uint16 (little-endian)
+    readBin(
+      con,
+      "integer",
+      n = 1L,
+      size = 2L,
+      endian = "little",
+      signed = FALSE
+    )
   } else if (format_version[1L] %in% c(2L, 3L)) {
-    readBin(con, "integer", n = 1L, size = 4L, endian = "little")
+    # uint32 (little-endian)
+    readBin(con, "integer", n = 1L, size = 4L, endian = "little") |>
+      int32_to_uint32()
   } else {
     stop("Unsupported .npy version: ", format_version[1L], call. = FALSE)
   }
-
   header <- parse_npy_descr(readBin(con, "raw", n = header_len))
 
   if (any(header$base_type == "py_object")) {

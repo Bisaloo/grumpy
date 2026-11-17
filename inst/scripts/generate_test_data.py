@@ -67,3 +67,7 @@ np.savez(
     x=np.array([1, 2, 3], dtype="int32"),
     y=np.array([4.0, 5.0, 6.0], dtype="float64"),
 )
+
+# Large header (long structured dtype)
+dt = np.dtype([("f%05d" % i, "<i4") for i in range(2500)])
+np.save("inst/extdata/test_large_header.npy", np.zeros(2, dtype=dt))
