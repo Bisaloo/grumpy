@@ -14,7 +14,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/Bisaloo/grumpy/blob/v0.2.0/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/Bisaloo/grumpy/blob/main/DESCRIPTION)
 
 Gruson H, Smith M (2026). *grumpy: Read 'NumPy' '.npy' and '.npz'
 Files*. R package version 0.2.0, <https://hugogruson.fr/grumpy/>.
