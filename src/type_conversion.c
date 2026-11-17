@@ -12,6 +12,10 @@ SEXP type_convert(SEXP input, SEXP what, SEXP _n_bytes, SEXP dims, SEXP _endian)
   const R_xlen_t buf_len = xlength(input);
   const void* raw_buffer = RAW_RO(input);
 
+  if (type_len <= 0  || buf_len % type_len != 0) {
+    Rf_error("Invalid type length or buffer length not divisible by type length");
+  }
+
   if (strcmp(type, "float") == 0)
     result = type_convert_float(raw_buffer, buf_len, type_len);
   else if (strcmp(type, "int") == 0)
