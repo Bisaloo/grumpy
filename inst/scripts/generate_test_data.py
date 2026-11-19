@@ -1,4 +1,5 @@
 import numpy as np
+import struct
 
 # Integer types
 np.save("inst/extdata/test_int32.npy", np.arange(1, 13, dtype="int32"))
@@ -97,3 +98,12 @@ def write_v1_empty_payload(path, descr, shape=(1,)):
 
 write_v1_empty_payload("inst/extdata/test_str_bytes_zero_len.npy", "|S0")
 write_v1_empty_payload("inst/extdata/test_str_unicode_zero_len.npy", "<U0")
+
+# Malicious header test case
+# See https://github.com/Bisaloo/grumpy/issues/33
+h = "{'descr': '<f8', 'fortran_order': False, 'shape': (1,), 'x': pwned <<- 1, }"
+h += " " * (64 - (10 + len(h) + 1) % 64) + "\n"
+with open("inst/extdata/test_malicious_header.npy", "wb") as f:
+    f.write(b"\x93NUMPY\x01\x00" + struct.pack("<H", len(h)) + h.encode()
+            + np.float64(1).tobytes())
+

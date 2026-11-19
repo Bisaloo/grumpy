@@ -171,18 +171,24 @@ parse_npy_descr <- function(bytes) {
   # It is not related to the way the data is stored in the file, nor the way
   # it appears to the user.
   # We just ignore it, at least for now.
-  header <- bytes |>
-    rawToChar() |>
-    py_dict_to_r_list()
+  header_str <- bytes |>
+    rawToChar()
 
-  parsed_descr <- parse_npy_datatype(header$descr)
+  header <- py_dict_to_r_list(header_str)
+
+  descr <- if (startsWith(header$descr, "[")) {
+    py_list_to_r_list(header$descr)
+  } else {
+    remove_surround(header$descr, "'", "'")
+  }
+  parsed_descr <- parse_npy_datatype(descr)
 
   return(list(
     endian = parsed_descr$endian,
     base_type = parsed_descr$base_type,
     nbytes = parsed_descr$nbytes,
-    fortran_order = header$fortran_order,
-    shape = header$shape
+    fortran_order = header$fortran_order == "True",
+    shape = py_tuple_to_r_c(header$shape, type = "numeric")
   ))
 }
 
@@ -366,32 +372,4 @@ convert_bytes_to_array <- function(bytes, what, shape, size, endian) {
   )
 
   return(res)
-}
-
-py_dict_to_r_list <- function(x) {
-  x |>
-    # Logicals
-    gsub("\\bNone\\b", "NA", x = _) |>
-    gsub("\\bTrue\\b", "TRUE", x = _) |>
-    gsub("\\bFalse\\b", "FALSE", x = _) |>
-    # Trailing commas (before closing brackets/braces)
-    gsub(",\\s*([]})])", "\\1", x = _) |>
-    # Dict (single-quoted) keys to list names.
-    #   Keys are composed of:
-    #   - anything that is not the quote itself or a backslash,
-    #   - a backslash followed by any character (to allow for escaped quotes).
-    gsub("'(([^'\\\\]|\\\\.)*)'\\s*:", "'\\1' =", x = _) |>
-    # Dict (double-quoted) keys to list names.
-    gsub('"(([^"\\\\]|\\\\.)*)"\\s*:', '"\\1" =', x = _) |>
-    # Tuples to c(...)
-    gsub("(", "c(", x = _, fixed = TRUE) |>
-    # Lists to list(...)
-    gsub("[", "list(", x = _, fixed = TRUE) |>
-    gsub("{", "list(", x = _, fixed = TRUE) |>
-    # Closing brackets/braces
-    gsub("]", ")", x = _, fixed = TRUE) |>
-    gsub("}", ")", x = _, fixed = TRUE) |>
-    # Evaluate the resulting R expression
-    str2lang() |>
-    eval()
 }

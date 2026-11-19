@@ -19,6 +19,8 @@
   NumPy) no longer error, and now return an array of `""`, modelled on NumPy's
   behaviour. Thanks to a report from Rohit Goswami as part of the
   rOpenSci review.
+* Unsafe, and potentially malicious, strings in header are no longer parser.
+  Thanks to a report from Rohit Goswami as part of the rOpenSci review.
 
 # grumpy 0.2.0
 
