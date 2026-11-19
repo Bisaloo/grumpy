@@ -311,12 +311,15 @@ convert_bytes_to_array <- function(bytes, what, shape, size, endian) {
     # Convert each field via strided index extraction
     res_fields <- vector("list", length(what)) |> setNames(names(what))
     for (i in seq_along(what)) {
-      starts <- seq(
+      starts <- seq.int(
         field_start[[i]] + 1L,
         by = record_size,
         length.out = n_records
       )
-      idx <- rep(starts, each = size[[i]]) + seq_len(size[[i]]) - 1L
+      idx <- rep(starts, each = size[[i]]) +
+        # Better than seq_len() - 1L because we get (and keep) a compact ALTREP
+        # sequence.
+        seq.int(from = 0L, by = 1L, length.out = size[[i]])
       res_fields[[i]] <- convert_bytes_to_array(
         bytes[idx],
         what = what[[i]],
